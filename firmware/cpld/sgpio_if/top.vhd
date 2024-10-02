@@ -39,6 +39,9 @@ entity top is
 
         DA              : in    std_logic_vector(7 downto 0);
         DD              : out   std_logic_vector(9 downto 0);
+        VDAC            : out   std_logic_vector(15 downto 0);
+        VDAC_CLK        : out   std_logic;
+        SYNC_OUT        : out   std_logic;
 
         CODEC_CLK       : in    std_logic;
         CODEC_X2_CLK    : in    std_logic
@@ -112,6 +115,9 @@ begin
     begin
         if rising_edge(host_clk_i) then
             codec_clk_rx_i <= CODEC_CLK;
+            -- HackDAC Clock. NOTE: AD768 samples on rising edge. Latching here ends up with the correct timing.
+            -- i.e. I and Q bytes in have both been latched and are stable
+            VDAC_CLK <= CODEC_CLK;
             adc_data_i <= DA(7 downto 0);
             if (transfer_direction_i = from_adc) then
                 if codec_clk_rx_i = '1' then
@@ -133,8 +139,15 @@ begin
             if transfer_direction_i = to_dac then
                 if codec_clk_tx_i = '1' then
                     dac_data_o <= (data_from_host_i xor tx_q_invert_mask) & tx_q_invert_mask(0) & tx_q_invert_mask(0);
+                    -- HackDAC 1-bit sync
+                    SYNC_OUT <= data_from_host_i(7);
+                    -- HackDAC DAC MSBs
+                    VDAC(15 downto 9) <= data_from_host_i(6 downto 0);
                 else
                     dac_data_o <= (data_from_host_i xor X"80") & "00";
+                    -- HackDAC DAC LSBs
+                    VDAC(8 downto 1) <= data_from_host_i;
+                    VDAC(0) <= '0';
                 end if;
             else
                 dac_data_o <= (dac_data_o'high => '0', others => '1');
