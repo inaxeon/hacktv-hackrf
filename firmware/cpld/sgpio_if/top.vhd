@@ -30,9 +30,8 @@ entity top is
     Port(
         HOST_DATA       : inout std_logic_vector(7 downto 0);
         HOST_CAPTURE    : out   std_logic;
-		  HOST_SYNC_EN    : in    std_logic;
+        HOST_SYNC_EN    : in    std_logic;
         HOST_SYNC_CMD   : out   std_logic;
-        HOST_SYNC       : in    std_logic;
         HOST_DISABLE    : in    std_logic;
         HOST_DIRECTION  : in    std_logic;
         HOST_Q_INVERT   : in    std_logic;
@@ -62,7 +61,7 @@ architecture Behavioral of top is
 
     signal host_data_enable_i : std_logic;
     signal host_data_capture_o : std_logic;
-	 signal host_sync_enable : std_logic := '0';
+    signal host_sync_enable : std_logic := '0';
     signal host_sync_o : std_logic := '0';
     signal host_sync_i : std_logic := '0';
     signal host_sync_latched : std_logic := '0';
@@ -97,9 +96,9 @@ begin
                                 else (others => 'Z');
 
     HOST_CAPTURE <= host_data_capture_o;
-	 host_sync_enable <= HOST_SYNC_EN;
-	 host_sync_i <= HOST_SYNC;
-	 HOST_SYNC_CMD <= host_sync_o;
+    host_sync_enable <= HOST_SYNC_EN;
+    host_sync_i <= '1';
+    HOST_SYNC_CMD <= host_sync_o;
 	 
     host_data_enable_i <= not HOST_DISABLE;
     transfer_direction_i <= to_dac when HOST_DIRECTION = '1'
