@@ -150,6 +150,8 @@ begin
                 end if;
             else
                 dac_data_o <= (dac_data_o'high => '0', others => '1');
+					 SYNC_OUT <= '1'; -- 0V
+					 VDAC(15 downto 0) <= X"C000"; -- 0V
             end if;
         end if;
     end process;
