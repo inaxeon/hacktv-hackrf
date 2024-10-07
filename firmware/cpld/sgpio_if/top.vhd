@@ -35,7 +35,6 @@ entity top is
         TCXO_IN         : in    std_logic;
         HOST_DISABLE    : in    std_logic;
         OUTPUT_ENABLED  : in    std_logic; -- Same as the HOST_DIRECTION signal. As HackDAC is output only HOST_DIRECTION = 1 means we're running.
-        HOST_Q_INVERT   : in    std_logic;
 
         DA              : in    std_logic_vector(7 downto 0);
         DD              : out   std_logic_vector(9 downto 0);
@@ -111,8 +110,8 @@ begin
                 end if;
             else
                 -- HackTV not running. Zero outputs.
-                     SYNC_OUT <= '1'; -- 0V
-                     VDAC(15 downto 0) <= X"C000"; -- 0V
+                SYNC_OUT <= '1'; -- 0V
+                VDAC(15 downto 0) <= X"C000"; -- 0V
             end if;
         end if;
     end process;
@@ -139,9 +138,9 @@ begin
     process(host_clk_i)
     begin
         if rising_edge(host_clk_i) then
-                 if codec_clk_tx_i = '1' then
-                      host_data_capture_o <= host_data_enable_i and (host_sync_latched or not host_sync_enable);
-                 end if;
+             if codec_clk_tx_i = '1' then
+                  host_data_capture_o <= host_data_enable_i and (host_sync_latched or not host_sync_enable);
+             end if;
         end if;
     end process;
     

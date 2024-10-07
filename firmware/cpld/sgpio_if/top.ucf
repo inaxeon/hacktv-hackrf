@@ -77,7 +77,6 @@ NET "HOST_DATA<6>"  LOC = "P61" ;
 NET "HOST_DATA<7>"  LOC = "P77" ; 
 NET "OUTPUT_ENABLED"  LOC = "P90" ; 
 NET "HOST_DISABLE"  LOC = "P76" ; 
-NET "HOST_Q_INVERT"  LOC = "P70" ;
 NET "TCXO_IN"  LOC = "P56" ; 
 
 #PACE: Start of PACE Area Constraints
