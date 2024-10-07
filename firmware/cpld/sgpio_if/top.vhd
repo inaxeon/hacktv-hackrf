@@ -28,22 +28,20 @@ use UNISIM.vcomponents.all;
 
 entity top is
     Port(
-        HOST_DATA       : inout std_logic_vector(7 downto 0);
+        HOST_DATA       : in    std_logic_vector(7 downto 0);
         HOST_CAPTURE    : out   std_logic;
+        HOST_CLOCK      : out   std_logic;
         HOST_SYNC_EN    : in    std_logic;
-        HOST_SYNC_CMD   : out   std_logic;
+        TCXO_IN         : in    std_logic;
         HOST_DISABLE    : in    std_logic;
-        HOST_DIRECTION  : in    std_logic;
+        OUTPUT_ENABLED  : in    std_logic; -- Same as the HOST_DIRECTION signal. As HackDAC is output only HOST_DIRECTION = 1 means we're running.
         HOST_Q_INVERT   : in    std_logic;
 
         DA              : in    std_logic_vector(7 downto 0);
         DD              : out   std_logic_vector(9 downto 0);
         VDAC            : out   std_logic_vector(15 downto 0);
         VDAC_CLK        : out   std_logic;
-        SYNC_OUT        : out   std_logic;
-
-        CODEC_CLK       : in    std_logic;
-        CODEC_X2_CLK    : in    std_logic
+        SYNC_OUT        : out   std_logic
     );
 
 end top;
@@ -51,81 +49,70 @@ end top;
 architecture Behavioral of top is
     signal codec_clk_rx_i : std_logic;
     signal codec_clk_tx_i : std_logic;
-    signal adc_data_i : std_logic_vector(7 downto 0);
     signal dac_data_o : std_logic_vector(9 downto 0);
-
     signal host_clk_i : std_logic;
-
-    type transfer_direction is (from_adc, to_dac);
-    signal transfer_direction_i : transfer_direction;
-
     signal host_data_enable_i : std_logic;
     signal host_data_capture_o : std_logic;
     signal host_sync_enable : std_logic := '0';
     signal host_sync_o : std_logic := '0';
     signal host_sync_i : std_logic := '0';
     signal host_sync_latched : std_logic := '0';
-
-    signal data_from_host_i : std_logic_vector(7 downto 0);
-    signal data_to_host_o : std_logic_vector(7 downto 0);
-
-    signal q_invert : std_logic;
-    signal rx_q_invert_mask : std_logic_vector(7 downto 0);
-    signal tx_q_invert_mask : std_logic_vector(7 downto 0);
-
+    signal dac_clock_o : std_logic := '0';
 begin
     
     ------------------------------------------------
-    -- Codec interface
-    
-    DD(9 downto 0) <= dac_data_o;
+    -- HackRF DAC. Now completely unused.
+     
+    DD(9 downto 0) <= (others => '0');
     
     ------------------------------------------------
     -- Clocks
     
-    BUFG_host : BUFG
-    port map (
-        O => host_clk_i,
-        I => CODEC_X2_CLK
-    );
-
+     host_clk_i <= TCXO_IN;
+     HOST_CLOCK <= host_clk_i; -- To SGPIO 11 (Reconfigured as SGPIO clock input for HackDAC)
+     
     ------------------------------------------------
     -- SGPIO interface
     
-    HOST_DATA <= data_to_host_o when transfer_direction_i = from_adc
-                                else (others => 'Z');
-
     HOST_CAPTURE <= host_data_capture_o;
     host_sync_enable <= HOST_SYNC_EN;
     host_sync_i <= '1';
-    HOST_SYNC_CMD <= host_sync_o;
-	 
     host_data_enable_i <= not HOST_DISABLE;
-    transfer_direction_i <= to_dac when HOST_DIRECTION = '1'
-                                   else from_adc;
      
     ------------------------------------------------
         
-    q_invert <= HOST_Q_INVERT;
-    rx_q_invert_mask <= X"80" when q_invert = '1' else X"7f";
-    tx_q_invert_mask <= X"7f" when q_invert = '1' else X"80";
-    
+     -- Generate DAC clock (TCXO / 2)
+    process(host_clk_i)
+    begin
+        if falling_edge(host_clk_i) then
+            dac_clock_o <= not dac_clock_o;
+        end if;
+    end process;
+     
     process(host_clk_i)
     begin
         if rising_edge(host_clk_i) then
-            codec_clk_rx_i <= CODEC_CLK;
+            codec_clk_rx_i <= dac_clock_o;
             -- HackDAC Clock. NOTE: AD768 samples on rising edge. Latching here ends up with the correct timing.
             -- i.e. I and Q bytes in have both been latched and are stable
-            VDAC_CLK <= CODEC_CLK;
-            adc_data_i <= DA(7 downto 0);
-            if (transfer_direction_i = from_adc) then
-                if codec_clk_rx_i = '1' then
-                    -- I: non-inverted between MAX2837 and MAX5864
-                    data_to_host_o <= adc_data_i xor X"80";
+            VDAC_CLK <= dac_clock_o;
+            -- Data latching is moved to the rising edge as the delay in getting the clock through the CPLD
+            -- down to the SGPIO means that it ends up better to sample at this time rather than falling.
+            if OUTPUT_ENABLED = '1' then
+                if codec_clk_tx_i = '1' then
+                    -- HackDAC 1-bit sync
+                    SYNC_OUT <= HOST_DATA(7);
+                    -- HackDAC DAC MSBs
+                    VDAC(15 downto 9) <= HOST_DATA(6 downto 0);
                 else
-                    -- Q: inverted between MAX2837 and MAX5864
-                    data_to_host_o <= adc_data_i xor rx_q_invert_mask;
+                    -- HackDAC DAC LSBs
+                    VDAC(8 downto 1) <= HOST_DATA;
+                    VDAC(0) <= '0';
                 end if;
+            else
+                -- HackTV not running. Zero outputs.
+                     SYNC_OUT <= '1'; -- 0V
+                     VDAC(15 downto 0) <= X"C000"; -- 0V
             end if;
         end if;
     end process;
@@ -133,26 +120,7 @@ begin
     process(host_clk_i)
     begin
         if falling_edge(host_clk_i) then
-            codec_clk_tx_i <= CODEC_CLK;
-            data_from_host_i <= HOST_DATA;
-            if transfer_direction_i = to_dac then
-                if codec_clk_tx_i = '1' then
-                    dac_data_o <= (data_from_host_i xor tx_q_invert_mask) & tx_q_invert_mask(0) & tx_q_invert_mask(0);
-                    -- HackDAC 1-bit sync
-                    SYNC_OUT <= data_from_host_i(7);
-                    -- HackDAC DAC MSBs
-                    VDAC(15 downto 9) <= data_from_host_i(6 downto 0);
-                else
-                    dac_data_o <= (data_from_host_i xor X"80") & "00";
-                    -- HackDAC DAC LSBs
-                    VDAC(8 downto 1) <= data_from_host_i;
-                    VDAC(0) <= '0';
-                end if;
-            else
-                dac_data_o <= (dac_data_o'high => '0', others => '1');
-					 SYNC_OUT <= '1'; -- 0V
-					 VDAC(15 downto 0) <= X"C000"; -- 0V
-            end if;
+            codec_clk_tx_i <= dac_clock_o;
         end if;
     end process;
     
@@ -171,15 +139,9 @@ begin
     process(host_clk_i)
     begin
         if rising_edge(host_clk_i) then
-            if transfer_direction_i = to_dac then
-                if codec_clk_tx_i = '1' then
-                    host_data_capture_o <= host_data_enable_i and (host_sync_latched or not host_sync_enable);
-                end if;
-            else
-                if codec_clk_rx_i = '1' then
-                    host_data_capture_o <= host_data_enable_i and (host_sync_latched or not host_sync_enable);
-                end if; 
-            end if;
+                 if codec_clk_tx_i = '1' then
+                      host_data_capture_o <= host_data_enable_i and (host_sync_latched or not host_sync_enable);
+                 end if;
         end if;
     end process;
     
