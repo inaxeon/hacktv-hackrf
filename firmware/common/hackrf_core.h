@@ -312,6 +312,9 @@ void led_off(const led_t led);
 void led_toggle(const led_t led);
 void set_leds(const uint8_t state);
 
+void video_led_on();
+void video_led_off();
+
 void hw_sync_enable(const hw_sync_mode_t hw_sync_mode);
 
 void halt_and_flash(const uint32_t duration);

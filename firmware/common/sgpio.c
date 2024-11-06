@@ -120,6 +120,11 @@ void sgpio_configure(sgpio_config_t* const config, const sgpio_direction_t direc
 		;
 	// clang-format on
 
+	if (direction == SGPIO_DIRECTION_TX)
+		video_led_on();
+	else
+		video_led_off();
+
 	/* The data direction might have changed. Check if we need to
 	 * adjust the q inversion. */
 	update_q_invert(config);
