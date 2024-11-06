@@ -98,7 +98,7 @@ begin
             if OUTPUT_ENABLED = '1' then
                 if codec_clk_tx_i = '1' then
                     -- HackDAC 1-bit sync
-                    SYNC_OUT <= HOST_DATA(7);
+                    SYNC_OUT <= not HOST_DATA(7);
                     -- HackDAC DAC MSBs
                     VDAC(15 downto 9) <= HOST_DATA(6 downto 0);
                 else
@@ -108,7 +108,7 @@ begin
                 end if;
             else
                 -- HackTV not running. Zero outputs.
-                SYNC_OUT <= '1'; -- 0V
+                SYNC_OUT <= '0'; -- 0V
                 VDAC(15 downto 0) <= X"C000"; -- 0V
             end if;
         end if;
