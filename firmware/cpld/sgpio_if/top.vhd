@@ -1,23 +1,20 @@
---
--- Copyright 2012 Jared Boone
--- Copyright 2013 Benjamin Vernoux
---
--- This file is part of HackRF.
---
--- This program is free software; you can redistribute it and/or modify
--- it under the terms of the GNU General Public License as published by
--- the Free Software Foundation; either version 2, or (at your option)
--- any later version.
---
--- This program is distributed in the hope that it will be useful,
--- but WITHOUT ANY WARRANTY; without even the implied warranty of
--- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
--- GNU General Public License for more details.
---
--- You should have received a copy of the GNU General Public License
--- along with this program; see the file COPYING.  If not, write to
--- the Free Software Foundation, Inc., 51 Franklin Street,
--- Boston, MA 02110-1301, USA.
+-- hacktv - Analogue video transmitter for the HackRF                    
+--=======================================================================
+-- Copyright 2019 Philip Heron <phil@sanslogic.co.uk>
+-- Author: Matthew Millman <inaxeon@hotmail.com>
+--                                                                       
+-- This program is free software: you can redistribute it and/or modify  
+-- it under the terms of the GNU General Public License as published by  
+-- the Free Software Foundation, either version 3 of the License, or     
+-- (at your option) any later version.                                   
+--                                                                       
+-- This program is distributed in the hope that it will be useful,       
+-- but WITHOUT ANY WARRANTY; without even the implied warranty of        
+-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         
+-- GNU General Public License for more details.                          
+--                                                                       
+-- You should have received a copy of the GNU General Public License     
+-- along with this program.  If not, see <http://www.gnu.org/licenses/>. 
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
@@ -67,8 +64,8 @@ begin
     ------------------------------------------------
     -- Clocks
     
-     host_clk_i <= TCXO_IN;
-     HOST_CLOCK <= host_clk_i; -- To SGPIO 11 (Reconfigured as SGPIO clock input for HackDAC)
+    host_clk_i <= TCXO_IN;
+    HOST_CLOCK <= host_clk_i; -- To SGPIO 11 (Reconfigured as SGPIO clock input for HackDAC)
      
     ------------------------------------------------
     -- SGPIO interface
@@ -80,21 +77,22 @@ begin
      
     ------------------------------------------------
         
-     -- Generate DAC clock (TCXO / 2)
     process(host_clk_i)
     begin
         if falling_edge(host_clk_i) then
-            dac_clock_o <= not dac_clock_o;
+               codec_clk_tx_i <= dac_clock_o;
+               -- HackDAC Clock. NOTE: AD768 samples on rising edge. Latching here ends up with the correct timing.
+               -- i.e. I and Q bytes in have both been latched and are stable
+               VDAC_CLK <= not dac_clock_o;
         end if;
     end process;
      
     process(host_clk_i)
     begin
         if rising_edge(host_clk_i) then
+            -- Generate DAC clock (TCXO / 2)
+            dac_clock_o <= not dac_clock_o;
             codec_clk_rx_i <= dac_clock_o;
-            -- HackDAC Clock. NOTE: AD768 samples on rising edge. Latching here ends up with the correct timing.
-            -- i.e. I and Q bytes in have both been latched and are stable
-            VDAC_CLK <= dac_clock_o;
             -- Data latching is moved to the rising edge as the delay in getting the clock through the CPLD
             -- down to the SGPIO means that it ends up better to sample at this time rather than falling.
             if OUTPUT_ENABLED = '1' then
@@ -113,13 +111,6 @@ begin
                 SYNC_OUT <= '1'; -- 0V
                 VDAC(15 downto 0) <= X"C000"; -- 0V
             end if;
-        end if;
-    end process;
-    
-    process(host_clk_i)
-    begin
-        if falling_edge(host_clk_i) then
-            codec_clk_tx_i <= dac_clock_o;
         end if;
     end process;
     
