@@ -57,6 +57,7 @@
 #include "hackrf_ui.h"
 #include "platform_detect.h"
 #include "clkin.h"
+#include "i2s.h"
 
 extern uint32_t __m0_start__;
 extern uint32_t __m0_end__;
@@ -288,6 +289,12 @@ int main(void)
 		operacake_allow_gpio = false;
 	}
 	operacake_init(operacake_allow_gpio);
+
+	i2s_init();
+	i2s_stop();
+	i2s_start();
+	i2s_test_tone();
+	i2s_mute(true);
 
 	// FIXME: clock detection on r9 only works when calling init twice
 	if (detected_platform() == BOARD_ID_HACKRF1_R9) {

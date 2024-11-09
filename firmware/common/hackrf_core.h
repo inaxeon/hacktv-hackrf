@@ -242,6 +242,10 @@ extern "C" {
 #define SCU_H1R9_NO_VAA_EN  (P6_10) /* GPIO3[6] on P6_10 */
 #define SCU_H1R9_HW_SYNC_EN (P2_5)  /* GPIO5[5] on P2_5 */
 
+#define SCU_PINMUX_I2S0_SCK	(P3_0)
+#define SCU_PINMUX_I2S0_WS	(P3_1)
+#define SCU_PINMUX_I2S0_SDA	(P3_2)
+
 typedef enum {
 	TRANSCEIVER_MODE_OFF = 0,
 	TRANSCEIVER_MODE_RX = 1,
@@ -311,6 +315,9 @@ void led_on(const led_t led);
 void led_off(const led_t led);
 void led_toggle(const led_t led);
 void set_leds(const uint8_t state);
+
+void video_led_on();
+void video_led_off();
 
 void hw_sync_enable(const hw_sync_mode_t hw_sync_mode);
 
