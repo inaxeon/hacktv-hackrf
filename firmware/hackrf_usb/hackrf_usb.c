@@ -293,14 +293,14 @@ int main(void)
 	i2s_init();
 	i2s_stop();
 	i2s_start();
-	i2s_test_tone();
-	i2s_mute(true);
+	i2s_generate_test_tone();
 
 	// FIXME: clock detection on r9 only works when calling init twice
-	if (detected_platform() == BOARD_ID_HACKRF1_R9) {
-		clkin_detect_init();
-		clkin_detect_init();
-	}
+
+	// if (detected_platform() == BOARD_ID_HACKRF1_R9) {
+	// 	clkin_detect_init();
+	// 	clkin_detect_init();
+	// }
 
 	while (true) {
 		transceiver_request_t request;
