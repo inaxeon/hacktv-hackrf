@@ -169,6 +169,7 @@ void usb_configuration_changed(usb_device_t* const device)
 	}
 	usb_endpoint_init(&usb_endpoint_bulk_in);
 	usb_endpoint_init(&usb_endpoint_bulk_out);
+	usb_endpoint_init(&usb_endpoint_audio_out);
 }
 
 void usb_set_descriptor_by_serial_number(void)
@@ -270,6 +271,7 @@ int main(void)
 	usb_queue_init(&usb_endpoint_control_in_queue);
 	usb_queue_init(&usb_endpoint_bulk_out_queue);
 	usb_queue_init(&usb_endpoint_bulk_in_queue);
+	usb_queue_init(&usb_endpoint_audio_out_queue);
 
 	usb_endpoint_init(&usb_endpoint_control_out);
 	usb_endpoint_init(&usb_endpoint_control_in);
@@ -291,9 +293,6 @@ int main(void)
 	operacake_init(operacake_allow_gpio);
 
 	i2s_init();
-	i2s_stop();
-	i2s_start();
-	i2s_generate_test_tone();
 
 	// FIXME: clock detection on r9 only works when calling init twice
 

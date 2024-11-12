@@ -21,13 +21,20 @@
  */
 
 #include <gpdma.h>
-
+#include <i2s.h>
 #include <libopencm3/lpc43xx/gpdma.h>
+
 
 void gpdma_controller_enable()
 {
 	GPDMA_CONFIG |= GPDMA_CONFIG_E(1);
 	while ((GPDMA_CONFIG & GPDMA_CONFIG_E_MASK) == 0) {}
+}
+
+void gpdma_interrupt_enable()
+{
+	nvic_enable_irq(NVIC_DMA_IRQ);
+	nvic_set_priority(NVIC_DMA_IRQ, ((0x01 << 3) | 0x01));
 }
 
 void gpdma_channel_enable(const uint_fast8_t channel)
@@ -69,4 +76,10 @@ void gpdma_lli_create_oneshot(gpdma_lli_t* const lli, const size_t lli_count)
 {
 	gpdma_lli_create_loop(lli, lli_count);
 	lli[lli_count - 1].clli &= ~GPDMA_CLLI_LLI_MASK;
+}
+
+void dma_isr(void)
+{
+	if (GPDMA_INTSTAT & (1 << I2S_DMA_CHANNEL))
+		i2s_gpdma_isr();
 }

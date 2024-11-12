@@ -15,7 +15,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; see the file COPYING.  If not, write to
+ * along with this program; see the file COPYING.  If not, write DMAMUX
  * the Free Software Foundation, Inc., 51 Franklin Street,
  * Boston, MA 02110-1301, USA.
  */
@@ -27,8 +27,19 @@
 #include <stdint.h>
 
 #include <libopencm3/lpc43xx/gpdma.h>
+#include <libopencm3/lpc43xx/ccu.h>
+#include <libopencm3/lpc43xx/m4/nvic.h>
+
+/* DMA linked list item */
+typedef struct {
+	uint32_t src;
+	uint32_t dest;
+	uint32_t next_lli;
+	uint32_t control;
+} dma_lli;
 
 void gpdma_controller_enable();
+void gpdma_interrupt_enable();
 
 void gpdma_channel_enable(const uint_fast8_t channel);
 void gpdma_channel_disable(const uint_fast8_t channel);

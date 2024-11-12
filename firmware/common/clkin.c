@@ -30,14 +30,6 @@
 #define MEASUREMENT_WINDOW_MS (50)
 #define MEASUREMENT_CYCLES    (CLOCK_CYCLES_1_MS * MEASUREMENT_WINDOW_MS)
 
-/* DMA linked list item */
-typedef struct {
-	uint32_t src;
-	uint32_t dest;
-	uint32_t next_lli;
-	uint32_t control;
-} dma_lli;
-
 /* timer control register configuration sequence */
 typedef struct {
 	uint32_t first_tcr;
