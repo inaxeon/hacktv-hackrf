@@ -1,84 +1,34 @@
-#include "i2s.h"
-#include "gpdma.h"
+/* hacktv - Analogue video transmitter for the HackRF                    */
+/*=======================================================================*/
+/* Copyright 2017 Philip Heron <phil@sanslogic.co.uk>                    */
+/* Author: Matthew Millman <inaxeon@hotmail.com>                         */
+/*                                                                       */
+/* This program is free software: you can redistribute it and/or modify  */
+/* it under the terms of the GNU General Public License as published by  */
+/* the Free Software Foundation, either version 3 of the License, or     */
+/* (at your option) any later version.                                   */
+/*                                                                       */
+/* This program is distributed in the hope that it will be useful,       */
+/* but WITHOUT ANY WARRANTY; without even the implied warranty of        */
+/* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         */
+/* GNU General Public License for more details.                          */
+/*                                                                       */
+/* You should have received a copy of the GNU General Public License     */
+/* along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 
 #include <stdio.h>
 #include <math.h>
 
-#define CLK_APB1_I2S 204000000 // 204 MHz
-#define I2S_DMA_FIFO_LEVEL	4
+#include "i2s.h"
+#include "gpdma.h"
 
-#define GPDMA_NUMBER_CHANNELS 8
-
-#define NUM_SAMPLES 48
-
-static bool i2s_get_clock_divider(int sample_rate, int word_width, uint16_t *px_div, uint16_t *py_div, uint32_t *pN);
-static void i2s_init_dma();
-static uint8_t i2s_get_tx_level();
-static void i2s_init_lli();
-static void i2s_tx(uint32_t data);
+#define CLK_APB1_I2S 			204000000 // 204 MHz
+#define I2S_DMA_FIFO_LEVEL		4
 
 dma_lli i2s_dma_lli[I2S_NUM_BUFFERS];
 uint32_t i2s_audio_buffer[I2S_BUFFER_DEPTH * I2S_NUM_BUFFERS];
 int32_t i2s_usb_bytes_transferred;
 int32_t _bytes_transferred;
-
-void i2s_init()
-{
-	int word_width = 16;
-	int sample_rate = 48000;
-	uint16_t x_div = 0;
-	uint16_t y_div = 0;
-	uint32_t clk_n = 0;
-
-	CCU1_CLK_APB1_I2S_CFG = 1; // Enable I2C branch clock
-
-	i2s_get_clock_divider(sample_rate, word_width, &x_div, &y_div, &clk_n);
-
-	I2S0_DAO = I2S0_DAO_WORDWIDTH(1) | // 16-bit
-		I2S0_DAO_MONO(0) | // Stereo
-		I2S0_DAO_WS_SEL(0) | // Master
-		I2S0_DAO_WS_HALFPERIOD(word_width - 1) |
-		I2S0_DAO_STOP(1) | I2S0_DAO_RESET(1); // WS half-cycle: 16-bits
-
-	I2S0_TXMODE = I2S0_TXMODE_TXCLKSEL(0);
-
-	I2S0_TXBITRATE = (clk_n - 1);
-	I2S0_TXRATE = y_div | (x_div << 8);
-
-	i2s_init_dma();
-
-	gpdma_interrupt_enable();
-	gpdma_controller_enable();
-}
-
-void i2s_startup()
-{
-	i2s_init_lli();
-	i2s_usb_bytes_transferred = 0;
-	_bytes_transferred = 0;
-}
-
-void i2s_streaming_enable()
-{
-	I2S0_DAO &= ~(I2S0_DAO_RESET_MASK | I2S0_DAO_STOP_MASK | I2S0_DAO_MUTE_MASK);
-	gpdma_channel_enable(I2S_DMA_CHANNEL);
-}
-
-void i2s_shutdown()
-{
-	// TODO: This is likely not an elegant shut down
-	I2S0_DAO &= ~I2S0_DAO_MUTE_MASK;
-	I2S0_DAO |= (I2S0_DAO_STOP_MASK | I2S0_DAO_RESET_MASK);
-	gpdma_channel_disable(I2S_DMA_CHANNEL);
-}
-
-void i2s_mute(bool mute)
-{
-	if (mute)
-		I2S0_DAO |= I2S0_DAO_MUTE_MASK;
-	else
-		I2S0_DAO &= ~I2S0_DAO_MUTE_MASK;
-}
 
 static void i2s_init_dma()
 {
@@ -126,57 +76,6 @@ static void i2s_init_lli()
 		| GPDMA_CCONFIG_H(0)					   // do not halt
 		| GPDMA_CCONFIG_ITC(1)					  
 		| GPDMA_CCONFIG_IE(1);
-}
-
-int32_t i2s_bytes_transferred()
-{
-	return _bytes_transferred;
-}
-
-static uint8_t i2s_get_tx_level()
-{
-	return (I2S0_STATE >> 16) & 0x0F;
-}
-
-static void i2s_tx(uint32_t data)
-{
-	I2S0_TXFIFO = data;
-}
-
-void i2s_gpdma_isr()
-{
-	if (GPDMA_INTTCSTAT & (1 << I2S_DMA_CHANNEL))
-	{
-		GPDMA_INTTCCLEAR = (1 << I2S_DMA_CHANNEL);
-		_bytes_transferred += I2S_USB_TRANSFER_SIZE;
-	}
-
-	if (GPDMA_INTTCSTAT & (1 << I2S_DMA_CHANNEL))
-	{
-		GPDMA_INTERRCLR = (1 << I2S_DMA_CHANNEL);
-	}
-}
-
-void i2s_generate_test_tone()
-{
-	int x, y;
-	double d;
-	int16_t l;
-	int sample_rate = 48000;
-	int audio_samples;
-
-	d = 1000.0 * 2 * M_PI / sample_rate;
-	y = sample_rate / 1000; /* 1ms */
-	audio_samples = y;
-
-	if (audio_samples != NUM_SAMPLES)
-		return;
-
-	for (x = 0; x < audio_samples; x++)
-	{
-		l = sin(x * d) * INT16_MAX * 0.1;
-		i2s_audio_buffer[x] = ((uint16_t)l | (uint32_t)(l << 16));
-	}
 }
 
 static bool i2s_get_clock_divider(int sample_rate, int word_width, uint16_t *px_div, uint16_t *py_div, uint32_t *pclk_n)
@@ -250,3 +149,113 @@ static bool i2s_get_clock_divider(int sample_rate, int word_width, uint16_t *px_
 
 	return true;
 }
+
+void i2s_init()
+{
+	int word_width = 16;
+	int sample_rate = 48000;
+	uint16_t x_div = 0;
+	uint16_t y_div = 0;
+	uint32_t clk_n = 0;
+
+	CCU1_CLK_APB1_I2S_CFG = 1; // Enable I2S branch clock
+
+	i2s_get_clock_divider(sample_rate, word_width, &x_div, &y_div, &clk_n);
+
+	I2S0_DAO = I2S0_DAO_WORDWIDTH(1) | // 16-bit
+		I2S0_DAO_MONO(0) | // Stereo
+		I2S0_DAO_WS_SEL(0) | // Master
+		I2S0_DAO_WS_HALFPERIOD(word_width - 1) |
+		I2S0_DAO_STOP(1) | I2S0_DAO_RESET(1); // WS half-cycle: 16-bits
+
+	I2S0_TXMODE = I2S0_TXMODE_TXCLKSEL(0);
+
+	I2S0_TXBITRATE = (clk_n - 1);
+	I2S0_TXRATE = y_div | (x_div << 8);
+
+	i2s_init_dma();
+
+	gpdma_interrupt_enable();
+	gpdma_controller_enable();
+}
+
+void i2s_startup()
+{
+	i2s_init_lli();
+	i2s_usb_bytes_transferred = 0;
+	_bytes_transferred = 0;
+}
+
+void i2s_shutdown()
+{
+	// TODO: This is likely not an elegant shut down
+	I2S0_DAO &= ~I2S0_DAO_MUTE_MASK;
+	I2S0_DAO |= (I2S0_DAO_STOP_MASK | I2S0_DAO_RESET_MASK);
+	gpdma_channel_disable(I2S_DMA_CHANNEL);
+}
+
+void i2s_streaming_enable()
+{
+	I2S0_DAO &= ~(I2S0_DAO_RESET_MASK | I2S0_DAO_STOP_MASK | I2S0_DAO_MUTE_MASK);
+	gpdma_channel_enable(I2S_DMA_CHANNEL);
+}
+
+void i2s_mute(bool mute)
+{
+	if (mute)
+		I2S0_DAO |= I2S0_DAO_MUTE_MASK;
+	else
+		I2S0_DAO &= ~I2S0_DAO_MUTE_MASK;
+}
+
+int32_t i2s_bytes_transferred()
+{
+	return _bytes_transferred;
+}
+
+void i2s_gpdma_isr()
+{
+	if (GPDMA_INTTCSTAT & (1 << I2S_DMA_CHANNEL))
+	{
+		GPDMA_INTTCCLEAR = (1 << I2S_DMA_CHANNEL);
+		_bytes_transferred += I2S_USB_TRANSFER_SIZE;
+	}
+
+	if (GPDMA_INTTCSTAT & (1 << I2S_DMA_CHANNEL))
+	{
+		GPDMA_INTERRCLR = (1 << I2S_DMA_CHANNEL);
+	}
+}
+
+#if 0
+static uint8_t i2s_get_tx_level()
+{
+	return (I2S0_STATE >> 16) & 0x0F;
+}
+
+static void i2s_tx(uint32_t data)
+{
+	I2S0_TXFIFO = data;
+}
+
+void i2s_generate_test_tone()
+{
+	int x, y;
+	double d;
+	int16_t l;
+	int sample_rate = 48000;
+	int audio_samples;
+
+	d = 1000.0 * 2 * M_PI / sample_rate;
+	y = sample_rate / 1000; /* 1ms */
+	audio_samples = y;
+
+	for (x = 0; x < audio_samples; x++)
+	{
+		l = sin(x * d) * INT16_MAX * 0.1;
+		i2s_audio_buffer[x] = ((uint16_t)l | (uint32_t)(l << 16));
+	}
+
+	// TODO: If this is ever used again audio_samples will have to be loaded into the lli.
+}
+#endif
