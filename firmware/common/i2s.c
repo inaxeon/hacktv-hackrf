@@ -24,9 +24,10 @@
 
 #define CLK_APB1_I2S 			204000000 // 204 MHz
 #define I2S_DMA_FIFO_LEVEL		4
+#define I2S_SAMPLE_RATE			48000
 
 dma_lli i2s_dma_lli[I2S_NUM_BUFFERS];
-uint32_t i2s_audio_buffer[I2S_BUFFER_DEPTH * I2S_NUM_BUFFERS];
+uint8_t i2s_audio_buffer[I2S_USB_TRANSFER_SIZE * I2S_NUM_BUFFERS];
 int32_t i2s_usb_bytes_transferred;
 int32_t _bytes_transferred;
 
@@ -62,7 +63,7 @@ static void i2s_init_lli()
 	i2s_dma_lli[0].next_lli = (uint32_t) & (i2s_dma_lli[1]);
 	i2s_dma_lli[0].control = cw;
 
-	i2s_dma_lli[1].src = (uint32_t) & (i2s_audio_buffer[I2S_BUFFER_DEPTH]); // Buffer 1
+	i2s_dma_lli[1].src = (uint32_t) & (i2s_audio_buffer[I2S_USB_TRANSFER_SIZE]); // Buffer 1
 	i2s_dma_lli[1].dest = (uint32_t) & (I2S0_TXFIFO);
 	i2s_dma_lli[1].next_lli = (uint32_t) & (i2s_dma_lli[0]);
 	i2s_dma_lli[1].control = cw;
@@ -72,10 +73,10 @@ static void i2s_init_lli()
 	GPDMA_CLLI(I2S_DMA_CHANNEL) = i2s_dma_lli[0].next_lli;
 	GPDMA_CCONTROL(I2S_DMA_CHANNEL) = i2s_dma_lli[0].control;
 	GPDMA_CCONFIG(I2S_DMA_CHANNEL) = GPDMA_CCONFIG_DESTPERIPHERAL(0x9) // DMA req channel 9
-		| GPDMA_CCONFIG_FLOWCNTRL(1)			   // memory-to-peripheral
-		| GPDMA_CCONFIG_H(0)					   // do not halt
-		| GPDMA_CCONFIG_ITC(1)					  
-		| GPDMA_CCONFIG_IE(1);
+		| GPDMA_CCONFIG_FLOWCNTRL(1)				// memory-to-peripheral
+		| GPDMA_CCONFIG_H(0)						// do not halt
+		| GPDMA_CCONFIG_ITC(1)						// terminal count interrupt
+		| GPDMA_CCONFIG_IE(1);						// error interrupt
 }
 
 static bool i2s_get_clock_divider(int sample_rate, int word_width, uint16_t *px_div, uint16_t *py_div, uint32_t *pclk_n)
@@ -153,14 +154,13 @@ static bool i2s_get_clock_divider(int sample_rate, int word_width, uint16_t *px_
 void i2s_init()
 {
 	int word_width = 16;
-	int sample_rate = 48000;
 	uint16_t x_div = 0;
 	uint16_t y_div = 0;
 	uint32_t clk_n = 0;
 
 	CCU1_CLK_APB1_I2S_CFG = 1; // Enable I2S branch clock
 
-	i2s_get_clock_divider(sample_rate, word_width, &x_div, &y_div, &clk_n);
+	i2s_get_clock_divider(I2S_SAMPLE_RATE, word_width, &x_div, &y_div, &clk_n);
 
 	I2S0_DAO = I2S0_DAO_WORDWIDTH(1) | // 16-bit
 		I2S0_DAO_MONO(0) | // Stereo
@@ -196,8 +196,8 @@ void i2s_shutdown()
 
 void i2s_streaming_enable()
 {
-	I2S0_DAO &= ~(I2S0_DAO_RESET_MASK | I2S0_DAO_STOP_MASK | I2S0_DAO_MUTE_MASK);
 	gpdma_channel_enable(I2S_DMA_CHANNEL);
+	I2S0_DAO &= ~(I2S0_DAO_RESET_MASK | I2S0_DAO_STOP_MASK | I2S0_DAO_MUTE_MASK);
 }
 
 void i2s_mute(bool mute)
@@ -228,6 +228,38 @@ void i2s_gpdma_isr()
 }
 
 #if 0
+static void i2s_init_lli_test(int num_samples)
+{
+	uint32_t cw = GPDMA_CCONTROL_TRANSFERSIZE(num_samples) |
+		GPDMA_CCONTROL_SBSIZE(0) // 1
+		| GPDMA_CCONTROL_DBSIZE(0) // 1
+		| GPDMA_CCONTROL_SWIDTH(2) // 32-bit word
+		| GPDMA_CCONTROL_DWIDTH(2) // 32-bit word
+		| GPDMA_CCONTROL_S(0)	  // AHB Master 0
+		| GPDMA_CCONTROL_D(1)	  // AHB Master 1
+		| GPDMA_CCONTROL_SI(1)	 // increment source
+		| GPDMA_CCONTROL_DI(0)	 // do not increment destination
+		| GPDMA_CCONTROL_PROT1(0)  // user mode
+		| GPDMA_CCONTROL_PROT2(0)  // not bufferable
+		| GPDMA_CCONTROL_PROT3(0)  // not cacheable
+		| GPDMA_CCONTROL_I(1);	 // interrupt enabled
+
+	i2s_dma_lli[0].src = (uint32_t) & (i2s_audio_buffer[0]); // Buffer 0
+	i2s_dma_lli[0].dest = (uint32_t) & (I2S0_TXFIFO);
+	i2s_dma_lli[0].next_lli = (uint32_t) & (i2s_dma_lli[0]);
+	i2s_dma_lli[0].control = cw;
+
+	GPDMA_CSRCADDR(I2S_DMA_CHANNEL) = i2s_dma_lli[0].src;
+	GPDMA_CDESTADDR(I2S_DMA_CHANNEL) = i2s_dma_lli[0].dest;
+	GPDMA_CLLI(I2S_DMA_CHANNEL) = i2s_dma_lli[0].next_lli;
+	GPDMA_CCONTROL(I2S_DMA_CHANNEL) = i2s_dma_lli[0].control;
+	GPDMA_CCONFIG(I2S_DMA_CHANNEL) = GPDMA_CCONFIG_DESTPERIPHERAL(0x9) // DMA req channel 9
+		| GPDMA_CCONFIG_FLOWCNTRL(1)				// memory-to-peripheral
+		| GPDMA_CCONFIG_H(0)						// do not halt
+		| GPDMA_CCONFIG_ITC(1)						// terminal count interrupt
+		| GPDMA_CCONFIG_IE(1);						// error interrupt
+}
+
 static uint8_t i2s_get_tx_level()
 {
 	return (I2S0_STATE >> 16) & 0x0F;
@@ -243,19 +275,19 @@ void i2s_generate_test_tone()
 	int x, y;
 	double d;
 	int16_t l;
-	int sample_rate = 48000;
 	int audio_samples;
 
-	d = 1000.0 * 2 * M_PI / sample_rate;
-	y = sample_rate / 1000; /* 1ms */
+	d = 1000.0 * 2 * M_PI / I2S_SAMPLE_RATE;
+	y = I2S_SAMPLE_RATE / 1000; /* 1ms */
 	audio_samples = y;
 
 	for (x = 0; x < audio_samples; x++)
 	{
 		l = sin(x * d) * INT16_MAX * 0.1;
-		i2s_audio_buffer[x] = ((uint16_t)l | (uint32_t)(l << 16));
+		*(((uint32_t *)i2s_audio_buffer) + x) = ((uint16_t)l | (uint32_t)(l << 16));
 	}
 
-	// TODO: If this is ever used again audio_samples will have to be loaded into the lli.
+	i2s_init_lli_test(audio_samples);
+	i2s_streaming_enable();
 }
 #endif

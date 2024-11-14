@@ -70,7 +70,7 @@ usb_endpoint_t usb_endpoint_bulk_out = {
 static USB_DEFINE_QUEUE(usb_endpoint_bulk_out, 1);
 
 usb_endpoint_t usb_endpoint_audio_out = {
-	.address = 0x03,
+	.address = 0x05,
 	.device = &usb_device,
 	.in = 0,
 	.out = &usb_endpoint_audio_out,

@@ -296,10 +296,10 @@ int main(void)
 
 	// FIXME: clock detection on r9 only works when calling init twice
 
-	// if (detected_platform() == BOARD_ID_HACKRF1_R9) {
-	// 	clkin_detect_init();
-	// 	clkin_detect_init();
-	// }
+	if (detected_platform() == BOARD_ID_HACKRF1_R9) {
+		clkin_detect_init();
+		clkin_detect_init();
+	}
 
 	while (true) {
 		transceiver_request_t request;

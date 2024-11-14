@@ -47,7 +47,7 @@
 
 #define USB_BULK_IN_EP_ADDR   (0x81)
 #define USB_BULK_OUT_EP_ADDR  (0x02)
-#define USB_AUDIO_OUT_EP_ADDR (0x03)
+#define USB_AUDIO_OUT_EP_ADDR (0x05)
 
 #define USB_STRING_LANGID (0x0409)
 
