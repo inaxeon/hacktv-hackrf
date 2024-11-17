@@ -44,6 +44,7 @@
 #define USB_MAX_PACKET0        (64)
 #define USB_MAX_PACKET_BULK_FS (64)
 #define USB_MAX_PACKET_BULK_HS (512)
+#define USB_MAX_PACKET_AUDIO   (512)
 
 #define USB_BULK_IN_EP_ADDR   (0x81)
 #define USB_BULK_OUT_EP_ADDR  (0x02)
@@ -162,7 +163,7 @@ uint8_t usb_descriptor_configuration_high_speed[] = {
 	USB_DESCRIPTOR_TYPE_ENDPOINT,     // bDescriptorType
 	USB_AUDIO_OUT_EP_ADDR,             // bEndpointAddress
 	0x02,                             // bmAttributes: BULK
-	USB_WORD(USB_MAX_PACKET_BULK_HS), // wMaxPacketSize
+	USB_WORD(USB_MAX_PACKET_AUDIO), // wMaxPacketSize
 	0x00,                             // bInterval: no NAK
 
 	0, // TERMINATOR

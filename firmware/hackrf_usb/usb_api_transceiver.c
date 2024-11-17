@@ -415,6 +415,13 @@ void transceiver_audio_transfer_complete(void* user_data, unsigned int bytes_tra
 {
 	(void) user_data;
 	i2s_usb_bytes_transferred += bytes_transferred;
+
+	if (i2s_is_paused())
+	{
+		// Wait for buffer to re-fill
+		if ((i2s_usb_bytes_transferred - i2s_bytes_transferred()) == I2S_BUFFER_SIZE)
+			i2s_resume();
+	}
 }
 
 void rx_mode(uint32_t seq)
@@ -440,14 +447,20 @@ void rx_mode(uint32_t seq)
 	transceiver_shutdown();
 }
 
+#define HAVE_AUDIO
+
 void tx_mode(uint32_t seq)
 {
 	unsigned int usb_count = 0;
 	unsigned int usb_audio_count = 0;
 	bool started = false;
+	bool audio = true;
 
 	transceiver_startup(TRANSCEIVER_MODE_TX);
-	i2s_startup();
+
+	if (audio) {
+		i2s_startup();
+	}
 
 	// Set up OUT transfer of buffer 0.
 	usb_transfer_schedule_block(
@@ -458,26 +471,30 @@ void tx_mode(uint32_t seq)
 		NULL);
 	usb_count += USB_TRANSFER_SIZE;
 
-	// Get first audio buffer
-	usb_transfer_schedule_block(
-		&usb_endpoint_audio_out,
-		&i2s_audio_buffer[0x0000],
-		I2S_USB_TRANSFER_SIZE,
-		transceiver_audio_transfer_complete,
-		NULL);
-	usb_audio_count += USB_TRANSFER_SIZE;
+	if (audio) {
+		// Get first audio buffer
+		usb_transfer_schedule_block(
+			&usb_endpoint_audio_out,
+			&i2s_audio_buffer[0x0000],
+			I2S_USB_TRANSFER_SIZE,
+			transceiver_audio_transfer_complete,
+			NULL);
+		usb_audio_count += I2S_USB_TRANSFER_SIZE;
+	}
 
 	while (transceiver_request.seq == seq) {
-		if (!started && (m0_state.m4_count == USB_BULK_BUFFER_SIZE) &&
-		(i2s_usb_bytes_transferred == I2S_USB_TRANSFER_SIZE)
-		) {
+		if (!started && ((m0_state.m4_count == USB_BULK_BUFFER_SIZE) &&
+		(!audio || (i2s_usb_bytes_transferred == I2S_BUFFER_SIZE))
+		)) {
 			// Buffer is now full, start streaming.
 			baseband_streaming_enable(&sgpio_config);
-			// Start audio
-			i2s_streaming_enable();
+			if (audio) {
+				// Start audio
+				i2s_streaming_enable();
+			}
 			started = true;
 		}
-		if ((usb_count - m0_state.m0_count) <= USB_TRANSFER_SIZE) {
+		if ((usb_count - m0_state.m0_count) <= (USB_BULK_BUFFER_SIZE - USB_TRANSFER_SIZE)) {
 			usb_transfer_schedule_block(
 				&usb_endpoint_bulk_out,
 				&usb_bulk_buffer[usb_count & USB_BULK_BUFFER_MASK],
@@ -486,18 +503,22 @@ void tx_mode(uint32_t seq)
 				NULL);
 			usb_count += USB_TRANSFER_SIZE;
 		}
-		if ((usb_audio_count - i2s_bytes_transferred()) <= I2S_USB_TRANSFER_SIZE) {
-			usb_transfer_schedule_block(
-				&usb_endpoint_audio_out,
-				&i2s_audio_buffer[usb_audio_count & I2S_BUFFER_MASK],
-				I2S_USB_TRANSFER_SIZE,
-				transceiver_audio_transfer_complete,
-				NULL);
-			usb_audio_count += I2S_USB_TRANSFER_SIZE;
+		if (audio) {
+			if ((usb_audio_count - i2s_bytes_transferred()) <= (I2S_BUFFER_SIZE - I2S_USB_TRANSFER_SIZE)) {
+				usb_transfer_schedule_block(
+					&usb_endpoint_audio_out,
+					&i2s_audio_buffer[usb_audio_count & I2S_BUFFER_MASK],
+					I2S_USB_TRANSFER_SIZE,
+					transceiver_audio_transfer_complete,
+					NULL);
+				usb_audio_count += I2S_USB_TRANSFER_SIZE;
+			}
 		}
 	}
 
-	i2s_shutdown();
+	if (audio) {
+		i2s_shutdown();
+	}
 	transceiver_shutdown();
 }
 

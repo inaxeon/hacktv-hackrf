@@ -206,12 +206,12 @@ The rest of this file is organised as follows:
 .equ INT_STATUS,                           0x2C
 
 // Buffer that we're funneling data to/from.
-.equ TARGET_DATA_BUFFER,                   0x20008000
-.equ TARGET_BUFFER_SIZE,                   0x8000
-.equ TARGET_BUFFER_MASK,                   0x7fff
+.equ TARGET_DATA_BUFFER,                   0x20000000
+.equ TARGET_BUFFER_SIZE,                   0x10000
+.equ TARGET_BUFFER_MASK,                   0xffff
 
 // Base address of the state structure.
-.equ STATE_BASE,                           0x20007000
+.equ STATE_BASE,                           0x10017000
 
 // Offsets into the state structure.
 .equ REQUESTED_MODE,                       0x00

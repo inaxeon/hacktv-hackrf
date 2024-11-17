@@ -27,9 +27,9 @@
 #define I2S_SAMPLE_RATE			48000
 
 dma_lli i2s_dma_lli[I2S_NUM_BUFFERS];
-uint8_t i2s_audio_buffer[I2S_USB_TRANSFER_SIZE * I2S_NUM_BUFFERS];
-int32_t i2s_usb_bytes_transferred;
-int32_t _bytes_transferred;
+uint8_t i2s_audio_buffer[I2S_BUFFER_SIZE];
+uint32_t i2s_usb_bytes_transferred;
+uint32_t _bytes_transferred;
 
 static void i2s_init_dma()
 {
@@ -58,25 +58,37 @@ static void i2s_init_lli()
 		| GPDMA_CCONTROL_PROT3(0)  // not cacheable
 		| GPDMA_CCONTROL_I(1);	 // interrupt enabled
 
-	i2s_dma_lli[0].src = (uint32_t) & (i2s_audio_buffer[0]); // Buffer 0
-	i2s_dma_lli[0].dest = (uint32_t) & (I2S0_TXFIFO);
-	i2s_dma_lli[0].next_lli = (uint32_t) & (i2s_dma_lli[1]);
-	i2s_dma_lli[0].control = cw;
+	for (int i = 0; i < I2S_NUM_BUFFERS; i++)
+	{
+		i2s_dma_lli[i].src = (uint32_t)&(i2s_audio_buffer[I2S_USB_TRANSFER_SIZE * i]);
+		i2s_dma_lli[i].dest = (uint32_t)&(I2S0_TXFIFO);
+		i2s_dma_lli[i].next_lli = (uint32_t)&(i2s_dma_lli[(i == (I2S_NUM_BUFFERS - 1)) ? 0 : i + 1]);
+		i2s_dma_lli[i].control = cw;
+	}
+}
 
-	i2s_dma_lli[1].src = (uint32_t) & (i2s_audio_buffer[I2S_USB_TRANSFER_SIZE]); // Buffer 1
-	i2s_dma_lli[1].dest = (uint32_t) & (I2S0_TXFIFO);
-	i2s_dma_lli[1].next_lli = (uint32_t) & (i2s_dma_lli[0]);
-	i2s_dma_lli[1].control = cw;
-
-	GPDMA_CSRCADDR(I2S_DMA_CHANNEL) = i2s_dma_lli[0].src;
-	GPDMA_CDESTADDR(I2S_DMA_CHANNEL) = i2s_dma_lli[0].dest;
-	GPDMA_CLLI(I2S_DMA_CHANNEL) = i2s_dma_lli[0].next_lli;
-	GPDMA_CCONTROL(I2S_DMA_CHANNEL) = i2s_dma_lli[0].control;
+static void i2s_start_dma(int start_index)
+{
+	GPDMA_CSRCADDR(I2S_DMA_CHANNEL) = i2s_dma_lli[start_index].src;
+	GPDMA_CDESTADDR(I2S_DMA_CHANNEL) = i2s_dma_lli[start_index].dest;
+	GPDMA_CLLI(I2S_DMA_CHANNEL) = i2s_dma_lli[start_index].next_lli;
+	GPDMA_CCONTROL(I2S_DMA_CHANNEL) = i2s_dma_lli[start_index].control;
 	GPDMA_CCONFIG(I2S_DMA_CHANNEL) = GPDMA_CCONFIG_DESTPERIPHERAL(0x9) // DMA req channel 9
 		| GPDMA_CCONFIG_FLOWCNTRL(1)				// memory-to-peripheral
 		| GPDMA_CCONFIG_H(0)						// do not halt
 		| GPDMA_CCONFIG_ITC(1)						// terminal count interrupt
 		| GPDMA_CCONFIG_IE(1);						// error interrupt
+}
+
+static int i2s_get_next_lli_index()
+{
+	for (int i = 0; i < I2S_NUM_BUFFERS; i++)
+	{
+		if (GPDMA_CLLI(I2S_DMA_CHANNEL) == (uint32_t)&i2s_dma_lli[i])
+			return i;
+	}
+
+	return -1; // Should never happen
 }
 
 static bool i2s_get_clock_divider(int sample_rate, int word_width, uint16_t *px_div, uint16_t *py_div, uint32_t *pclk_n)
@@ -182,6 +194,7 @@ void i2s_init()
 void i2s_startup()
 {
 	i2s_init_lli();
+	i2s_start_dma(0);
 	i2s_usb_bytes_transferred = 0;
 	_bytes_transferred = 0;
 }
@@ -208,9 +221,21 @@ void i2s_mute(bool mute)
 		I2S0_DAO &= ~I2S0_DAO_MUTE_MASK;
 }
 
-int32_t i2s_bytes_transferred()
+uint32_t i2s_bytes_transferred()
 {
 	return _bytes_transferred;
+}
+
+void i2s_resume()
+{
+	i2s_init_lli();
+	i2s_start_dma(i2s_get_next_lli_index()); // Resume playback on the buffer after the one we stopped at.
+	i2s_streaming_enable();
+}
+
+bool i2s_is_paused()
+{
+	return (GPDMA_CCONFIG(I2S_DMA_CHANNEL) & GPDMA_CCONFIG_H_MASK) == GPDMA_CCONFIG_H(1) && (I2S0_DAO & I2S0_DAO_RESET_MASK) == 0;
 }
 
 void i2s_gpdma_isr()
@@ -218,11 +243,22 @@ void i2s_gpdma_isr()
 	if (GPDMA_INTTCSTAT & (1 << I2S_DMA_CHANNEL))
 	{
 		GPDMA_INTTCCLEAR = (1 << I2S_DMA_CHANNEL);
-		_bytes_transferred += I2S_USB_TRANSFER_SIZE;
+
+		if ((i2s_usb_bytes_transferred - _bytes_transferred) <= I2S_USB_TRANSFER_SIZE)
+		{
+			// Buffer underrun
+			GPDMA_CCONFIG(I2S_DMA_CHANNEL) |= GPDMA_CCONFIG_H(1); // Halt playback
+		}
+		else
+		{
+			_bytes_transferred += I2S_USB_TRANSFER_SIZE;
+		}
 	}
 
 	if (GPDMA_INTTCSTAT & (1 << I2S_DMA_CHANNEL))
 	{
+		// DMA Error. Not sure if this would ever happen. Lock up if it does.
+		while (1) {}
 		GPDMA_INTERRCLR = (1 << I2S_DMA_CHANNEL);
 	}
 }
