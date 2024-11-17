@@ -489,8 +489,7 @@ void tx_mode(uint32_t seq)
 			// Buffer is now full, start streaming.
 			baseband_streaming_enable(&sgpio_config);
 			if (audio) {
-				// Start audio
-				i2s_streaming_enable();
+				i2s_streaming_enable(); // Start audio
 			}
 			started = true;
 		}
@@ -503,16 +502,14 @@ void tx_mode(uint32_t seq)
 				NULL);
 			usb_count += USB_TRANSFER_SIZE;
 		}
-		if (audio) {
-			if ((usb_audio_count - i2s_bytes_transferred()) <= (I2S_BUFFER_SIZE - I2S_USB_TRANSFER_SIZE)) {
-				usb_transfer_schedule_block(
-					&usb_endpoint_audio_out,
-					&i2s_audio_buffer[usb_audio_count & I2S_BUFFER_MASK],
-					I2S_USB_TRANSFER_SIZE,
-					transceiver_audio_transfer_complete,
-					NULL);
-				usb_audio_count += I2S_USB_TRANSFER_SIZE;
-			}
+		if (audio && (usb_audio_count - i2s_bytes_transferred()) <= (I2S_BUFFER_SIZE - I2S_USB_TRANSFER_SIZE)) {
+			usb_transfer_schedule_block(
+				&usb_endpoint_audio_out,
+				&i2s_audio_buffer[usb_audio_count & I2S_BUFFER_MASK],
+				I2S_USB_TRANSFER_SIZE,
+				transceiver_audio_transfer_complete,
+				NULL);
+			usb_audio_count += I2S_USB_TRANSFER_SIZE;
 		}
 	}
 

@@ -215,10 +215,11 @@ void i2s_streaming_enable()
 
 void i2s_mute(bool mute)
 {
-	if (mute)
+	if (mute) {
 		I2S0_DAO |= I2S0_DAO_MUTE_MASK;
-	else
+	} else {
 		I2S0_DAO &= ~I2S0_DAO_MUTE_MASK;
+	}
 }
 
 uint32_t i2s_bytes_transferred()
@@ -244,13 +245,10 @@ void i2s_gpdma_isr()
 	{
 		GPDMA_INTTCCLEAR = (1 << I2S_DMA_CHANNEL);
 
-		if ((i2s_usb_bytes_transferred - _bytes_transferred) <= I2S_USB_TRANSFER_SIZE)
-		{
+		if ((i2s_usb_bytes_transferred - _bytes_transferred) <= I2S_USB_TRANSFER_SIZE) {
 			// Buffer underrun
 			GPDMA_CCONFIG(I2S_DMA_CHANNEL) |= GPDMA_CCONFIG_H(1); // Halt playback
-		}
-		else
-		{
+		} else {
 			_bytes_transferred += I2S_USB_TRANSFER_SIZE;
 		}
 	}
