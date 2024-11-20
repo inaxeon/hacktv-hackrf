@@ -19,16 +19,18 @@
 #include <stdio.h>
 #include <math.h>
 
+#include "hackrf_core.h"
 #include "i2s.h"
 #include "gpdma.h"
 
 #define CLK_APB1_I2S 			204000000 // 204 MHz
 #define I2S_DMA_FIFO_LEVEL		4
 #define I2S_SAMPLE_RATE			48000
+#define I2S_SYNC_CLOCK_DIVIDER	4 // fs / 32
 
 dma_lli i2s_dma_lli[I2S_NUM_BUFFERS];
 uint8_t i2s_audio_buffer[I2S_BUFFER_SIZE];
-uint32_t i2s_usb_bytes_transferred;
+volatile uint32_t i2s_usb_bytes_transferred;
 uint32_t _bytes_transferred;
 
 static void i2s_init_dma()
@@ -165,25 +167,16 @@ static bool i2s_get_clock_divider(int sample_rate, int word_width, uint16_t *px_
 
 void i2s_init()
 {
-	int word_width = 16;
-	uint16_t x_div = 0;
-	uint16_t y_div = 0;
-	uint32_t clk_n = 0;
-
+	CGU_BASE_AUDIO_CLK = CGU_BASE_AUDIO_CLK_CLK_SEL(0x04);
+	CREG_CREG6 |= CREG_CREG6_I2S0_TX_SCK_IN_SEL;
+	CREG_CREG6 |= CREG_CREG6_I2S0_RX_SCK_IN_SEL;
 	CCU1_CLK_APB1_I2S_CFG = 1; // Enable I2S branch clock
-
-	i2s_get_clock_divider(I2S_SAMPLE_RATE, word_width, &x_div, &y_div, &clk_n);
 
 	I2S0_DAO = I2S0_DAO_WORDWIDTH(1) | // 16-bit
 		I2S0_DAO_MONO(0) | // Stereo
 		I2S0_DAO_WS_SEL(0) | // Master
-		I2S0_DAO_WS_HALFPERIOD(word_width - 1) |
+		I2S0_DAO_WS_HALFPERIOD(16 - 1) |
 		I2S0_DAO_STOP(1) | I2S0_DAO_RESET(1); // WS half-cycle: 16-bits
-
-	I2S0_TXMODE = I2S0_TXMODE_TXCLKSEL(0);
-
-	I2S0_TXBITRATE = (clk_n - 1);
-	I2S0_TXRATE = y_div | (x_div << 8);
 
 	i2s_init_dma();
 
@@ -191,8 +184,26 @@ void i2s_init()
 	gpdma_controller_enable();
 }
 
-void i2s_startup()
+void i2s_startup(bool ext_clock)
 {
+	uint16_t x_div = 0;
+	uint16_t y_div = 0;
+	uint32_t clk_n = 0;
+
+	i2s_get_clock_divider(I2S_SAMPLE_RATE, 16, &x_div, &y_div, &clk_n);
+
+	if (ext_clock) {
+		I2S0_TXMODE = I2S0_TXMODE_TXCLKSEL(1); // BASE_AUDIO_CLK
+		I2S0_TXBITRATE = (I2S_SYNC_CLOCK_DIVIDER - 1);
+		// I2S0_TXRATE does nothing in this mode
+		si5351c_mcu_clk_enable(&clock_gen, 1);
+	} else {
+		I2S0_TXMODE = I2S0_TXMODE_TXCLKSEL(0); // BASE_APB1_CLK
+		I2S0_TXBITRATE = (clk_n - 1);
+		I2S0_TXRATE = y_div | (x_div << 8);
+		si5351c_mcu_clk_enable(&clock_gen, 0);
+	}
+
 	i2s_init_lli();
 	i2s_start_dma(0);
 	i2s_usb_bytes_transferred = 0;

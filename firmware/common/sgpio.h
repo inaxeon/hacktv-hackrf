@@ -39,6 +39,7 @@ typedef struct sgpio_config_t {
 	gpio_t gpio_q_invert;
 	gpio_t gpio_hw_sync_enable;
 	bool slice_mode_multislice;
+	bool tcxo;
 } sgpio_config_t;
 
 void sgpio_configure_pin_functions(sgpio_config_t* const config);

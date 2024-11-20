@@ -39,6 +39,7 @@ static struct gpio_t gpio_h1r9_mcu_clk_en = GPIO(0,  8);
 static enum pll_sources active_clock_source = PLL_SOURCE_UNINITIALIZED;
 /* External clock output default is deactivated as it creates noise */
 static bool clkout_enabled = false;
+static bool mcu_clock_enabled = false;
 
 /* write to single register */
 void si5351c_write_single(si5351c_driver_t* const drv, uint8_t reg, uint8_t val)
@@ -219,7 +220,7 @@ void si5351c_configure_clock_control(
 		}
 	}
 #endif
-	if (clkout_enabled) {
+	if (clkout_enabled || mcu_clock_enabled) {
 		clkout_ctrl = SI5351C_CLK_INT_MODE | SI5351C_CLK_PLL_SRC(pll) |
 			SI5351C_CLK_SRC(SI5351C_CLK_SRC_MULTISYNTH_SELF) |
 			SI5351C_CLK_IDRV(SI5351C_CLK_IDRV_8MA);
@@ -290,7 +291,7 @@ void si5351c_enable_clock_outputs(si5351c_driver_t* const drv)
 			SI5351C_CLK_DISABLE(7);
 	}
 
-	value |= (clkout_enabled) ? SI5351C_CLK_ENABLE(clkout) :
+	value |= (clkout_enabled || mcu_clock_enabled) ? SI5351C_CLK_ENABLE(clkout) :
 				    SI5351C_CLK_DISABLE(clkout);
 	uint8_t data[] = {SI5351C_REG_OUTPUT_EN, value};
 	si5351c_write(drv, data, sizeof(data));
@@ -299,6 +300,12 @@ void si5351c_enable_clock_outputs(si5351c_driver_t* const drv)
 		gpio_set(&gpio_h1r9_clkout_en);
 	} else {
 		gpio_clear(&gpio_h1r9_clkout_en);
+	}
+
+	if ((mcu_clock_enabled) && (detected_platform() == BOARD_ID_HACKRF1_R9)) {
+		gpio_set(&gpio_h1r9_mcu_clk_en);
+	} else {
+		gpio_clear(&gpio_h1r9_mcu_clk_en);
 	}
 }
 
@@ -360,11 +367,18 @@ void si5351c_clkout_enable(si5351c_driver_t* const drv, uint8_t enable)
 	uint8_t clkout = 3;
 	/* HackRF One r9 has only three clock generator outputs. */
 	if (detected_platform() == BOARD_ID_HACKRF1_R9) {
-		clkout = 2;
+		return; // hackdac: No thank you. clkout and mcu_clock are shared. Don't touch here.
 	}
 	/* Configure clock to 10MHz */
 	si5351c_configure_multisynth(drv, clkout, 80 * 128 - 512, 0, 1, 0);
 
+	si5351c_configure_clock_control(drv, active_clock_source);
+	si5351c_enable_clock_outputs(drv);
+}
+
+void si5351c_mcu_clk_enable(si5351c_driver_t* const drv, uint8_t enable)
+{
+	mcu_clock_enabled = (enable > 0);
 	si5351c_configure_clock_control(drv, active_clock_source);
 	si5351c_enable_clock_outputs(drv);
 }

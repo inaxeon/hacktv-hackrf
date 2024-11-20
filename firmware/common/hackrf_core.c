@@ -245,6 +245,7 @@ sgpio_config_t sgpio_config = {
 	.gpio_q_invert = &gpio_q_invert,
 	.gpio_hw_sync_enable = &gpio_hw_sync_enable,
 	.slice_mode_multislice = true,
+	.tcxo = false,
 };
 
 rf_path_t rf_path = {
@@ -414,6 +415,7 @@ bool sample_rate_frac_set(uint32_t rate_num, uint32_t rate_denom)
 		 * from MS1/CLK1 operating at twice the sample rate.
 		 */
 		si5351c_configure_multisynth(&clock_gen, 1, MSx_P1, MSx_P2, MSx_P3, 0);
+		si5351c_configure_multisynth(&clock_gen, 2, MSx_P1, MSx_P2, MSx_P3, 0);
 	} else {
 		/*
 		 * On other platforms the clock generator produces three
@@ -494,6 +496,7 @@ bool sample_rate_set(const uint32_t sample_rate_hz)
 		 * from MS1/CLK1 operating at twice the sample rate.
 		 */
 		si5351c_configure_multisynth(&clock_gen, 1, p1, p2, p3, 0);
+		si5351c_configure_multisynth(&clock_gen, 2, p1, p2, p3, 0);
 	} else {
 		/*
 		 * On other platforms the clock generator produces three

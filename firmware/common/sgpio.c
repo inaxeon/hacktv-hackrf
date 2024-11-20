@@ -47,7 +47,13 @@ void sgpio_configure_pin_functions(sgpio_config_t* const config)
 	scu_pinmux(SCU_PINMUX_SGPIO10, SCU_GPIO_FAST | SCU_CONF_FUNCTION6);
 	scu_pinmux(SCU_PINMUX_SGPIO11, SCU_GPIO_FAST | SCU_CONF_FUNCTION6);
 	scu_pinmux(SCU_PINMUX_SGPIO12, SCU_GPIO_FAST | SCU_CONF_FUNCTION0); /* GPIO0[13] */
-	scu_pinmux(SCU_PINMUX_SGPIO14, SCU_GPIO_FAST | SCU_CONF_FUNCTION7); /* SGPIO14 */
+
+	if (config->tcxo) {
+		scu_pinmux(SCU_PINMUX_SGPIO14, SCU_GPIO_FAST | SCU_CONF_FUNCTION7); /* SGPIO14 */
+	} else {
+		scu_pinmux(SCU_PINMUX_SGPIO14, SCU_GPIO_FAST | SCU_CONF_FUNCTION4); /* GPIO5[13] */
+	}
+
 	scu_pinmux(SCU_PINMUX_SGPIO15, SCU_GPIO_FAST | SCU_CONF_FUNCTION4); /* GPIO5[14] */
 
 	if (detected_platform() == BOARD_ID_HACKRF1_R9) {
@@ -101,7 +107,9 @@ void sgpio_set_slice_mode(sgpio_config_t* const config, const bool multi_slice)
  SGPIO8 Clock Input (External Clock)
  SGPIO9 Capture Input (Capture/ChipSelect, 1=Enable Capture, 0=Disable capture)
  SGPIO10 Disable Output (1/High=Disable codec data stream, 0/Low=Enable codec data stream)
- SGPIO14 Direction Output (1/High=TX mode LPC43xx=>CPLD=>DAC, 0/Low=RX mode LPC43xx<=CPLD<=ADC)
+ SGPIO11 Direction Output (1/High=TX mode LPC43xx=>CPLD=>DAC, 0/Low=RX mode LPC43xx<=CPLD<=ADC) (Si PLL mode)
+ SGPIO14 Direction Output (1/High=TX mode LPC43xx=>CPLD=>DAC, 0/Low=RX mode LPC43xx<=CPLD<=ADC) (TCXO mode)
+
 */
 void sgpio_configure(sgpio_config_t* const config, const sgpio_direction_t direction)
 {
@@ -113,17 +121,12 @@ void sgpio_configure(sgpio_config_t* const config, const sgpio_direction_t direc
 
 	// clang-format off
 	SGPIO_GPIO_OUTREG =
-		  (cpld_direction << 14) // 1 = Output SGPIO14 High (TX mode)
-		                         // 0 = Output SGPIO14 Low  (RX mode)
+		(config->tcxo ? (cpld_direction << 14) : (cpld_direction << 11)) // 1 = Output SGPIO11 High (TX mode)
+								// 0 = Output SGPIO11 Low  (RX mode) // SGPIO14 in TCXO mode
 		| (1L << 10) // disable codec data stream during configuration
-		             // (Output SGPIO10 High)
+					// (Output SGPIO10 High)
 		;
 	// clang-format on
-
-	if (direction == SGPIO_DIRECTION_TX)
-		video_led_on();
-	else
-		video_led_off();
 
 	/* The data direction might have changed. Check if we need to
 	 * adjust the q inversion. */
@@ -135,18 +138,22 @@ void sgpio_configure(sgpio_config_t* const config, const sgpio_direction_t direc
 
 	// clang-format off
 	SGPIO_GPIO_OENREG =
-		  (1L << 14) // direction output SGPIO14 active
+		  (1L << 14) // GPDMA burst request SGPIO14 active (direction bit for TCXO mode)
+		| (config->tcxo ? 0 : (1L << 11)) // direction output SGPIO11 active (pinched for clock input in TCXO mode)
 		| (1L << 10) // disable output SGPIO10 active
 		| (0L <<  9) // capture input SGPIO9 (output i is tri-stated)
 		| (0L <<  8) // clock input SGPIO8 (output i is tri-stated)
 		| sgpio_gpio_data_direction // 0xFF = Output all SGPIO High (TX mode)
 		;                           // 0x00 = Output all SPGIO Low  (RX mode)
-	SGPIO_OUT_MUX_CFG(8) = // SGPIO8:
-		  SGPIO_OUT_MUX_CFG_P_OE_CFG(0)  // gpio_oe (state set by GPIO_OEREG)
-		| SGPIO_OUT_MUX_CFG_P_OUT_CFG(0) // dout_doutm1 (1-bit mode)
-		;
 
-	SGPIO_OUT_MUX_CFG(11) = // SGPIO11:
+	if (config->tcxo) {
+		SGPIO_OUT_MUX_CFG(8) = // SGPIO8:
+			SGPIO_OUT_MUX_CFG_P_OE_CFG(0)  // gpio_oe (state set by GPIO_OEREG)
+			| SGPIO_OUT_MUX_CFG_P_OUT_CFG(0) // dout_doutm1 (1-bit mode)
+			;
+	}
+
+	SGPIO_OUT_MUX_CFG((config->tcxo ? 11 : 8)) = // SGPIO8 (SGPIO11 in TCXO mode):
 		  SGPIO_OUT_MUX_CFG_P_OE_CFG(0)  // gpio_oe (state set by GPIO_OEREG)
 		| SGPIO_OUT_MUX_CFG_P_OUT_CFG(0) // dout_doutm1 (1-bit mode)
 		;
@@ -158,7 +165,7 @@ void sgpio_configure(sgpio_config_t* const config, const sgpio_direction_t direc
 		  SGPIO_OUT_MUX_CFG_P_OE_CFG(0)  // gpio_oe (state set by GPIO_OEREG)
 		| SGPIO_OUT_MUX_CFG_P_OUT_CFG(4) // gpio_out (level set by GPIO_OUTREG)
 		;
-    SGPIO_OUT_MUX_CFG(14) = // GPIO14: Output: direction
+    SGPIO_OUT_MUX_CFG((config->tcxo ? 14 : 11)) = // GPIO11: Output: direction
 		  SGPIO_OUT_MUX_CFG_P_OE_CFG(0)  // gpio_oe (state set by GPIO_OEREG)
 		| SGPIO_OUT_MUX_CFG_P_OUT_CFG(4) // gpio_out (level set by GPIO_OUTREG)
 		;
@@ -212,7 +219,7 @@ void sgpio_configure(sgpio_config_t* const config, const sgpio_direction_t direc
 			| SGPIO_MUX_CFG_QUALIFIER_PIN_MODE(1)    // Select qualifier pin SGPIO9
 			| SGPIO_MUX_CFG_QUALIFIER_MODE(3)        // External SGPIO
 			| SGPIO_MUX_CFG_CLK_SOURCE_SLICE_MODE(0) // Select clock source slice D
-			| SGPIO_MUX_CFG_CLK_SOURCE_PIN_MODE(3)   // Source clock pin = SGPIO11
+			| SGPIO_MUX_CFG_CLK_SOURCE_PIN_MODE(config->tcxo ? 3 : 0)   // Source clock pin = SGPIO8 (SGPIO 11 in TCXO mode)
 			| SGPIO_MUX_CFG_EXT_CLK_ENABLE(1)        // External clock signal selected
 			;
 		SGPIO_SLICE_MUX_CFG(slice_index) =
@@ -313,8 +320,8 @@ static bool mixer_invert = false;
 /* Called when TX/RX changes or sgpio_cpld_set_mixer_invert() gets called. */
 static void update_q_invert(sgpio_config_t* const config)
 {
-	/* 1=Output SGPIO14 High(TX mode), 0=Output SGPIO14 Low(RX mode) */
-	bool tx_mode = (SGPIO_GPIO_OUTREG & (1 << 14)) > 0;
+	/* 1=Output SGPIO11 High(TX mode), 0=Output SGPIO11 (SGPIO14 in TCXO mode) Low(RX mode) */
+	bool tx_mode = (SGPIO_GPIO_OUTREG & (config->tcxo ? (1 << 14) : (1 << 11))) > 0;
 
 	/*
 	 * This switch will need to change if we modify the CPLD to handle

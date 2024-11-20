@@ -29,7 +29,7 @@ enable_language(C CXX ASM)
 
 SET(PATH_HACKRF_FIRMWARE ${CMAKE_CURRENT_LIST_DIR})
 if(NOT DEFINED SGPIO_DEBUG)
-	SET(PATH_HACKRF_CPLD_XSVF ${PATH_HACKRF_FIRMWARE}/cpld/sgpio_if/default.xsvf)
+	SET(PATH_HACKRF_CPLD_XSVF ${PATH_HACKRF_FIRMWARE}/cpld/sgpio_baseband/default.xsvf)
 else()
 	SET(PATH_HACKRF_CPLD_XSVF ${PATH_HACKRF_FIRMWARE}/cpld/sgpio_debug/default.xsvf)
 endif()
