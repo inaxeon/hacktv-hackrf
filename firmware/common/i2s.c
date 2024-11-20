@@ -257,7 +257,7 @@ void i2s_gpdma_isr()
 	{
 		GPDMA_INTTCCLEAR = (1 << I2S_DMA_CHANNEL);
 
-		if ((usb_audio_bytes_transferred - _i2s_bus_bytes_transferred) <= (I2S_USB_TRANSFER_SIZE * (I2S_NUM_BUFFERS - 1))) {
+		if ((usb_audio_bytes_transferred - _i2s_bus_bytes_transferred) <= (I2S_BUFFER_SIZE - I2S_USB_TRANSFER_SIZE)) {
 			// Buffer underrun
 			GPDMA_CCONFIG(I2S_DMA_CHANNEL) |= GPDMA_CCONFIG_H(1); // Halt playback
 		} else {
