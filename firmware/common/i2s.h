@@ -44,9 +44,9 @@ void i2s_gpdma_isr();
 void i2s_generate_test_tone();
 void i2s_resume();
 bool i2s_is_paused();
-uint32_t i2s_bytes_transferred();
+uint32_t i2s_bus_bytes_transferred();
 
 extern uint8_t i2s_audio_buffer[];
-extern volatile uint32_t i2s_usb_bytes_transferred;
+extern volatile uint32_t usb_audio_bytes_transferred;
 
 #endif /*__I2S_H__*/

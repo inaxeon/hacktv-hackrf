@@ -30,8 +30,8 @@
 
 dma_lli i2s_dma_lli[I2S_NUM_BUFFERS];
 uint8_t i2s_audio_buffer[I2S_BUFFER_SIZE];
-volatile uint32_t i2s_usb_bytes_transferred;
-uint32_t _bytes_transferred;
+volatile uint32_t usb_audio_bytes_transferred;
+uint32_t _i2s_bus_bytes_transferred;
 
 static void i2s_init_dma()
 {
@@ -44,7 +44,7 @@ static void i2s_init_dma()
 	CREG_DMAMUX |= CREG_DMAMUX_DMAMUXPER9(1);
 }
 
-static void i2s_init_lli()
+static void i2s_init_dma_lli()
 {
 	uint32_t cw = GPDMA_CCONTROL_TRANSFERSIZE(I2S_BUFFER_DEPTH) |
 		GPDMA_CCONTROL_SBSIZE(0) // 1
@@ -189,6 +189,9 @@ void i2s_startup(bool ext_clock)
 	uint16_t x_div = 0;
 	uint16_t y_div = 0;
 	uint32_t clk_n = 0;
+	
+	usb_audio_bytes_transferred = 0;
+	_i2s_bus_bytes_transferred = 0;
 
 	i2s_get_clock_divider(I2S_SAMPLE_RATE, 16, &x_div, &y_div, &clk_n);
 
@@ -204,10 +207,8 @@ void i2s_startup(bool ext_clock)
 		si5351c_mcu_clk_enable(&clock_gen, 0);
 	}
 
-	i2s_init_lli();
+	i2s_init_dma_lli();
 	i2s_start_dma(0);
-	i2s_usb_bytes_transferred = 0;
-	_bytes_transferred = 0;
 }
 
 void i2s_shutdown()
@@ -233,14 +234,14 @@ void i2s_mute(bool mute)
 	}
 }
 
-uint32_t i2s_bytes_transferred()
+uint32_t i2s_bus_bytes_transferred()
 {
-	return _bytes_transferred;
+	return _i2s_bus_bytes_transferred;
 }
 
 void i2s_resume()
 {
-	i2s_init_lli();
+	i2s_init_dma_lli();
 	i2s_start_dma(i2s_get_next_lli_index()); // Resume playback on the buffer after the one we stopped at.
 	i2s_streaming_enable();
 }
@@ -256,24 +257,25 @@ void i2s_gpdma_isr()
 	{
 		GPDMA_INTTCCLEAR = (1 << I2S_DMA_CHANNEL);
 
-		if ((i2s_usb_bytes_transferred - _bytes_transferred) <= I2S_USB_TRANSFER_SIZE) {
+		if ((usb_audio_bytes_transferred - _i2s_bus_bytes_transferred) <= (I2S_USB_TRANSFER_SIZE * (I2S_NUM_BUFFERS - 1))) {
 			// Buffer underrun
 			GPDMA_CCONFIG(I2S_DMA_CHANNEL) |= GPDMA_CCONFIG_H(1); // Halt playback
 		} else {
-			_bytes_transferred += I2S_USB_TRANSFER_SIZE;
+			_i2s_bus_bytes_transferred += I2S_USB_TRANSFER_SIZE;
 		}
 	}
 
 	if (GPDMA_INTTCSTAT & (1 << I2S_DMA_CHANNEL))
 	{
 		// DMA Error. Not sure if this would ever happen. Lock up if it does.
+		video_led_off();
 		while (1) {}
 		GPDMA_INTERRCLR = (1 << I2S_DMA_CHANNEL);
 	}
 }
 
 #if 0
-static void i2s_init_lli_test(int num_samples)
+static void i2s_init_dma_lli_test(int num_samples)
 {
 	uint32_t cw = GPDMA_CCONTROL_TRANSFERSIZE(num_samples) |
 		GPDMA_CCONTROL_SBSIZE(0) // 1
@@ -332,7 +334,7 @@ void i2s_generate_test_tone()
 		*(((uint32_t *)i2s_audio_buffer) + x) = ((uint16_t)l | (uint32_t)(l << 16));
 	}
 
-	i2s_init_lli_test(audio_samples);
+	i2s_init_dma_lli_test(audio_samples);
 	i2s_streaming_enable();
 }
 #endif

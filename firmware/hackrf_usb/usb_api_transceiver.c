@@ -419,12 +419,12 @@ void transceiver_bulk_transfer_complete(void* user_data, unsigned int bytes_tran
 void transceiver_audio_transfer_complete(void* user_data, unsigned int bytes_transferred)
 {
 	(void) user_data;
-	i2s_usb_bytes_transferred += bytes_transferred;
+	usb_audio_bytes_transferred += bytes_transferred;
 
 	if (i2s_is_paused())
 	{
 		// Wait for buffer to re-fill
-		if ((i2s_usb_bytes_transferred - i2s_bytes_transferred()) == I2S_BUFFER_SIZE)
+		if ((usb_audio_bytes_transferred - i2s_bus_bytes_transferred()) == I2S_BUFFER_SIZE)
 			i2s_resume();
 	}
 }
@@ -540,7 +540,7 @@ void tx_mode(uint32_t seq)
 			started = true;
 		}
 
-		if ((sync_audio || async_audio) && !audio_started && (i2s_usb_bytes_transferred == (I2S_BUFFER_SIZE - I2S_USB_TRANSFER_SIZE))) {
+		if ((sync_audio || async_audio) && !audio_started && (usb_audio_bytes_transferred == (I2S_BUFFER_SIZE - I2S_USB_TRANSFER_SIZE))) {
 			i2s_streaming_enable(); // Start audio
 			audio_started = true;
 		}
@@ -563,7 +563,7 @@ void tx_mode(uint32_t seq)
 				usb_audio_count += I2S_USB_TRANSFER_SIZE;
 			}
 		}
-		if (async_audio && ((usb_audio_count - i2s_bytes_transferred()) <= (I2S_BUFFER_SIZE - I2S_USB_TRANSFER_SIZE))) {
+		if (async_audio && ((usb_audio_count - i2s_bus_bytes_transferred()) <= (I2S_BUFFER_SIZE - I2S_USB_TRANSFER_SIZE))) {
 			usb_transfer_schedule_block(
 				&usb_endpoint_audio_out,
 				&i2s_audio_buffer[usb_audio_count & I2S_BUFFER_MASK],
