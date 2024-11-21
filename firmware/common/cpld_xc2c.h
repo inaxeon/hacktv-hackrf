@@ -70,4 +70,12 @@ extern const cpld_xc2c64a_program_t cpld_hackrf_program_sram;
 extern const cpld_xc2c64a_verify_t cpld_hackrf_verify;
 extern const cpld_xc2c64a_row_addresses_t cpld_hackrf_row_addresses;
 
+extern const cpld_xc2c64a_program_t cpld_hackdac_program_sram;
+extern const cpld_xc2c64a_verify_t cpld_hackdac_verify;
+extern const cpld_xc2c64a_row_addresses_t cpld_hackdac_row_addresses;
+
+extern const cpld_xc2c64a_program_t cpld_hackdac_tcxo_program_sram;
+extern const cpld_xc2c64a_verify_t cpld_hackdac_tcxo_verify;
+extern const cpld_xc2c64a_row_addresses_t cpld_hackdac_row_addresses;
+
 #endif /*__CPLD_XC2C_H__*/

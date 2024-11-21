@@ -156,6 +156,7 @@ action_group.add_argument('--portapack-data', type=str, help='C++ data file for 
 parser.add_argument('--crcmod', action='store_true', help='Use Python crcmod library instead of built-in CRC32 code')
 parser.add_argument('--debug', action='store_true', help='Enable debug output')
 parser.add_argument('--xsvf', required=True, type=str, help='HackRF Xilinx XC2C64A CPLD XSVF file containing erase/program/verify phases')
+parser.add_argument('--cname', required=True, type=str, help='Name of generated object in C source file')
 args = parser.parse_args()
 
 #######################################################################
@@ -216,14 +217,14 @@ if args.hackrf_data:
 		'',
 		'#include <cpld_xc2c.h>',
 		'',
-		'const cpld_xc2c64a_program_t cpld_hackrf_program_sram = { {',
+		'const cpld_xc2c64a_program_t cpld_' + args.cname + '_program_sram = { {',
 	))
 	data_lines = [', '.join(['0x%02x' % n for n in row['data'].to_bytes(bytes_of_data, byteorder='little')]) for row in program_sram]
 	result.extend(['\t{ { %s } },' % line for line in data_lines])
 	result.extend((
 		'} };',
 		'',
-		'const cpld_xc2c64a_verify_t cpld_hackrf_verify = {',
+		'const cpld_xc2c64a_verify_t cpld_' + args.cname + '_verify = {',
 		'\t.mask = {',
 	))
 	verify_mask_lines = [', '.join(['0x%02x' % n for n in mask.to_bytes(bytes_of_data, byteorder='little')]) for mask in verify_masks]
@@ -237,7 +238,7 @@ if args.hackrf_data:
 		'\t}',
 		'};',
 		'',
-		'const cpld_xc2c64a_row_addresses_t cpld_hackrf_row_addresses = { {',
+		'const cpld_xc2c64a_row_addresses_t cpld_' + args.cname + '_row_addresses = { {',
 	))
 	result.extend(['\t%s' % line for line in hex_lines(address_sequence)])
 	result.extend((

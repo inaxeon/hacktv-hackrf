@@ -28,12 +28,16 @@
 #include <libopencm3/lpc43xx/i2s.h>
 #include <libopencm3/lpc43xx/creg.h>
 
-#define I2S_DMA_CHANNEL         1
-#define I2S_NUM_BUFFERS			4
-#define I2S_BUFFER_DEPTH		128 // 32-bit words (each one 16-bit L+R sample)
-#define I2S_USB_TRANSFER_SIZE	(I2S_BUFFER_DEPTH * sizeof(uint32_t))
-#define I2S_BUFFER_MASK			((I2S_USB_TRANSFER_SIZE * I2S_NUM_BUFFERS) - 1)
-#define I2S_BUFFER_SIZE			(I2S_USB_TRANSFER_SIZE * I2S_NUM_BUFFERS)
+#define I2S_DMA_CHANNEL         	1
+#define I2S_NUM_BUFFERS				4
+#define I2S_BUFFER_DEPTH_SYNC		128 // 32-bit words (each one 16-bit L+R sample)
+#define I2S_BUFFER_DEPTH_ASYNC		512 // 32-bit words (each one 16-bit L+R sample)
+#define I2S_USB_TRANSFER_SIZE_SYNC	(I2S_BUFFER_DEPTH_SYNC * sizeof(uint32_t))
+#define I2S_USB_TRANSFER_SIZE_ASYNC	(I2S_BUFFER_DEPTH_ASYNC * sizeof(uint32_t))
+#define I2S_BUFFER_MASK_SYNC		((I2S_USB_TRANSFER_SIZE_SYNC * I2S_NUM_BUFFERS) - 1)
+#define I2S_BUFFER_MASK_ASYNC		((I2S_USB_TRANSFER_SIZE_ASYNC * I2S_NUM_BUFFERS) - 1)
+#define I2S_BUFFER_SIZE_SYNC		(I2S_USB_TRANSFER_SIZE_ASYNC * I2S_NUM_BUFFERS)
+#define I2S_BUFFER_SIZE_ASYNC		(I2S_USB_TRANSFER_SIZE_ASYNC * I2S_NUM_BUFFERS)
 
 void i2s_init();
 void i2s_startup(bool ext_clock);

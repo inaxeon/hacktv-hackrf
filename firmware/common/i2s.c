@@ -26,10 +26,14 @@
 #define CLK_APB1_I2S 			204000000 // 204 MHz
 #define I2S_DMA_FIFO_LEVEL		4
 #define I2S_SAMPLE_RATE			48000
-#define I2S_SYNC_CLOCK_DIVIDER	4 // fs / 32
+#define I2S_SYNC_CLOCK_DIVIDER	4 // fs / 32 i.e. 27000000 (2 x 13.5 MHz) / 32 (bits per L+R sample) / 4 (I2S clock divider) = 210937.5
+
+#if (I2S_BUFFER_DEPTH_SYNC > I2S_BUFFER_DEPTH_ASYNC)
+#error async buffer must be smaller than sync buffer
+#endif
 
 dma_lli i2s_dma_lli[I2S_NUM_BUFFERS];
-uint8_t i2s_audio_buffer[I2S_BUFFER_SIZE];
+uint8_t i2s_audio_buffer[I2S_BUFFER_SIZE_ASYNC];
 volatile uint32_t usb_audio_bytes_transferred;
 uint32_t _i2s_bus_bytes_transferred;
 
@@ -44,9 +48,9 @@ static void i2s_init_dma()
 	CREG_DMAMUX |= CREG_DMAMUX_DMAMUXPER9(1);
 }
 
-static void i2s_init_dma_lli()
+static void i2s_init_dma_lli(int samples_per_buffer)
 {
-	uint32_t cw = GPDMA_CCONTROL_TRANSFERSIZE(I2S_BUFFER_DEPTH) |
+	uint32_t cw = GPDMA_CCONTROL_TRANSFERSIZE(samples_per_buffer) |
 		GPDMA_CCONTROL_SBSIZE(0) // 1
 		| GPDMA_CCONTROL_DBSIZE(0) // 1
 		| GPDMA_CCONTROL_SWIDTH(2) // 32-bit word
@@ -62,14 +66,14 @@ static void i2s_init_dma_lli()
 
 	for (int i = 0; i < I2S_NUM_BUFFERS; i++)
 	{
-		i2s_dma_lli[i].src = (uint32_t)&(i2s_audio_buffer[I2S_USB_TRANSFER_SIZE * i]);
+		i2s_dma_lli[i].src = (uint32_t)&(i2s_audio_buffer[(samples_per_buffer * sizeof(uint32_t)) * i]);
 		i2s_dma_lli[i].dest = (uint32_t)&(I2S0_TXFIFO);
 		i2s_dma_lli[i].next_lli = (uint32_t)&(i2s_dma_lli[(i == (I2S_NUM_BUFFERS - 1)) ? 0 : i + 1]);
 		i2s_dma_lli[i].control = cw;
 	}
 }
 
-static void i2s_start_dma(int start_index)
+static void i2s_setup_dma_channel(int start_index)
 {
 	GPDMA_CSRCADDR(I2S_DMA_CHANNEL) = i2s_dma_lli[start_index].src;
 	GPDMA_CDESTADDR(I2S_DMA_CHANNEL) = i2s_dma_lli[start_index].dest;
@@ -184,7 +188,7 @@ void i2s_init()
 	gpdma_controller_enable();
 }
 
-void i2s_startup(bool ext_clock)
+void i2s_startup(bool sync_mode)
 {
 	uint16_t x_div = 0;
 	uint16_t y_div = 0;
@@ -195,8 +199,8 @@ void i2s_startup(bool ext_clock)
 
 	i2s_get_clock_divider(I2S_SAMPLE_RATE, 16, &x_div, &y_div, &clk_n);
 
-	if (ext_clock) {
-		I2S0_TXMODE = I2S0_TXMODE_TXCLKSEL(1); // BASE_AUDIO_CLK
+	if (sync_mode) {
+		I2S0_TXMODE = I2S0_TXMODE_TXCLKSEL(1); // BASE_AUDIO_CLK (Datasheet lists is as "Reserved" ?)
 		I2S0_TXBITRATE = (I2S_SYNC_CLOCK_DIVIDER - 1);
 		// I2S0_TXRATE does nothing in this mode
 		si5351c_mcu_clk_enable(&clock_gen, 1);
@@ -207,8 +211,8 @@ void i2s_startup(bool ext_clock)
 		si5351c_mcu_clk_enable(&clock_gen, 0);
 	}
 
-	i2s_init_dma_lli();
-	i2s_start_dma(0);
+	i2s_init_dma_lli(sync_mode ? I2S_BUFFER_DEPTH_SYNC : I2S_BUFFER_DEPTH_ASYNC);
+	i2s_setup_dma_channel(0);
 }
 
 void i2s_shutdown()
@@ -241,8 +245,8 @@ uint32_t i2s_bus_bytes_transferred()
 
 void i2s_resume()
 {
-	i2s_init_dma_lli();
-	i2s_start_dma(i2s_get_next_lli_index()); // Resume playback on the buffer after the one we stopped at.
+	i2s_init_dma_lli((I2S0_TXMODE & I2S0_TXMODE_TXCLKSEL_MASK) == 1 ? I2S_BUFFER_DEPTH_SYNC : I2S_BUFFER_DEPTH_ASYNC);
+	i2s_setup_dma_channel(i2s_get_next_lli_index()); // Resume playback on the buffer after the one we stopped at.
 	i2s_streaming_enable();
 }
 
@@ -255,13 +259,14 @@ void i2s_gpdma_isr()
 {
 	if (GPDMA_INTTCSTAT & (1 << I2S_DMA_CHANNEL))
 	{
+		uint32_t xfer_size = (I2S0_TXMODE & I2S0_TXMODE_TXCLKSEL_MASK) == 1 ? I2S_USB_TRANSFER_SIZE_SYNC : I2S_USB_TRANSFER_SIZE_ASYNC;
 		GPDMA_INTTCCLEAR = (1 << I2S_DMA_CHANNEL);
 
-		if ((usb_audio_bytes_transferred - _i2s_bus_bytes_transferred) <= (I2S_BUFFER_SIZE - I2S_USB_TRANSFER_SIZE)) {
+		if ((usb_audio_bytes_transferred - _i2s_bus_bytes_transferred) <= xfer_size) {
 			// Buffer underrun
 			GPDMA_CCONFIG(I2S_DMA_CHANNEL) |= GPDMA_CCONFIG_H(1); // Halt playback
 		} else {
-			_i2s_bus_bytes_transferred += I2S_USB_TRANSFER_SIZE;
+			_i2s_bus_bytes_transferred += xfer_size;
 		}
 	}
 
