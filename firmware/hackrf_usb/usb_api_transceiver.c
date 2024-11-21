@@ -432,13 +432,13 @@ void transceiver_bulk_transfer_complete(void* user_data, unsigned int bytes_tran
 void transceiver_audio_transfer_complete(void* user_data, unsigned int bytes_transferred)
 {
 	(void) user_data;
-	usb_audio_bytes_transferred += bytes_transferred;
+	i2s_usb_audio_bytes_transferred += bytes_transferred;
 
 	if (i2s_is_paused()) {
 		// Wait for buffer to re-fill
-		if ((usb_audio_bytes_transferred - i2s_bus_bytes_transferred()) ==
+		if ((i2s_usb_audio_bytes_transferred - i2s_bus_bytes_transferred()) ==
 			// sync mode: in order to match the re-fill logic for video don't fully re-fill 
-			(hackdac_get_audio_mode() == HACKDAC_SYNC_AUDIO ? (I2S_BUFFER_SIZE_SYNC - I2S_USB_TRANSFER_SIZE_SYNC) : I2S_BUFFER_SIZE_ASYNC)) {
+			(hackdac_get_audio_mode() == HACKDAC_SYNC_AUDIO ? (i2s_buffer_size - i2s_usb_transfer_size) : i2s_buffer_size)) {
 			i2s_resume();
 		}
 	}
@@ -540,10 +540,10 @@ void tx_mode(uint32_t seq)
 		usb_transfer_schedule_block(
 			&usb_endpoint_audio_out,
 			&i2s_audio_buffer[0x0000],
-			(audio_mode == HACKDAC_SYNC_AUDIO) ? I2S_USB_TRANSFER_SIZE_SYNC : I2S_USB_TRANSFER_SIZE_ASYNC,
+			i2s_usb_transfer_size,
 			transceiver_audio_transfer_complete,
 			NULL);
-		usb_audio_count += ((audio_mode == HACKDAC_SYNC_AUDIO) ? I2S_USB_TRANSFER_SIZE_SYNC : I2S_USB_TRANSFER_SIZE_ASYNC);
+		usb_audio_count += i2s_usb_transfer_size;
 	}
 
 	while (transceiver_request.seq == seq) {
@@ -556,8 +556,8 @@ void tx_mode(uint32_t seq)
 			started = true;
 		}
 
-		if ((audio_mode != HACKDAC_NO_AUDIO) && !audio_started && (usb_audio_bytes_transferred == 
-			(audio_mode == HACKDAC_SYNC_AUDIO ? (I2S_BUFFER_SIZE_SYNC - I2S_USB_TRANSFER_SIZE_SYNC) : (I2S_BUFFER_SIZE_ASYNC - I2S_USB_TRANSFER_SIZE_ASYNC)))) {
+		if ((audio_mode != HACKDAC_NO_AUDIO) && !audio_started &&
+			(i2s_usb_audio_bytes_transferred == (i2s_buffer_size - i2s_usb_transfer_size))) {
 			i2s_streaming_enable(); // Start audio
 			audio_started = true;
 		}
@@ -573,22 +573,23 @@ void tx_mode(uint32_t seq)
 			if (audio_mode == HACKDAC_SYNC_AUDIO) {
 				usb_transfer_schedule_block(
 					&usb_endpoint_bulk_out,
-					&i2s_audio_buffer[usb_audio_count & I2S_BUFFER_MASK_SYNC],
-					I2S_USB_TRANSFER_SIZE_SYNC,
+					&i2s_audio_buffer[usb_audio_count & i2s_buffer_mask],
+					i2s_usb_transfer_size,
 					transceiver_audio_transfer_complete,
 					NULL);
-				usb_audio_count += I2S_USB_TRANSFER_SIZE_SYNC;
+				usb_audio_count += i2s_usb_transfer_size;
 			}
 		}
 
-		if ((audio_mode == HACKDAC_ASYNC_AUDIO) && ((usb_audio_count - i2s_bus_bytes_transferred()) <= (I2S_BUFFER_SIZE_ASYNC - I2S_USB_TRANSFER_SIZE_ASYNC))) {
+		if ((audio_mode == HACKDAC_ASYNC_AUDIO) &&
+			((usb_audio_count - i2s_bus_bytes_transferred()) <= (i2s_buffer_size - i2s_usb_transfer_size))) {
 			usb_transfer_schedule_block(
 				&usb_endpoint_audio_out,
-				&i2s_audio_buffer[usb_audio_count & I2S_BUFFER_MASK_ASYNC],
-				I2S_USB_TRANSFER_SIZE_ASYNC,
+				&i2s_audio_buffer[usb_audio_count & i2s_buffer_mask],
+				i2s_usb_transfer_size,
 				transceiver_audio_transfer_complete,
 				NULL);
-			usb_audio_count += I2S_USB_TRANSFER_SIZE_ASYNC;
+			usb_audio_count += i2s_usb_transfer_size;
 		}
 	}
 

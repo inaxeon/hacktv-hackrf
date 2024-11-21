@@ -68,6 +68,17 @@ void hackdac_init()
 	i2s_init();
 }
 
+void hackdac_error()
+{
+	// System error: Blink the video out LED.
+	while (1) {
+		video_led_on();
+		delay(6000000);
+		video_led_off();
+		delay(6000000);
+	}
+}
+
 bool hackdac_baseband_enabled()
 {
 	return _baseband_enabled;

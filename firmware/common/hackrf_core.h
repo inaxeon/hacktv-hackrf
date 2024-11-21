@@ -318,6 +318,7 @@ void set_leds(const uint8_t state);
 
 void video_led_on();
 void video_led_off();
+void hackdac_error();
 
 void hw_sync_enable(const hw_sync_mode_t hw_sync_mode);
 
