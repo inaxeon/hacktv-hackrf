@@ -57,7 +57,7 @@
 #include "hackrf_ui.h"
 #include "platform_detect.h"
 #include "clkin.h"
-#include "i2s.h"
+#include "hackdac.h"
 
 extern uint32_t __m0_start__;
 extern uint32_t __m0_end__;
@@ -292,7 +292,7 @@ int main(void)
 	}
 	operacake_init(operacake_allow_gpio);
 
-	i2s_init();
+	hackdac_init();
 
 	// FIXME: clock detection on r9 only works when calling init twice
 

@@ -37,7 +37,9 @@ typedef enum {
 	HACKDAC_ASYNC_AUDIO = 2
 } audio_mode_t;
 
+void hackdac_init();
 bool hackdac_set_mode(uint8_t mode);
 audio_mode_t hackdac_get_audio_mode();
+bool hackdac_baseband_enabled();
 
 #endif /*__HACKDAC_H__*/

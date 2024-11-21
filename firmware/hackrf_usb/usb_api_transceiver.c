@@ -550,7 +550,9 @@ void tx_mode(uint32_t seq)
 		if (!started && ((m0_state.m4_count == USB_BULK_BUFFER_SIZE))) {
 			// Buffer is now full, start streaming.
 			baseband_streaming_enable(&sgpio_config);
-			video_led_on();
+			if (hackdac_baseband_enabled()) {
+				video_led_on();
+			}
 			started = true;
 		}
 

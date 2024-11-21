@@ -20,8 +20,10 @@
 #include "hackdac.h"
 #include "cpld_jtag.h"
 #include "cpld_xc2c.h"
+#include "i2s.h"
 
 static uint8_t _audio_mode;
+static bool _baseband_enabled;
 
 static bool cpld_jtag_sram_load_hackrf(jtag_t* const jtag)
 {
@@ -59,6 +61,18 @@ static bool cpld_jtag_sram_load_hackdac_tcxo(jtag_t* const jtag)
 	return success;
 }
 
+void hackdac_init()
+{
+	_baseband_enabled = false;
+	_audio_mode = HACKDAC_NO_AUDIO;
+	i2s_init();
+}
+
+bool hackdac_baseband_enabled()
+{
+	return _baseband_enabled;
+}
+
 bool hackdac_set_mode(uint8_t mode)
 {
 	_audio_mode = (mode & HACKDAC_AUDIO_MODE_MASK) >> HACKDAC_AUDIO_MODE_SHIFT;
@@ -78,11 +92,13 @@ bool hackdac_set_mode(uint8_t mode)
 			}
 			sgpio_config.tcxo = false;
 		}
+		_baseband_enabled = true;
 	} else {
 		if (!cpld_jtag_sram_load_hackrf(&jtag_cpld)) {
 			halt_and_flash(6000000);
 		}
 		si5351c_mcu_clk_enable(&clock_gen, false); // Not needed in RF mode
+		_baseband_enabled = false;
 	}
 
 	return true;
