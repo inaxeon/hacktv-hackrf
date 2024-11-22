@@ -293,7 +293,7 @@ bool set_hw_sync_mode(const hw_sync_mode_t new_hw_sync_mode)
 			_hw_sync_mode = HW_SYNC_MODE_OFF;
 			return true;
 		}
-		_hw_sync_mode = new_hw_sync_mode;
+		_hw_sync_mode = new_hw_sync_mode & 0x01;
 	}
 
 	return result;
