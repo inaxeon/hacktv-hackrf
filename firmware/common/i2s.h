@@ -30,7 +30,19 @@
 
 #define I2S_DMA_CHANNEL         	1
 #define I2S_NUM_BUFFERS				4
+
+// For sync mode audio buffers are transferred and consumed in lockstep with video data,
+// possible because the I2S master is clocked from the same source thus entirely synchronous.
+// 128 samples is chosen because it results in a 512 byte buffer which is efficent to transfer
+// over USB with the video buffers (which are 16KB each). Resulting audio sample rates
+// are fs / 64. A bit overkill but the alternative is throwing away data on the wire.
+
 #define I2S_BUFFER_DEPTH_SYNC		128 // 32-bit words (each one 16-bit L+R sample)
+
+// For async mode larger buffers are used. 512 samples results in 2K buffers which
+// from experimentation (thus far) appears to be the sweet spot in terms of minimal
+// CPU time to de-queue them -without- clogging up the wire potentially causing video underruns.
+
 #define I2S_BUFFER_DEPTH_ASYNC		512 // 32-bit words (each one 16-bit L+R sample)
 
 void i2s_init();

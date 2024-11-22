@@ -86,11 +86,11 @@ bool hackdac_baseband_enabled()
 
 bool hackdac_set_mode(uint8_t mode)
 {
-	_audio_mode = (mode & HACKDAC_AUDIO_MODE_MASK) >> HACKDAC_AUDIO_MODE_SHIFT;
+	uint8_t audio_mode = (mode & HACKDAC_AUDIO_MODE_MASK) >> HACKDAC_AUDIO_MODE_SHIFT;
 
 	if (mode & HACKDAC_MODE_BASEBAND) {
 		if (mode & HACKDAC_BASEBAND_TCXO) {
-			if (_audio_mode == HACKDAC_SYNC_AUDIO) {
+			if (audio_mode == HACKDAC_SYNC_AUDIO) {
 				return false; // Not presently possible
 			}
 			if (!cpld_jtag_sram_load_hackdac_tcxo(&jtag_cpld)) {
@@ -105,13 +105,18 @@ bool hackdac_set_mode(uint8_t mode)
 		}
 		_baseband_enabled = true;
 	} else {
+		if (mode & HACKDAC_BASEBAND_TCXO) {
+			return false; // No chance of this working. Block it.
+		}
 		if (!cpld_jtag_sram_load_hackrf(&jtag_cpld)) {
 			halt_and_flash(6000000);
 		}
 		si5351c_mcu_clk_enable(&clock_gen, false); // Not needed in RF mode
+		sgpio_config.tcxo = false;
 		_baseband_enabled = false;
 	}
 
+	_audio_mode = audio_mode;
 	return true;
 }
 
