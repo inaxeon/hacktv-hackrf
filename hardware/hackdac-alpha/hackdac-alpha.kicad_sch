@@ -1,0 +1,172 @@
+(kicad_sch
+	(version 20231120)
+	(generator "eeschema")
+	(generator_version "8.0")
+	(uuid "487245ca-0c1f-4f9d-bc99-20c8f558090f")
+	(paper "A4")
+	(title_block
+		(title "${TITLE}")
+		(date "${DATE}")
+		(rev "${VERSION}")
+		(company "${COPYRIGHT}")
+		(comment 1 "${LICENSE}")
+	)
+	(lib_symbols)
+	(sheet
+		(at 154.94 55.88)
+		(size 54.61 29.845)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "80e17ed4-cb43-4c12-a09c-75e0f0ffaba0")
+		(property "Sheetname" "audio"
+			(at 154.94 55.1684 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "audio.kicad_sch"
+			(at 154.94 86.3096 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "dacattac-alpha"
+				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f"
+					(page "3")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 97.79 55.88)
+		(size 54.61 29.845)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "b4bbface-dd1a-4873-ab51-f35caad404be")
+		(property "Sheetname" "video"
+			(at 97.79 55.1684 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "video.kicad_sch"
+			(at 97.79 86.3096 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "dacattac-alpha"
+				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f"
+					(page "1")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 154.94 100.33)
+		(size 54.61 29.845)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "b8114b5f-896b-4ea4-b003-c1721b486c01")
+		(property "Sheetname" "power"
+			(at 154.94 99.6184 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "power.kicad_sch"
+			(at 154.94 130.7596 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "dacattac-alpha"
+				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f"
+					(page "4")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 97.79 100.33)
+		(size 54.61 29.845)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "e1e307fe-d49b-45b6-b177-774a7a482979")
+		(property "Sheetname" "video-misc"
+			(at 97.79 99.6184 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "video-misc.kicad_sch"
+			(at 97.79 130.7596 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "dacattac-alpha"
+				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f"
+					(page "2")
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "5")
+		)
+	)
+)
