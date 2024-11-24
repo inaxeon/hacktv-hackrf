@@ -43,7 +43,7 @@
 			)
 		)
 		(instances
-			(project "dacattac-alpha"
+			(project "hackdac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f"
 					(page "3")
 				)
@@ -81,7 +81,7 @@
 			)
 		)
 		(instances
-			(project "dacattac-alpha"
+			(project "hackdac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f"
 					(page "1")
 				)
@@ -119,7 +119,7 @@
 			)
 		)
 		(instances
-			(project "dacattac-alpha"
+			(project "hackdac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f"
 					(page "4")
 				)
@@ -157,7 +157,7 @@
 			)
 		)
 		(instances
-			(project "dacattac-alpha"
+			(project "hackdac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f"
 					(page "2")
 				)

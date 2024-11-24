@@ -8010,15 +8010,15 @@
 		(fields_autoplaced yes)
 		(uuid "ce2d2c14-94a4-468e-8d30-697749984c77")
 		(property "Reference" "L11"
-			(at 48.895 151.765 90)
+			(at 48.895 151.13 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Value" "L"
-			(at 48.895 154.305 90)
+		(property "Value" "5u6"
+			(at 48.895 153.67 90)
 			(effects
 				(font
 					(size 1.27 1.27)
