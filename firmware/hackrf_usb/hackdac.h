@@ -24,12 +24,16 @@
 #define HACKDAC_SYNC_MAGIC_2			0x12345678
 #define HACKDAC_SYNC_AWAITING			0xFFFFFFFF
 
-#define HACKDAC_MODE_BASEBAND			0x80
-#define HACKDAC_BASEBAND_TCXO			0x02
+#define HACKDAC_MODE_BASEBAND			(1 << 7)
+#define HACKDAC_RFFC5071_HIJACK			(1 << 6)
+#define HACKDAC_BASEBAND_TCXO			(1 << 1)
 
 #define HACKDAC_AUDIO_MODE_SHIFT		(2)
 #define HACKDAC_AUDIO_MODE_MASK			(0x3 << HACKDAC_AUDIO_MODE_SHIFT)
 #define HACKDAC_AUDIO_MODE(x) 			((x) << HACKDAC_AUDIO_MODE_SHIFT)
+
+#define HACKDAC_REG_START				0x20
+#define HACKDAC_NUM_REGS				0x20
 
 typedef enum {
 	HACKDAC_NO_AUDIO = 0,
@@ -41,5 +45,8 @@ void hackdac_init();
 bool hackdac_set_mode(uint8_t mode);
 audio_mode_t hackdac_get_audio_mode();
 bool hackdac_baseband_enabled();
+bool hackdac_i2c_reg_read(uint8_t idx, uint16_t *value);
+bool hackdac_i2c_reg_write(uint8_t idx, uint16_t value);
+bool hackdac_rffc5071_api_is_hijacked();
 
 #endif /*__HACKDAC_H__*/
