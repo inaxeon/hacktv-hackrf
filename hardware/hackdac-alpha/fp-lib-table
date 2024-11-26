@@ -1,0 +1,10 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "BFC2808xxxxx")(type "KiCad")(uri "${KIPRJMOD}/thirdparty-syms/BFC2808xxxxx.pretty")(options "")(descr ""))
+  (lib (name "NEOSID_7MM")(type "KiCad")(uri "${KIPRJMOD}/thirdparty-syms/NEOSID_7MM.pretty")(options "")(descr ""))
+  (lib (name "hackrf")(type "Legacy")(uri "${KIPRJMOD}/thirdparty-syms/hackrf.mod")(options "")(descr ""))
+  (lib (name "TPS63700DRCT")(type "KiCad")(uri "${KIPRJMOD}/thirdparty-syms/TPS63700DRCT.pretty")(options "")(descr ""))
+  (lib (name "TPS61170DRVR")(type "KiCad")(uri "${KIPRJMOD}/thirdparty-syms/TPS61170DRVR.pretty")(options "")(descr ""))
+  (lib (name "MOLEX_73101")(type "KiCad")(uri "${KIPRJMOD}/thirdparty-syms/MOLEX_73101.pretty")(options "")(descr ""))
+  (lib (name "PJRAN2X1U01X")(type "KiCad")(uri "${KIPRJMOD}/thirdparty-syms/PJRAN2X1U01X.pretty")(options "")(descr ""))
+)
