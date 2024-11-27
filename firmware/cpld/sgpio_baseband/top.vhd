@@ -97,8 +97,6 @@ begin
         if falling_edge(host_clk_i) then
             -- Generate DAC clock (TCXO / 2)
             codec_clk_rx_i <= dac_clock_o;
-            -- Data latching is moved to the rising edge as the delay in getting the clock through the CPLD
-            -- down to the SGPIO means that it ends up better to sample at this time rather than falling.
             if OUTPUT_ENABLED = '1' then
                 if codec_clk_tx_i = '1' then
                     -- HackDAC 1-bit sync
