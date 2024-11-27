@@ -34,9 +34,9 @@
 #include <sys/ioctl.h>
 #include <unistd.h>
 
-#define HACKDAC_ONEVOLT                              0x0000
-#define HACKDAC_ZEROVOLT                             0x8000
-#define HACKDAC_MINUSONEVOLT                         0xFFFF
+#define HACKDAC_ONEVOLT                              32767
+#define HACKDAC_ZEROVOLT                             0
+#define HACKDAC_MINUSONEVOLT                         -32768
 
 #define HACKDAC_SAMPLE_RATE                          13500000
 
@@ -84,6 +84,7 @@ typedef enum
     OffsetDown,
     GainUp,
     GainDown,
+    ToggleSync,
     CoarseAdjust,
     FineAdjust,
     Print,
@@ -92,7 +93,7 @@ typedef enum
     Quit
 } test_cmd_t;
 
-uint16_t dac_value;
+int16_t dac_value;
 bool sync_bit;
 
 void usage()
@@ -153,6 +154,24 @@ void terminal_unset_raw_mode()
     tcsetattr(STDIN_FILENO, TCSANOW, &term);
 }
 
+void adjust_cal(uint16_t *value, bool up, bool coarse)
+{
+    int32_t new_value = *value;
+
+    if (up)
+        new_value += coarse ? 10 : 1;
+    else
+        new_value -= coarse ? 10 : 1;
+
+    if (new_value < 0)
+        new_value = 0;
+    
+    if (new_value > (MCP47FEBXX_RANGE - 1))
+        new_value = (MCP47FEBXX_RANGE - 1);
+
+    *value = new_value;
+}
+
 test_cmd_t get_cmd(bool non_block)
 {
     if (non_block && !posix_kbhit())
@@ -192,6 +211,9 @@ test_cmd_t get_cmd(bool non_block)
         return GainUp;
     case '-':
         return GainDown;
+    case 's':
+    case 'S':
+        return ToggleSync;
     case 'c':
     case 'C':
         return CoarseAdjust;
@@ -258,6 +280,7 @@ void cal_run(hackrf_device *device, uint16_t offset, uint16_t gain)
     printf("Left/Right arrow    : Set output to 0V\n");
     printf("+/-                 : Increase/decrease gain\n");
     printf("Page up / Page down : Increase/decrease offset\n");
+    printf("S                   : Toggle sync output\n");
     printf("C                   : Coarse adjustment\n");
     printf("F                   : Fine adjustment\n");
     printf("R                   : Reset calibration\n");
@@ -286,20 +309,23 @@ void cal_run(hackrf_device *device, uint16_t offset, uint16_t gain)
                 dac_value = HACKDAC_ZEROVOLT;
                 break;
             case GainUp:
-                gain += coarse ? 10 : 1;
+                adjust_cal(&gain, true, coarse);
                 mcp47febxx_write(device, MCP47FEBXX_VOLATILE_DAC1, gain);
                 break;
             case GainDown:
-                gain -= coarse ? 10 : 1;
+                adjust_cal(&gain, false, coarse);
                 mcp47febxx_write(device, MCP47FEBXX_VOLATILE_DAC1, gain);
                 break;
             case OffsetUp:
-                offset -= coarse ? 10 : 1;
+                adjust_cal(&offset, false, coarse);
                 mcp47febxx_write(device, MCP47FEBXX_VOLATILE_DAC0, offset);
                 break;
             case OffsetDown:
-                offset += coarse ? 10 : 1;
+                adjust_cal(&offset, true, coarse);
                 mcp47febxx_write(device, MCP47FEBXX_VOLATILE_DAC0, offset);
+                break;
+            case ToggleSync:
+                sync_bit = !sync_bit;
                 break;
             case CoarseAdjust:
                 coarse = true;
@@ -313,7 +339,8 @@ void cal_run(hackrf_device *device, uint16_t offset, uint16_t gain)
             case Reset:
                 gain = MCP47FEBXX_RANGE / 2;
                 offset = MCP47FEBXX_RANGE / 2;
-                cal_write(device, offset, gain);
+                mcp47febxx_write(device, MCP47FEBXX_VOLATILE_DAC1, gain);
+                mcp47febxx_write(device, MCP47FEBXX_VOLATILE_DAC0, offset);
                 break;
             case Write:
                 cal_write(device, offset, gain);
@@ -339,10 +366,8 @@ int tx_callback(hackrf_transfer *transfer)
 
     for (i = 0; i < transfer->valid_length; i += 2)
     {
-        uint16_t actual_dac_value = (dac_value >> 1); // Drop LSB to account for sync bit
-
-        buf[i + 0] = actual_dac_value & 0xFF;
-        buf[i + 1] = ((actual_dac_value >> 8) & 0x7F) | (sync_bit << 7);
+        buf[i + 0] = (dac_value >> 1) & 0xFF;
+        buf[i + 1] = ((dac_value >> 9) & 0x7F) | (sync_bit << 7);
     }
 
     return 0;

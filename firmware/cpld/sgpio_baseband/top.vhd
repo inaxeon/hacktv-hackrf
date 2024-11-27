@@ -101,10 +101,11 @@ begin
                     -- HackDAC 1-bit sync
                     SYNC_OUT <= HOST_DATA(7);
                     -- HackDAC DAC MSBs
-                    VDAC(15 downto 9) <= HOST_DATA(6 downto 0);
+						  VDAC(15) <= HOST_DATA(6);
+                    VDAC(14 downto 9) <= not HOST_DATA(5 downto 0); -- convert to 2's compliment
                 else
                     -- HackDAC DAC LSBs
-                    VDAC(8 downto 1) <= HOST_DATA;
+                    VDAC(8 downto 1) <= not HOST_DATA;  -- convert to 2's compliment
                     VDAC(0) <= '0';
                 end if;
             else

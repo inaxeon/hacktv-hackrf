@@ -4,7 +4,7 @@
 # tsim -intstyle ise top top.nga
 # taengine -intstyle ise -f top -l top.tim -e {taengine.err}
 # hprep6 -s IEEE1149 -i top
-# vhdtdtfi -prj sgpio_if -o top.vhi -module top -template /opt/Xilinx/14.7/ISE_DS/ISE/data/vhdlinst.tft -deleteonerror -lib work top.vhd
+# vhdtdtfi -prj sgpio_baseband -o top.vhi -module top -template /opt/Xilinx/14.7/ISE_DS/ISE/data/vhdlinst.tft -deleteonerror -lib work top.vhd
 
 DESIGN=top
 
