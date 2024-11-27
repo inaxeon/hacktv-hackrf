@@ -22,8 +22,14 @@
 #include "cpld_xc2c.h"
 #include "i2s.h"
 
+#define MCP47FEBXX_A1_SLAVE_ADDR            0x61
+#define MCP47FEBXX_CMD_READ                 0x06
+#define MCP47FEBXX_NONVOLATILE_DAC0         0x10
+#define MCP47FEBXX_NONVOLATILE_DAC1         0x11
+
 static uint8_t _audio_mode;
 static bool _baseband_enabled;
+static bool _rffc5071_hijacked;
 
 static bool cpld_jtag_sram_load_hackrf(jtag_t* const jtag)
 {
@@ -65,6 +71,7 @@ void hackdac_init()
 {
 	_baseband_enabled = false;
 	_audio_mode = HACKDAC_NO_AUDIO;
+	_rffc5071_hijacked = false;
 	i2s_init();
 }
 
@@ -87,6 +94,7 @@ bool hackdac_baseband_enabled()
 bool hackdac_set_mode(uint8_t mode)
 {
 	uint8_t audio_mode = (mode & HACKDAC_AUDIO_MODE_MASK) >> HACKDAC_AUDIO_MODE_SHIFT;
+	bool rffc5071_hijacked = (mode & HACKDAC_RFFC5071_HIJACK) == HACKDAC_RFFC5071_HIJACK;
 
 	if (mode & HACKDAC_MODE_BASEBAND) {
 		if (mode & HACKDAC_BASEBAND_TCXO) {
@@ -116,6 +124,7 @@ bool hackdac_set_mode(uint8_t mode)
 		_baseband_enabled = false;
 	}
 
+	_rffc5071_hijacked = rffc5071_hijacked;
 	_audio_mode = audio_mode;
 	return true;
 }
@@ -123,4 +132,34 @@ bool hackdac_set_mode(uint8_t mode)
 audio_mode_t hackdac_get_audio_mode()
 {
 	return _audio_mode;
+}
+
+bool hackdac_i2c_reg_read(uint8_t reg, uint16_t *value)
+{
+	const uint8_t data_tx[] = {(reg << 3) | MCP47FEBXX_CMD_READ};
+
+	i2c_bus_transfer(&i2c0, MCP47FEBXX_A1_SLAVE_ADDR, data_tx, 1, (uint8_t *)value, 2);
+
+	return true;
+}
+
+bool hackdac_i2c_reg_write(uint8_t reg, uint16_t value)
+{
+	uint8_t data_tx[3];
+
+	data_tx[0] = (reg << 3);
+	data_tx[2] = value & 0xFF;
+	data_tx[1] = value >> 8;
+
+	i2c_bus_transfer(&i2c0, MCP47FEBXX_A1_SLAVE_ADDR, data_tx, 3, NULL, 0);
+
+	if (reg == MCP47FEBXX_NONVOLATILE_DAC0 || reg == MCP47FEBXX_NONVOLATILE_DAC1)
+		delay(500000); // NV registers take a little bit of time to update
+
+	return true;
+}
+
+bool hackdac_rffc5071_api_is_hijacked()
+{
+	return _rffc5071_hijacked;
 }

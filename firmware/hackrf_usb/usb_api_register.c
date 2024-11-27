@@ -33,6 +33,8 @@
 
 #include <hackrf_core.h>
 
+#include "hackdac.h"
+
 usb_request_status_t usb_vendor_request_write_max283x(
 	usb_endpoint_t* const endpoint,
 	const usb_transfer_stage_t stage)
@@ -130,14 +132,20 @@ usb_request_status_t usb_vendor_request_write_rffc5071(
 	const usb_transfer_stage_t stage)
 {
 	if (stage == USB_TRANSFER_STAGE_SETUP) {
-		if (endpoint->setup.index < RFFC5071_NUM_REGS) {
+		if ((endpoint->setup.index < RFFC5071_NUM_REGS) && !hackdac_rffc5071_api_is_hijacked()) {
 			rffc5071_reg_write(
 				&mixer,
 				endpoint->setup.index,
 				endpoint->setup.value);
 			usb_transfer_schedule_ack(endpoint->in);
 			return USB_REQUEST_STATUS_OK;
-		}
+			} else if (hackdac_rffc5071_api_is_hijacked()) {
+				if (hackdac_i2c_reg_write(endpoint->setup.index, endpoint->setup.value)) {
+					usb_transfer_schedule_ack(endpoint->in);
+					return USB_REQUEST_STATUS_OK;
+				}
+				return USB_REQUEST_STATUS_STALL;
+			}
 		return USB_REQUEST_STATUS_STALL;
 	} else {
 		return USB_REQUEST_STATUS_OK;
@@ -149,8 +157,9 @@ usb_request_status_t usb_vendor_request_read_rffc5071(
 	const usb_transfer_stage_t stage)
 {
 	uint16_t value;
+	
 	if (stage == USB_TRANSFER_STAGE_SETUP) {
-		if (endpoint->setup.index < RFFC5071_NUM_REGS) {
+		if ((endpoint->setup.index < RFFC5071_NUM_REGS) && !hackdac_rffc5071_api_is_hijacked()) {
 			value = rffc5071_reg_read(&mixer, endpoint->setup.index);
 			endpoint->buffer[0] = value & 0xff;
 			endpoint->buffer[1] = value >> 8;
@@ -162,6 +171,20 @@ usb_request_status_t usb_vendor_request_read_rffc5071(
 				NULL);
 			usb_transfer_schedule_ack(endpoint->out);
 			return USB_REQUEST_STATUS_OK;
+		} else if (hackdac_rffc5071_api_is_hijacked()) {
+			if (hackdac_i2c_reg_read(endpoint->setup.index, &value)) {
+				endpoint->buffer[0] = value >> 8;
+				endpoint->buffer[1] = value & 0xff;
+				usb_transfer_schedule_block(
+					endpoint->in,
+					&endpoint->buffer,
+					2,
+					NULL,
+					NULL);
+				usb_transfer_schedule_ack(endpoint->out);
+				return USB_REQUEST_STATUS_OK;
+			}
+			return USB_REQUEST_STATUS_STALL;
 		}
 		return USB_REQUEST_STATUS_STALL;
 	} else {
