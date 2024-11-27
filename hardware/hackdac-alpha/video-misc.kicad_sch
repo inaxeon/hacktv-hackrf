@@ -13101,7 +13101,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "1k8"
+		(property "Value" "1k5"
 			(at 208.915 101.6 90)
 			(effects
 				(font

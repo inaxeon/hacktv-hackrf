@@ -10187,7 +10187,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "1k8"
+		(property "Value" "750"
 			(at 243.205 70.485 90)
 			(effects
 				(font
@@ -14626,7 +14626,7 @@
 				)
 			)
 		)
-		(property "Value" "270"
+		(property "Value" "487"
 			(at 258.445 107.315 90)
 			(effects
 				(font
