@@ -53,6 +53,7 @@ architecture Behavioral of top is
     signal host_sync_o : std_logic := '0';
     signal host_sync_i : std_logic := '0';
     signal host_sync_latched : std_logic := '0';
+    signal dac_clock_o : std_logic := '0';
 begin
     
     ------------------------------------------------
@@ -63,11 +64,13 @@ begin
     ------------------------------------------------
     -- Clocks
     
-	 BUFG_host : BUFG
+     BUFG_host : BUFG
     port map (
         O => host_clk_i,
         I => CODEC_X2_CLK
     );
+     
+     dac_clock_o <= not CODEC_CLK;
      
     ------------------------------------------------
     -- SGPIO interface
@@ -82,10 +85,10 @@ begin
     process(host_clk_i)
     begin
         if rising_edge(host_clk_i) then
-               codec_clk_tx_i <= CODEC_CLK;
-               -- HackDAC Clock. NOTE: AD768 samples on rising edge. Latching here ends up with the correct timing.
-               -- i.e. I and Q bytes in have both been latched and are stable
-               VDAC_CLK <= CODEC_CLK;
+            codec_clk_tx_i <= dac_clock_o;
+            -- HackDAC Clock. NOTE: AD768 samples on rising edge. Latching here ends up with the correct timing.
+            -- i.e. I and Q bytes in have both been latched and are stable
+            VDAC_CLK <= not dac_clock_o;
         end if;
     end process;
      
@@ -93,7 +96,7 @@ begin
     begin
         if falling_edge(host_clk_i) then
             -- Generate DAC clock (TCXO / 2)
-            codec_clk_rx_i <= CODEC_CLK;
+            codec_clk_rx_i <= dac_clock_o;
             -- Data latching is moved to the rising edge as the delay in getting the clock through the CPLD
             -- down to the SGPIO means that it ends up better to sample at this time rather than falling.
             if OUTPUT_ENABLED = '1' then
@@ -101,7 +104,7 @@ begin
                     -- HackDAC 1-bit sync
                     SYNC_OUT <= HOST_DATA(7);
                     -- HackDAC DAC MSBs
-						  VDAC(15) <= HOST_DATA(6);
+                    VDAC(15) <= HOST_DATA(6);
                     VDAC(14 downto 9) <= not HOST_DATA(5 downto 0); -- convert to 2's compliment
                 else
                     -- HackDAC DAC LSBs
