@@ -318,7 +318,9 @@ void set_leds(const uint8_t state);
 
 void video_led_on();
 void video_led_off();
+// TODO: These should not be here.
 void hackdac_error();
+bool hackdac_baseband_enabled();
 
 void hw_sync_enable(const hw_sync_mode_t hw_sync_mode);
 

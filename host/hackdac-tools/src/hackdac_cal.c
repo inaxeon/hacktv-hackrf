@@ -45,9 +45,8 @@
 #define HACKDAC_MODE_BASEBAND                        (1 << 7)
 #define HACKDAC_RFFC5071_HIJACK                      (1 << 6)
 // NOTE: bit 0 is reserved (HW sync enable)
-#define HACKDAC_BASEBAND_TCXO                        (1 << 1) // Use on-board 27 MHz TCXO (fixed fs at 13.5 MHz). HACKDAC_SYNC_AUDIO not available when setting this bit. Not available in RF mode.
 // Audio mode field
-#define HACKDAC_AUDIO_MODE_SHIFT                     (2)
+#define HACKDAC_AUDIO_MODE_SHIFT                     (1)
 #define HACKDAC_AUDIO_MODE_MASK                      (0x3 << HACKDAC_AUDIO_MODE_SHIFT)
 #define HACKDAC_AUDIO_MODE(x)                        ((x) << HACKDAC_AUDIO_MODE_SHIFT)
 // Audio mode values
@@ -416,7 +415,7 @@ int main(int argc, char** argv)
         return EXIT_FAILURE;
     }
 
-    result = hackrf_set_hackdac_mode(device, HACKDAC_MODE_BASEBAND | HACKDAC_BASEBAND_TCXO | HACKDAC_RFFC5071_HIJACK | HACKDAC_AUDIO_MODE(HACKDAC_NO_AUDIO));
+    result = hackrf_set_hackdac_mode(device, HACKDAC_MODE_BASEBAND | HACKDAC_RFFC5071_HIJACK | HACKDAC_AUDIO_MODE(HACKDAC_NO_AUDIO));
     if(result != HACKRF_SUCCESS) {
         fprintf(stderr,
             "hackrf_set_hackdac_mode() failed: %s (%d)\n",

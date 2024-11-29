@@ -26,7 +26,7 @@
 #define CLK_APB1_I2S 			204000000 // 204 MHz
 #define I2S_DMA_FIFO_LEVEL		4
 #define I2S_SAMPLE_RATE			48000
-#define I2S_SYNC_CLOCK_DIVIDER	4 // fs / 32 i.e. 27000000 (2 x 13.5 MHz) / 32 (bits per L+R sample) / 4 (I2S clock divider) = 210937.5
+#define I2S_SYNC_CLOCK_DIVIDER	1 // fs / 32 i.e. 6750000 (13.5 MHz / 2) / 32 (bits per L+R sample) / 1 (I2S clock divider) = 210937.5
 
 #if (I2S_BUFFER_DEPTH_SYNC > I2S_BUFFER_DEPTH_ASYNC)
 #error async buffer must be smaller than sync buffer
@@ -194,26 +194,25 @@ void i2s_init()
 
 void i2s_startup(bool sync_mode)
 {
-	uint16_t x_div = 0;
-	uint16_t y_div = 0;
-	uint32_t clk_n = 0;
-	
 	i2s_usb_audio_bytes_transferred = 0;
 	_i2s_bus_bytes_transferred = 0;
 
-	i2s_get_clock_divider(I2S_SAMPLE_RATE, 16, &x_div, &y_div, &clk_n);
 
 	if (sync_mode) {
 		I2S0_TXMODE = I2S0_TXMODE_TXCLKSEL(1); // BASE_AUDIO_CLK (Datasheet lists is as "Reserved" ?)
 		I2S0_TXBITRATE = (I2S_SYNC_CLOCK_DIVIDER - 1);
 		// I2S0_TXRATE does nothing in this mode
-		si5351c_mcu_clk_enable(&clock_gen, 1);
 		_i2s_usb_buffer_depth = I2S_BUFFER_DEPTH_SYNC;
 	} else {
+		uint16_t x_div = 0;
+		uint16_t y_div = 0;
+		uint32_t clk_n = 0;
+
+		i2s_get_clock_divider(I2S_SAMPLE_RATE, 16, &x_div, &y_div, &clk_n);
+
 		I2S0_TXMODE = I2S0_TXMODE_TXCLKSEL(0); // BASE_APB1_CLK
 		I2S0_TXBITRATE = (clk_n - 1);
 		I2S0_TXRATE = y_div | (x_div << 8);
-		si5351c_mcu_clk_enable(&clock_gen, 0);
 		_i2s_usb_buffer_depth = I2S_BUFFER_DEPTH_ASYNC;
 	}
 

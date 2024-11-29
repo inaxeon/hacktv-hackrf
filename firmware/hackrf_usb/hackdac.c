@@ -55,18 +55,6 @@ static bool cpld_jtag_sram_load_hackdac(jtag_t* const jtag)
 	return success;
 }
 
-static bool cpld_jtag_sram_load_hackdac_tcxo(jtag_t* const jtag)
-{
-	cpld_jtag_take(jtag);
-	cpld_xc2c64a_jtag_sram_write(jtag, &cpld_hackdac_tcxo_program_sram);
-	const bool success = cpld_xc2c64a_jtag_sram_verify(
-		jtag,
-		&cpld_hackdac_tcxo_program_sram,
-		&cpld_hackdac_tcxo_verify);
-	cpld_jtag_release(jtag);
-	return success;
-}
-
 void hackdac_init()
 {
 	_baseband_enabled = false;
@@ -95,37 +83,27 @@ bool hackdac_set_mode(uint8_t mode)
 {
 	uint8_t audio_mode = (mode & HACKDAC_AUDIO_MODE_MASK) >> HACKDAC_AUDIO_MODE_SHIFT;
 	bool rffc5071_hijacked = (mode & HACKDAC_RFFC5071_HIJACK) == HACKDAC_RFFC5071_HIJACK;
+	bool baseband_enabled = (mode & HACKDAC_MODE_BASEBAND) == HACKDAC_MODE_BASEBAND;
 
-	if (mode & HACKDAC_MODE_BASEBAND) {
-		if (mode & HACKDAC_BASEBAND_TCXO) {
-			if (audio_mode == HACKDAC_SYNC_AUDIO) {
-				return false; // Not presently possible
-			}
-			if (!cpld_jtag_sram_load_hackdac_tcxo(&jtag_cpld)) {
-				halt_and_flash(6000000);
-			}
-			sgpio_config.tcxo = true;
-		} else {
-			if (!cpld_jtag_sram_load_hackdac(&jtag_cpld)) {
-				halt_and_flash(6000000);
-			}
-			sgpio_config.tcxo = false;
+	if (baseband_enabled) {
+		if (!cpld_jtag_sram_load_hackdac(&jtag_cpld)) {
+			halt_and_flash(6000000);
 		}
-		_baseband_enabled = true;
+		si5351c_mcu_clk_enable(&clock_gen, true);
 	} else {
-		if (mode & HACKDAC_BASEBAND_TCXO) {
-			return false; // No chance of this working. Block it.
+		if (audio_mode == HACKDAC_SYNC_AUDIO) {
+			return false; // Not possible on anything other than HackRF-R9. Just block it.
 		}
 		if (!cpld_jtag_sram_load_hackrf(&jtag_cpld)) {
 			halt_and_flash(6000000);
 		}
-		si5351c_mcu_clk_enable(&clock_gen, false); // Not needed in RF mode
-		sgpio_config.tcxo = false;
-		_baseband_enabled = false;
+		si5351c_mcu_clk_enable(&clock_gen, false);
 	}
 
+	_baseband_enabled = baseband_enabled;
 	_rffc5071_hijacked = rffc5071_hijacked;
 	_audio_mode = audio_mode;
+	activate_best_clock_source();
 	return true;
 }
 

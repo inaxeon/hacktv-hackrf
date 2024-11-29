@@ -84,6 +84,11 @@ void si5351c_configure_multisynth(
 	const uint32_t p2,
 	const uint32_t p3,
 	const uint_fast8_t r_div);
+void si5351c_configure_multisynth_6_or_7(
+	si5351c_driver_t* const drv,
+	const uint_fast8_t ms_number,
+	const uint8_t p1,
+	const uint_fast8_t r_div);
 void si5351c_configure_clock_control(
 	si5351c_driver_t* const drv,
 	const enum pll_sources source);

@@ -420,7 +420,7 @@ usb_request_status_t usb_vendor_request_set_rx_overrun_limit(
 	return USB_REQUEST_STATUS_OK;
 }
 
-static volatile uint32_t _sync_bytes_received;
+static volatile int32_t _sync_bytes_received;
 static volatile uint32_t _bytes_until_in_sync;
 
 void transceiver_bulk_transfer_complete(void* user_data, unsigned int bytes_transferred)
@@ -449,13 +449,20 @@ void transceiver_sync_transfer_complete(void* user_data, unsigned int bytes_tran
 	if (_bytes_until_in_sync == HACKDAC_SYNC_AWAITING &&
 		*((uint32_t *)(user_data + (sizeof(uint32_t) * 0))) == HACKDAC_SYNC_MAGIC_1 &&
 		*((uint32_t *)(user_data + (sizeof(uint32_t) * 1))) == HACKDAC_SYNC_MAGIC_2) {
-		_bytes_until_in_sync = *(uint32_t *)(user_data + (sizeof(uint32_t) * 2)) + HACKDAC_SYNC_XFER_SIZE;
+		_bytes_until_in_sync = *(uint32_t *)(user_data + (sizeof(uint32_t) * 2));
 	}
 
-	_sync_bytes_received += bytes_transferred;
-
-	if (_bytes_until_in_sync && _bytes_until_in_sync != HACKDAC_SYNC_AWAITING)
-		_bytes_until_in_sync -= bytes_transferred;
+	// There is something funky about the below logic as it appears to be transferring
+	// an additional HACKDAC_SYNC_XFER_SIZE after the sync frame is received. The author of
+	// this code does not presently understand exactly what is going on... but it works.
+	if (_bytes_until_in_sync == 0) {
+		_sync_bytes_received = -1;
+	} else {
+		if (_bytes_until_in_sync && _bytes_until_in_sync != HACKDAC_SYNC_AWAITING) {
+			_bytes_until_in_sync -= bytes_transferred;
+		}
+		_sync_bytes_received += bytes_transferred;
+	}
 }
 
 void rx_mode(uint32_t seq)
@@ -481,29 +488,35 @@ void rx_mode(uint32_t seq)
 	transceiver_shutdown();
 }
 
-void sync_with_hacktv(uint32_t seq)
+bool sync_with_hacktv(uint32_t seq)
 {
-	uint32_t sync_bytes_scheduled = 0;
+	int32_t sync_bytes_scheduled = 0;
 	_bytes_until_in_sync = HACKDAC_SYNC_AWAITING;
 	_sync_bytes_received = 0;
 
-	while (transceiver_request.seq == seq && _bytes_until_in_sync)
+	while (transceiver_request.seq == seq)
 	{
+		if (_sync_bytes_received < 0)
+			return true;
+
+		// It shouldn't matter if the USB interrupt goes off at this point of execution.
+		// if say, it sets _sync_bytes_received to -1 the below will be false regardless
+		// then we go around to check it again.
+
 		if ((sync_bytes_scheduled - _sync_bytes_received) == 0)
 		{
-			// Check _bytes_until_in_sync again in case usb interrupt has gone off since the beginning of the loop
-			if (_bytes_until_in_sync)  {
-				usb_transfer_schedule_block(
-					&usb_endpoint_bulk_out,
-					&usb_bulk_buffer[0],
-					HACKDAC_SYNC_XFER_SIZE,
-					transceiver_sync_transfer_complete,
-					&usb_bulk_buffer[0]);
+			usb_transfer_schedule_block(
+				&usb_endpoint_bulk_out,
+				&usb_bulk_buffer[0],
+				HACKDAC_SYNC_XFER_SIZE,
+				transceiver_sync_transfer_complete,
+				&usb_bulk_buffer[0]);
 
-				sync_bytes_scheduled += HACKDAC_SYNC_XFER_SIZE;
-			}
+			sync_bytes_scheduled += HACKDAC_SYNC_XFER_SIZE;
 		}
 	}
+
+	return false;
 }
 
 void tx_mode(uint32_t seq)
@@ -514,16 +527,17 @@ void tx_mode(uint32_t seq)
 	bool audio_started = false;
 	audio_mode_t audio_mode = hackdac_get_audio_mode();
 
+	if (audio_mode == HACKDAC_SYNC_AUDIO) {
+		// Eat random quantity of zeros sent by PC until proper data from hacktv arrives.
+		// failure to do so would result in audio/video data sequencing failure.
+		if (!sync_with_hacktv(seq))
+			return;
+	}
+
 	transceiver_startup(TRANSCEIVER_MODE_TX);
 	
 	if (audio_mode != HACKDAC_NO_AUDIO) {
 		i2s_startup(audio_mode == HACKDAC_SYNC_AUDIO);
-	}
-
-	if (audio_mode == HACKDAC_SYNC_AUDIO) {
-		// Eat random quantity of zeros sent by PC until proper data from hacktv arrives.
-		// failure to do so would result in audio/video data sequencing failure.
-		sync_with_hacktv(seq);
 	}
 
 	// Set up OUT transfer of buffer 0.

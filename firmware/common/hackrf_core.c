@@ -245,7 +245,6 @@ sgpio_config_t sgpio_config = {
 	.gpio_q_invert = &gpio_q_invert,
 	.gpio_hw_sync_enable = &gpio_hw_sync_enable,
 	.slice_mode_multislice = true,
-	.tcxo = false,
 };
 
 rf_path_t rf_path = {
@@ -415,7 +414,7 @@ bool sample_rate_frac_set(uint32_t rate_num, uint32_t rate_denom)
 		 * from MS1/CLK1 operating at twice the sample rate.
 		 */
 		si5351c_configure_multisynth(&clock_gen, 1, MSx_P1, MSx_P2, MSx_P3, 0);
-		si5351c_configure_multisynth(&clock_gen, 2, MSx_P1, MSx_P2, MSx_P3, 0);
+		si5351c_configure_multisynth(&clock_gen, 2, MSx_P1, MSx_P2, MSx_P3, 2); // CPU / Audio (27 MHz / 4 = 6.75 MHz)
 	} else {
 		/*
 		 * On other platforms the clock generator produces three
@@ -429,6 +428,9 @@ bool sample_rate_frac_set(uint32_t rate_num, uint32_t rate_denom)
 
 		/* MS0/CLK2 is the source for SGPIO (CODEC_X2_CLK) */
 		si5351c_configure_multisynth(&clock_gen, 2, 0, 0, 0, 0); //p1 doesn't matter
+
+		/* MCU CLK (audio) */
+		si5351c_configure_multisynth_6_or_7(&clock_gen, 7, 0, 2); // 27 MHz / 4 = 6.75 MHz
 	}
 
 	if (streaming) {
@@ -496,7 +498,7 @@ bool sample_rate_set(const uint32_t sample_rate_hz)
 		 * from MS1/CLK1 operating at twice the sample rate.
 		 */
 		si5351c_configure_multisynth(&clock_gen, 1, p1, p2, p3, 0);
-		si5351c_configure_multisynth(&clock_gen, 2, p1, p2, p3, 0);
+		si5351c_configure_multisynth(&clock_gen, 2, p1, p2, p3, 2); // CPU / Audio (27 MHz / 4 = 6.75 MHz)
 	} else {
 		/*
 		 * On other platforms the clock generator produces three
@@ -522,6 +524,9 @@ bool sample_rate_set(const uint32_t sample_rate_hz)
 			0,
 			1,
 			0); //p1 doesn't matter
+
+		/* CLKIN/CLK7 is the source for CPU / audio */
+		si5351c_configure_multisynth_6_or_7(&clock_gen, 7, 0, 2); // 27 MHz / 4 = 6.75 MHz
 	}
 
 	return true;
@@ -824,26 +829,32 @@ clock_source_t activate_best_clock_source(void)
 		portapack_reference_oscillator(false);
 	}
 #endif
-
 	clock_source_t source = CLOCK_SOURCE_HACKRF;
-
-	/* Check for external clock input. */
-	if (si5351c_clkin_signal_valid(&clock_gen)) {
-		source = CLOCK_SOURCE_EXTERNAL;
+	if (hackdac_baseband_enabled()) {
+		source = CLOCK_SOURCE_EXTERNAL; // Bluntly override. Baseband must be external clock (oscillator on HackDAC).
 	} else {
+#if 1
+		source = CLOCK_SOURCE_HACKRF; // Override for now. Need electrical disable for HackDAC clock
+#else
+		/* Check for external clock input. */
+		if (si5351c_clkin_signal_valid(&clock_gen)) {
+			source = CLOCK_SOURCE_EXTERNAL;
+		} else {
 #ifdef HACKRF_ONE
-		/* Enable PortaPack reference oscillator (if present), and check for valid clock. */
-		if (portapack_reference_oscillator && portapack()) {
-			portapack_reference_oscillator(true);
-			delay(510000); /* loop iterations @ 204MHz for >10ms for oscillator to enable. */
-			if (si5351c_clkin_signal_valid(&clock_gen)) {
-				source = CLOCK_SOURCE_PORTAPACK;
-			} else {
-				portapack_reference_oscillator(false);
+			/* Enable PortaPack reference oscillator (if present), and check for valid clock. */
+			if (portapack_reference_oscillator && portapack()) {
+				portapack_reference_oscillator(true);
+				delay(510000); /* loop iterations @ 204MHz for >10ms for oscillator to enable. */
+				if (si5351c_clkin_signal_valid(&clock_gen)) {
+					source = CLOCK_SOURCE_PORTAPACK;
+				} else {
+					portapack_reference_oscillator(false);
+				}
 			}
 		}
 #endif
 		/* No external or PortaPack clock was found. Use HackRF Si5351C crystal. */
+#endif
 	}
 
 	si5351c_set_clock_source(
