@@ -111,8 +111,8 @@ begin
                 end if;
             else
                 -- HackTV not running. Zero outputs.
-                SYNC_OUT <= '1'; -- 0V
-                VDAC(15 downto 0) <= X"C000"; -- 0V
+                SYNC_OUT <= '0'; -- 0V
+                VDAC(15 downto 0) <= X"8000"; -- 0V
             end if;
         end if;
     end process;

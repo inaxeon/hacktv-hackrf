@@ -187,6 +187,7 @@ void si5351c_configure_multisynth(
 	si5351c_write(drv, data, sizeof(data));
 }
 
+// ffs. si5351c_configure_multisynth cannot configure MS6 or MS7 because they're different to the rest.
 void si5351c_configure_multisynth_6_or_7(
 	si5351c_driver_t* const drv,
 	const uint_fast8_t ms_number,
@@ -198,12 +199,19 @@ void si5351c_configure_multisynth_6_or_7(
 		register_number,
 		p1
 	};
+	uint8_t current_rdiv = si5351c_read_single(drv, 92);
+	if (ms_number == 6) {
+		current_rdiv &= 0x70;
+	} else {
+		current_rdiv &= 0x07;
+	}
+	current_rdiv |= ((ms_number == 6) ? ((r_div & 0x07) << 0) : ((r_div & 0x07) << 4));
 	uint8_t rdiv_data[] = {
 		92,
-		(ms_number == 6) ? (r_div << 0) : (r_div << 4)
+		current_rdiv
 	};
 	si5351c_write(drv, p1_data, sizeof(p1_data));
-	si5351c_write(drv, rdiv_data, sizeof(rdiv_data)); // TODO: Overwrites the other
+	si5351c_write(drv, rdiv_data, sizeof(rdiv_data));
 }
 
 void si5351c_configure_clock_control(

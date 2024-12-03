@@ -57,8 +57,6 @@ static struct gpio_t gpio_led[] = {
 #endif
 };
 
-struct gpio_t video_out_led = GPIO(1, 9);
-
 // clang-format off
 static struct gpio_t gpio_1v8_enable        = GPIO(3,  6);
 
@@ -929,9 +927,6 @@ void pin_setup(void)
 	gpio_output(&gpio_led[3]);
 #endif
 
-	gpio_output(&video_out_led);
-	gpio_set(&video_out_led);
-
 	disable_1v8_power();
 	if (detected_platform() == BOARD_ID_HACKRF1_R9) {
 #ifdef HACKRF_ONE
@@ -1064,16 +1059,6 @@ void led_on(const led_t led)
 void led_off(const led_t led)
 {
 	gpio_clear(&gpio_led[led]);
-}
-
-void video_led_on()
-{
-	gpio_clear(&video_out_led);
-}
-
-void video_led_off()
-{
-	gpio_set(&video_out_led);
 }
 
 void led_toggle(const led_t led)

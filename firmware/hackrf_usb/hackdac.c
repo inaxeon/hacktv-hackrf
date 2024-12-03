@@ -27,6 +27,9 @@
 #define MCP47FEBXX_NONVOLATILE_DAC0         0x10
 #define MCP47FEBXX_NONVOLATILE_DAC1         0x11
 
+struct gpio_t video_out_led = GPIO(1, 9);
+struct gpio_t vdac_sw_clock = GPIO(5, 13);
+
 static uint8_t _audio_mode;
 static bool _baseband_enabled;
 static bool _rffc5071_hijacked;
@@ -55,11 +58,28 @@ static bool cpld_jtag_sram_load_hackdac(jtag_t* const jtag)
 	return success;
 }
 
+static void hackdac_zero_video_output()
+{
+	// Latch the zero-volt word into the DAC.
+	// This ensures the output is zero'd when running in RF mode
+	gpio_set(&vdac_sw_clock);
+	delay(100);
+	gpio_clear(&vdac_sw_clock);
+}
+
 void hackdac_init()
 {
 	_baseband_enabled = false;
 	_audio_mode = HACKDAC_NO_AUDIO;
 	_rffc5071_hijacked = false;
+
+	gpio_output(&video_out_led);
+	gpio_set(&video_out_led);
+
+	gpio_output(&vdac_sw_clock);
+	delay(100);
+	hackdac_zero_video_output();
+
 	i2s_init();
 }
 
@@ -92,7 +112,8 @@ bool hackdac_set_mode(uint8_t mode)
 		si5351c_mcu_clk_enable(&clock_gen, true);
 	} else {
 		if (audio_mode == HACKDAC_SYNC_AUDIO) {
-			return false; // Not possible on anything other than HackRF-R9. Just block it.
+			return false; 	// Not possible on anything other than HackRF-R9 becuase of the limitations of PLL 7.
+							// No point in screwing around enabling it for a small clutch of R9 users. Just block it.
 		}
 		if (!cpld_jtag_sram_load_hackrf(&jtag_cpld)) {
 			halt_and_flash(6000000);
@@ -103,6 +124,7 @@ bool hackdac_set_mode(uint8_t mode)
 	_baseband_enabled = baseband_enabled;
 	_rffc5071_hijacked = rffc5071_hijacked;
 	_audio_mode = audio_mode;
+	hackdac_zero_video_output();
 	activate_best_clock_source();
 	return true;
 }
@@ -140,4 +162,14 @@ bool hackdac_i2c_reg_write(uint8_t reg, uint16_t value)
 bool hackdac_rffc5071_api_is_hijacked()
 {
 	return _rffc5071_hijacked;
+}
+
+void video_led_on()
+{
+	gpio_clear(&video_out_led);
+}
+
+void video_led_off()
+{
+	gpio_set(&video_out_led);
 }

@@ -197,19 +197,15 @@ void i2s_startup(bool sync_mode)
 	i2s_usb_audio_bytes_transferred = 0;
 	_i2s_bus_bytes_transferred = 0;
 
-
 	if (sync_mode) {
-		I2S0_TXMODE = I2S0_TXMODE_TXCLKSEL(1); // BASE_AUDIO_CLK (Datasheet lists is as "Reserved" ?)
+		I2S0_TXMODE = I2S0_TXMODE_TXCLKSEL(1); // BASE_AUDIO_CLK (Datasheet lists this as "Reserved" ?)
 		I2S0_TXBITRATE = (I2S_SYNC_CLOCK_DIVIDER - 1);
 		// I2S0_TXRATE does nothing in this mode
 		_i2s_usb_buffer_depth = I2S_BUFFER_DEPTH_SYNC;
 	} else {
-		uint16_t x_div = 0;
-		uint16_t y_div = 0;
+		uint16_t x_div = 0, y_div = 0;
 		uint32_t clk_n = 0;
-
 		i2s_get_clock_divider(I2S_SAMPLE_RATE, 16, &x_div, &y_div, &clk_n);
-
 		I2S0_TXMODE = I2S0_TXMODE_TXCLKSEL(0); // BASE_APB1_CLK
 		I2S0_TXBITRATE = (clk_n - 1);
 		I2S0_TXRATE = y_div | (x_div << 8);
