@@ -27,8 +27,9 @@
 #define MCP47FEBXX_NONVOLATILE_DAC0         0x10
 #define MCP47FEBXX_NONVOLATILE_DAC1         0x11
 
-struct gpio_t video_out_led = GPIO(1, 9);
-struct gpio_t vdac_sw_clock = GPIO(5, 13);
+static struct gpio_t video_out_led = GPIO(1, 9);
+static struct gpio_t vdac_sw_clock = GPIO(5, 13);
+static struct gpio_t tcxo_clock_enable = GPIO(1, 6);
 
 static uint8_t _audio_mode;
 static bool _baseband_enabled;
@@ -62,6 +63,7 @@ static void hackdac_zero_video_output()
 {
 	// Latch the zero-volt word into the DAC.
 	// This ensures the output is zero'd when running in RF mode
+	// Only works when the sgpio_if CPLD code is loaded
 	gpio_set(&vdac_sw_clock);
 	delay(100);
 	gpio_clear(&vdac_sw_clock);
@@ -72,6 +74,9 @@ void hackdac_init()
 	_baseband_enabled = false;
 	_audio_mode = HACKDAC_NO_AUDIO;
 	_rffc5071_hijacked = false;
+
+	gpio_output(&tcxo_clock_enable);
+	gpio_set(&tcxo_clock_enable);
 
 	gpio_output(&video_out_led);
 	gpio_set(&video_out_led);
@@ -105,26 +110,39 @@ bool hackdac_set_mode(uint8_t mode)
 	bool rffc5071_hijacked = (mode & HACKDAC_RFFC5071_HIJACK) == HACKDAC_RFFC5071_HIJACK;
 	bool baseband_enabled = (mode & HACKDAC_MODE_BASEBAND) == HACKDAC_MODE_BASEBAND;
 
+	// Step 1: Check if requested mode can be set
 	if (baseband_enabled) {
-		if (!cpld_jtag_sram_load_hackdac(&jtag_cpld)) {
-			halt_and_flash(6000000);
-		}
-		si5351c_mcu_clk_enable(&clock_gen, true);
+		// Presently no validation
 	} else {
 		if (audio_mode == HACKDAC_SYNC_AUDIO) {
 			return false; 	// Not possible on anything other than HackRF-R9 becuase of the limitations of PLL 7.
 							// No point in screwing around enabling it for a small clutch of R9 users. Just block it.
 		}
+	}
+
+	// Step 2: Set requested mode. Nothing which can fail allowed after here.
+	_baseband_enabled = baseband_enabled;
+	_rffc5071_hijacked = rffc5071_hijacked;
+	_audio_mode = audio_mode;
+
+	if (_baseband_enabled)
+	{
+		if (!cpld_jtag_sram_load_hackdac(&jtag_cpld)) {
+			halt_and_flash(6000000);
+		}
+		gpio_clear(&tcxo_clock_enable); // Activate 27 MHz clock
+		si5351c_mcu_clk_enable(&clock_gen, true);
+	}
+	else
+	{
 		if (!cpld_jtag_sram_load_hackrf(&jtag_cpld)) {
 			halt_and_flash(6000000);
 		}
 		si5351c_mcu_clk_enable(&clock_gen, false);
+		gpio_set(&tcxo_clock_enable); // Shut off 27 MHz clock
+		hackdac_zero_video_output();
 	}
 
-	_baseband_enabled = baseband_enabled;
-	_rffc5071_hijacked = rffc5071_hijacked;
-	_audio_mode = audio_mode;
-	hackdac_zero_video_output();
 	activate_best_clock_source();
 	return true;
 }

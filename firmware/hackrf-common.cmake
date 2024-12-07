@@ -62,7 +62,7 @@ if (NOT DEFINED VERSION)
 	if (GIT_VERSION_FOUND)
 		set(VERSION "2024.02.1+")
 	else (GIT_VERSION_FOUND)
-		set(VERSION "git-${GIT_VERSION}-hackdac-1")
+		set(VERSION "git-${GIT_VERSION}-hackdac-a-1")
 	endif (GIT_VERSION_FOUND)
 endif()
 

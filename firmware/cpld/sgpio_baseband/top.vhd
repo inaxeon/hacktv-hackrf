@@ -43,7 +43,6 @@ entity top is
 end top;
 
 architecture Behavioral of top is
-    signal codec_clk_rx_i : std_logic;
     signal codec_clk_tx_i : std_logic;
     signal dac_data_o : std_logic_vector(9 downto 0);
     signal host_clk_i : std_logic;
@@ -70,7 +69,7 @@ begin
         I => CODEC_X2_CLK
     );
      
-     dac_clock_o <= not CODEC_CLK;
+    dac_clock_o <= not CODEC_CLK;
      
     ------------------------------------------------
     -- SGPIO interface
@@ -96,7 +95,6 @@ begin
     begin
         if falling_edge(host_clk_i) then
             -- Generate DAC clock (TCXO / 2)
-            codec_clk_rx_i <= dac_clock_o;
             if OUTPUT_ENABLED = '1' then
                 if codec_clk_tx_i = '1' then
                     -- HackDAC 1-bit sync

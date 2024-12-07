@@ -336,8 +336,8 @@ void cal_run(hackrf_device *device, uint16_t offset, uint16_t gain)
                 cal_print("Current", offset, gain);
                 break;
             case Reset:
-                gain = MCP47FEBXX_RANGE / 2;
-                offset = MCP47FEBXX_RANGE / 2;
+                gain = (MCP47FEBXX_RANGE / 2) - 1;
+                offset = (MCP47FEBXX_RANGE / 2) - 1;
                 mcp47febxx_write(device, MCP47FEBXX_VOLATILE_DAC1, gain);
                 mcp47febxx_write(device, MCP47FEBXX_VOLATILE_DAC0, offset);
                 break;
