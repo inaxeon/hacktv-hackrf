@@ -10187,7 +10187,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "750"
+		(property "Value" "470"
 			(at 243.205 70.485 90)
 			(effects
 				(font
@@ -13040,8 +13040,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100"
-			(at 263.525 141.605 90)
+		(property "Value" "75"
+			(at 263.525 140.97 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14626,7 +14626,7 @@
 				)
 			)
 		)
-		(property "Value" "487"
+		(property "Value" "330"
 			(at 258.445 107.315 90)
 			(effects
 				(font
@@ -14694,7 +14694,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "330"
+		(property "Value" "220"
 			(at 263.525 127 90)
 			(effects
 				(font
