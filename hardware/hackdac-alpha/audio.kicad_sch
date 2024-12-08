@@ -4533,6 +4533,16 @@
 	)
 	(wire
 		(pts
+			(xy 76.2 29.845) (xy 80.01 29.845)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "dd68fef2-fa84-472f-a11c-ed92a127f419")
+	)
+	(wire
+		(pts
 			(xy 153.67 120.015) (xy 153.67 117.475)
 		)
 		(stroke
@@ -4895,6 +4905,28 @@
 					(size 1.27 1.27)
 				)
 				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "TCXO_CLK"
+		(shape input)
+		(at 80.01 29.845 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "f4cc20eb-8cb9-40ac-aea6-0951ac6736d2")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 92.3085 29.845 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
 				(hide yes)
 			)
 		)
