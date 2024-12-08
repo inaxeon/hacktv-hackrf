@@ -436,9 +436,7 @@ void transceiver_audio_transfer_complete(void* user_data, unsigned int bytes_tra
 
 	if (i2s_is_paused()) {
 		// Wait for buffer to re-fill
-		if ((i2s_usb_audio_bytes_transferred - i2s_bus_bytes_transferred()) ==
-			// sync mode: in order to match the re-fill logic for video don't fully re-fill 
-			(hackdac_get_audio_mode() == HACKDAC_SYNC_AUDIO ? (i2s_buffer_size - i2s_usb_transfer_size) : i2s_buffer_size)) {
+		if ((i2s_usb_audio_bytes_transferred - i2s_bus_bytes_transferred()) == i2s_buffer_size) {
 			i2s_resume();
 		}
 	}

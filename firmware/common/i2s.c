@@ -90,15 +90,14 @@ static void i2s_setup_dma_channel(int start_index)
 		| GPDMA_CCONFIG_IE(1);						// error interrupt
 }
 
+#define BUFFER_WINDBACK (I2S_NUM_BUFFERS - 1) // Number of buffers to wind the ring back by when resuming
+
 static int i2s_get_next_lli_index()
 {
-	for (int i = 0; i < I2S_NUM_BUFFERS; i++)
-	{
-		if (GPDMA_CLLI(I2S_DMA_CHANNEL) == (uint32_t)&i2s_dma_lli[i])
-			return i;
-	}
-
-	return -1; // Should never happen
+	// Determine index of buffer last filled
+	int last_transferred_buffer = ((i2s_usb_audio_bytes_transferred - i2s_usb_transfer_size) & i2s_buffer_mask) / i2s_usb_transfer_size;
+	// Calculate index of buffer to resume playback on
+    return (BUFFER_WINDBACK <= last_transferred_buffer) ? (last_transferred_buffer - BUFFER_WINDBACK) : I2S_NUM_BUFFERS + (last_transferred_buffer - BUFFER_WINDBACK);
 }
 
 static bool i2s_get_clock_divider(int sample_rate, int word_width, uint16_t *px_div, uint16_t *py_div, uint32_t *pclk_n)
