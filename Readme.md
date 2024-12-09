@@ -38,6 +38,10 @@ Unfortunately it's quite difficult to build, and calibrating it takes some pract
 * Sample rate (with video): 210.9 KHz
 * Sample rate (standalone): 48 KHz
 
+# Schematic
+
+[Can be viewed here](https://github.com/inaxeon/hacktv-hackrf/blob/master/hardware/hackdac-alpha/hackdac-alpha-rev2.pdf)
+
 # How do I obtain one?
 
 The project is presently in the prototype stage.
