@@ -14,7 +14,7 @@ Well yes, it is. For anybody wanting to design a device which has an analogue vi
 
 HackTV on the other hand is a fully software defined TV transmitter which does not want the output hardware doing anything clever for it – this is why it is able to generate a massive range of TV signals, some quite obscure.
 
-Ultimately HackTV wants a high-quality arbitrary video signal generator as its output and sadly there is no commercial reason for such a thing to exist, beyond analogue video test equipment which is no longer designed or sold.
+Ultimately HackTV wants a high-quality arbitrary video signal generator as its output and sadly there is no commercial reason for such a thing to exist, beyond analogue video test equipment, very little of which is designed or sold today.
 
 In 2022 Danish Entrepreneur Karsten Hansen dumped 4 gigabytes engineering materials from Philips TV & Test Equipment into a github repository (intellectual property he personally came to own). Contained within the repository was detailed information about how to build and calibrate a very high-quality arbitrary video signal generator circuit first used in the Philips PM5655. This circuit became the basis of "HackDAC Alpha" – the current design.
 
