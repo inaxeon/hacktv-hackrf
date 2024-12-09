@@ -9362,74 +9362,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C")
-		(at 207.01 144.145 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "073cddd5-be68-4631-bd42-6c91689643fb")
-		(property "Reference" "C88"
-			(at 207.01 137.16 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "0.1"
-			(at 207.01 139.7 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 210.82 143.1798 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 207.01 144.145 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Unpolarized capacitor"
-			(at 207.01 144.145 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "193982bf-bd78-4940-87bd-1afd4413323a")
-		)
-		(pin "2"
-			(uuid "9cbcf567-3b74-4652-b0d6-663625e63d23")
-		)
-		(instances
-			(project ""
-				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "C88")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:R")
 		(at 231.775 93.345 0)
 		(unit 1)
@@ -11434,6 +11366,73 @@
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
 					(reference "R28")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 207.01 144.145 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "649b10de-a1b7-4a13-ad15-61ecf813374c")
+		(property "Reference" "R64"
+			(at 207.01 141.605 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "0"
+			(at 207.01 144.145 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 207.01 145.923 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 207.01 144.145 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 207.01 144.145 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "4a53ad24-240e-4e19-95c9-70cea894685c")
+		)
+		(pin "1"
+			(uuid "85b2b84d-f049-4d78-8da9-71cab23cb001")
+		)
+		(instances
+			(project ""
+				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
+					(reference "R64")
 					(unit 1)
 				)
 			)

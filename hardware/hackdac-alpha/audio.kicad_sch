@@ -3300,10 +3300,16 @@
 		(uuid "3513cabe-5080-4412-b56b-f564042eda40")
 	)
 	(junction
+		(at 224.79 114.935)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "42a3472a-5621-4c20-9ec6-305dc012dc2b")
+	)
+	(junction
 		(at 236.855 109.855)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "56ee7e3e-3063-49ab-957f-80657f446552")
+		(uuid "664de263-c4fc-4a54-91a4-ca81f2eb1080")
 	)
 	(junction
 		(at 105.41 40.005)
@@ -3395,12 +3401,6 @@
 		(color 0 0 0 0)
 		(uuid "f59f9071-fc4b-4319-9af4-fefabe088032")
 	)
-	(junction
-		(at 224.79 114.935)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "f7d0529c-8d8e-4703-85f8-cca8ce421cfe")
-	)
 	(wire
 		(pts
 			(xy 147.955 149.225) (xy 147.955 153.035)
@@ -3430,6 +3430,26 @@
 			(type default)
 		)
 		(uuid "07782442-660d-41d9-b633-8a20c9acc2cf")
+	)
+	(wire
+		(pts
+			(xy 221.615 114.935) (xy 224.79 114.935)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "08ed3446-432b-4095-8b02-a083315a3fa9")
+	)
+	(wire
+		(pts
+			(xy 221.615 109.855) (xy 221.615 114.935)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "09ff8fd2-4845-46d8-aa97-3abc56d2ee2a")
 	)
 	(wire
 		(pts
@@ -3520,6 +3540,16 @@
 			(type default)
 		)
 		(uuid "1af11200-1ab3-4506-b23e-29f9cc251608")
+	)
+	(wire
+		(pts
+			(xy 210.82 109.855) (xy 221.615 109.855)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1b3264d4-572a-49db-a92f-5cdc21629dd8")
 	)
 	(wire
 		(pts
@@ -3653,6 +3683,16 @@
 	)
 	(wire
 		(pts
+			(xy 224.79 109.855) (xy 236.855 109.855)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "315e1c58-dff7-4620-8403-9fb87f3cf423")
+	)
+	(wire
+		(pts
 			(xy 147.955 127.635) (xy 155.575 127.635)
 		)
 		(stroke
@@ -3773,6 +3813,16 @@
 	)
 	(wire
 		(pts
+			(xy 224.79 112.395) (xy 224.79 109.855)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "46ea4fde-2a84-4098-8e44-b4ae90b4f0e6")
+	)
+	(wire
+		(pts
 			(xy 197.485 130.175) (xy 197.485 133.985)
 		)
 		(stroke
@@ -3850,16 +3900,6 @@
 			(type default)
 		)
 		(uuid "5591883e-0942-48e4-b681-76b3681cb7c2")
-	)
-	(wire
-		(pts
-			(xy 224.79 112.395) (xy 224.79 114.935)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "55c78de7-f21a-47f1-a1ef-0040ef6699dd")
 	)
 	(wire
 		(pts
@@ -4230,16 +4270,6 @@
 			(type default)
 		)
 		(uuid "a230de88-b53f-4254-ad12-ec2943efdd28")
-	)
-	(wire
-		(pts
-			(xy 210.82 109.855) (xy 236.855 109.855)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a2ac56d3-419f-4542-ac70-3724fd8e81ec")
 	)
 	(wire
 		(pts
@@ -4710,6 +4740,37 @@
 			(type default)
 		)
 		(uuid "fe9d612f-6c39-4aa3-8d67-49d7f42cbaef")
+	)
+	(text "NOTE: L+R REVERSED FOR COMPATIBILITY\nWITH HACKTV BINARY AUDIO DATA\nAND EASIER PCB ROUTING"
+		(exclude_from_sim no)
+		(at 193.675 102.235 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "555e61fc-10ab-475b-846b-30ccbabddf0b")
+	)
+	(text "R"
+		(exclude_from_sim no)
+		(at 254 114.935 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "991b2c5c-bab5-4448-b1f4-ecf712937fa6")
+	)
+	(text "L"
+		(exclude_from_sim no)
+		(at 254 109.855 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "f6addbfa-1b4d-424f-983e-8d7156897436")
 	)
 	(label "I2S_WS"
 		(at 50.165 47.625 0)
@@ -8172,10 +8233,9 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "d9d05a70-320d-4579-8de7-22c2ec049c7a")
 		(property "Reference" "J4"
-			(at 254 111.4182 0)
+			(at 256.54 111.76 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8184,7 +8244,7 @@
 			)
 		)
 		(property "Value" "AUDIO OUT"
-			(at 254 113.9582 0)
+			(at 256.54 113.665 0)
 			(effects
 				(font
 					(size 1.27 1.27)

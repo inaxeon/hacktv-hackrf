@@ -50,22 +50,15 @@
 			)
 		)
 		(symbol "LM66200_1_1"
-			(text_box ""
-				(at -6.35 8.89 0)
-				(size 12.7 -15.24)
+			(rectangle
+				(start -6.35 8.89)
+				(end 6.35 -6.35)
 				(stroke
 					(width 0)
 					(type default)
 				)
 				(fill
-					(type color)
-					(color 0 0 0 0)
-				)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
+					(type background)
 				)
 			)
 			(pin passive line
