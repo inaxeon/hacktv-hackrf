@@ -40,7 +40,7 @@ Unfortunately it's quite difficult to build, and calibrating it takes some pract
 
 # Schematic
 
-[Can be viewed here](https://github.com/inaxeon/hacktv-hackrf/blob/master/hardware/hackdac-alpha/hackdac-alpha-rev2.pdf)
+[Can be viewed here](https://github.com/inaxeon/hacktv-hackrf/blob/master/hardware/hackdac-alpha/hackdac-alpha-rev2.pdf).
 
 # How do I obtain one?
 
