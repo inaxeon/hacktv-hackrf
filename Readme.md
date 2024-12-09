@@ -24,7 +24,7 @@ Unfortunately it's quite difficult to build, and calibrating it takes some pract
 
 ## Video output
 * Bandwidth: DC-6 MHz
-* Voltage range: 2V pk-pk
+* Voltage range: 2V pk-pk (+/- 1V)
 * Output impedence: 75Ω
 * Sample rate: 13.5 MHz (fixed, per CCIR 601)
 
