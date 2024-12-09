@@ -27,6 +27,7 @@ Unfortunately it's quite difficult to build, and calibrating it takes some pract
 * Voltage range: 2V pk-pk (+/- 1V)
 * Output impedence: 75Ω
 * Sample rate: 13.5 MHz (fixed, per CCIR 601)
+* Word size: 15-bit
 
 ## Sync output
 * Output voltage: -1.8V (0v at rest)
@@ -37,6 +38,7 @@ Unfortunately it's quite difficult to build, and calibrating it takes some pract
 * Output voltage: 2.1 V(RMS)
 * Sample rate (with video): 210.9 KHz
 * Sample rate (standalone): 48 KHz
+* Word size: 16-bit
 
 # Schematic
 
