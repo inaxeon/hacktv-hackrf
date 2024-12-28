@@ -525,6 +525,10 @@ void tx_mode(uint32_t seq)
 	bool audio_started = false;
 	audio_mode_t audio_mode = hackdac_get_audio_mode();
 
+	if (audio_mode != HACKDAC_NO_AUDIO) {
+		i2s_startup(audio_mode == HACKDAC_SYNC_AUDIO);
+	}
+
 	if (audio_mode == HACKDAC_SYNC_AUDIO) {
 		// Eat random quantity of zeros sent by PC until proper data from hacktv arrives.
 		// failure to do so would result in audio/video data sequencing failure.
@@ -533,10 +537,6 @@ void tx_mode(uint32_t seq)
 	}
 
 	transceiver_startup(TRANSCEIVER_MODE_TX);
-	
-	if (audio_mode != HACKDAC_NO_AUDIO) {
-		i2s_startup(audio_mode == HACKDAC_SYNC_AUDIO);
-	}
 
 	// Set up OUT transfer of buffer 0.
 	usb_transfer_schedule_block(
