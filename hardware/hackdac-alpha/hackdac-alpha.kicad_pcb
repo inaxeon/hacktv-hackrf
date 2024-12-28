@@ -17308,7 +17308,7 @@
 			(uuid "a6eb4554-c700-4dfa-b689-905778b0eafa")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 360)
+			(at 0 0 0)
 			(layer "F.Fab")
 			(uuid "3682e480-fd4a-40f0-92f6-b3dceeba0806")
 			(effects
@@ -40011,7 +40011,7 @@
 			)
 		)
 		(property "Value" "74LVC1G125"
-			(at 0 2.4 360)
+			(at 0 2.4 0)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "e6cef5f0-4aff-4450-b60c-3ae393971f9e")
@@ -40023,7 +40023,7 @@
 			)
 		)
 		(property "Footprint" "Package_TO_SOT_SMD:SOT-23-5"
-			(at 0 0 360)
+			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "a1da8a45-6f44-48ec-9832-a2ff4444f536")
@@ -40035,7 +40035,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.ti.com/lit/ds/symlink/sn74lvc1g125.pdf"
-			(at 0 0 360)
+			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "03cebc12-4603-4d2e-9aa2-75dd0505ea6b")
@@ -40047,7 +40047,7 @@
 			)
 		)
 		(property "Description" "Single Buffer Gate Tri-State, Low-Voltage CMOS"
-			(at 0 0 360)
+			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "79de7350-e5fd-4c5d-aa7e-77c74e9f5fd8")
@@ -40206,7 +40206,7 @@
 			(uuid "8e67b767-262d-4b70-a3ae-0bdcd66d3857")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 360)
+			(at 0 0 0)
 			(layer "F.Fab")
 			(uuid "3cb83e3e-03f6-419b-b14c-741bb94a13cd")
 			(effects
@@ -53906,6 +53906,16 @@
 		(uuid "e8fe5f99-2c59-4efa-9daf-9cc74e9fa3d1")
 	)
 	(gr_line
+		(start 55.01 138.75)
+		(end 85.21 138.75)
+		(stroke
+			(width 0.15)
+			(type default)
+		)
+		(layer "Dwgs.User")
+		(uuid "eb0d56b6-3dd6-465a-982a-cec8f6c43d9e")
+	)
+	(gr_line
 		(start 154.625 132.4)
 		(end 154.625 125.161)
 		(stroke
@@ -54093,6 +54103,138 @@
 			)
 			(justify left bottom)
 		)
+	)
+	(dimension
+		(type aligned)
+		(layer "Dwgs.User")
+		(uuid "24615ab1-0f3b-40ec-b772-7bf46af938fb")
+		(pts
+			(xy 69.26 138.75) (xy 69.26 126.5)
+		)
+		(height -1.69)
+		(gr_text "12.2500 mm"
+			(at 66.42 132.625 90)
+			(layer "Dwgs.User")
+			(uuid "24615ab1-0f3b-40ec-b772-7bf46af938fb")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(format
+			(prefix "")
+			(suffix "")
+			(units 3)
+			(units_format 1)
+			(precision 4)
+		)
+		(style
+			(thickness 0.15)
+			(arrow_length 1.27)
+			(text_position_mode 0)
+			(extension_height 0.58642)
+			(extension_offset 0.5) keep_text_aligned)
+	)
+	(dimension
+		(type aligned)
+		(layer "Dwgs.User")
+		(uuid "2546b2a9-b24b-46dd-ac6f-5f2b9bbc5b1c")
+		(pts
+			(xy 67.57 138.75) (xy 67.57 111.5)
+		)
+		(height -2.62)
+		(gr_text "27.2500 mm"
+			(at 63.8 125.125 90)
+			(layer "Dwgs.User")
+			(uuid "2546b2a9-b24b-46dd-ac6f-5f2b9bbc5b1c")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(format
+			(prefix "")
+			(suffix "")
+			(units 3)
+			(units_format 1)
+			(precision 4)
+		)
+		(style
+			(thickness 0.15)
+			(arrow_length 1.27)
+			(text_position_mode 0)
+			(extension_height 0.58642)
+			(extension_offset 0.5) keep_text_aligned)
+	)
+	(dimension
+		(type aligned)
+		(layer "Dwgs.User")
+		(uuid "a09a98c2-fd1f-420f-b5e1-27fdec49e77d")
+		(pts
+			(xy 59.17 138.75) (xy 59.17 78.33)
+		)
+		(height -3.93)
+		(gr_text "60.4200 mm"
+			(at 54.09 108.54 90)
+			(layer "Dwgs.User")
+			(uuid "a09a98c2-fd1f-420f-b5e1-27fdec49e77d")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(format
+			(prefix "")
+			(suffix "")
+			(units 3)
+			(units_format 1)
+			(precision 4)
+		)
+		(style
+			(thickness 0.15)
+			(arrow_length 1.27)
+			(text_position_mode 0)
+			(extension_height 0.58642)
+			(extension_offset 0.5) keep_text_aligned)
+	)
+	(dimension
+		(type aligned)
+		(layer "Dwgs.User")
+		(uuid "cb263b85-4bcf-4db5-a95f-1b7617c4be8c")
+		(pts
+			(xy 64.95 138.75) (xy 64.95 96.33)
+		)
+		(height -7.26)
+		(gr_text "42.4200 mm"
+			(at 56.54 117.54 90)
+			(layer "Dwgs.User")
+			(uuid "cb263b85-4bcf-4db5-a95f-1b7617c4be8c")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(format
+			(prefix "")
+			(suffix "")
+			(units 3)
+			(units_format 1)
+			(precision 4)
+		)
+		(style
+			(thickness 0.15)
+			(arrow_length 1.27)
+			(text_position_mode 0)
+			(extension_height 0.58642)
+			(extension_offset 0.5) keep_text_aligned)
 	)
 	(dimension
 		(type aligned)
