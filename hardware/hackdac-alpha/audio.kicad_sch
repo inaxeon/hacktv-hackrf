@@ -3954,6 +3954,16 @@
 	)
 	(wire
 		(pts
+			(xy 76.2 55.245) (xy 81.915 55.245)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "91160c98-d534-4811-a657-00e6b9e0becf")
+	)
+	(wire
+		(pts
 			(xy 187.325 81.28) (xy 187.325 84.455)
 		)
 		(stroke
@@ -4274,7 +4284,7 @@
 	)
 	(wire
 		(pts
-			(xy 97.155 57.785) (xy 97.155 49.53)
+			(xy 98.425 57.785) (xy 98.425 49.53)
 		)
 		(stroke
 			(width 0)
@@ -4364,7 +4374,7 @@
 	)
 	(wire
 		(pts
-			(xy 76.2 57.785) (xy 97.155 57.785)
+			(xy 76.2 57.785) (xy 98.425 57.785)
 		)
 		(stroke
 			(width 0)
@@ -4404,7 +4414,7 @@
 	)
 	(wire
 		(pts
-			(xy 97.155 49.53) (xy 100.33 49.53)
+			(xy 98.425 49.53) (xy 100.33 49.53)
 		)
 		(stroke
 			(width 0)
@@ -4464,7 +4474,7 @@
 	)
 	(text "NOTE: L+R REVERSED FOR COMPATIBILITY\nWITH HACKTV BINARY AUDIO DATA\nAND EASIER PCB ROUTING"
 		(exclude_from_sim no)
-		(at 193.675 102.235 0)
+		(at 204.47 102.235 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -4472,6 +4482,16 @@
 			(justify left)
 		)
 		(uuid "555e61fc-10ab-475b-846b-30ccbabddf0b")
+	)
+	(text "NO FIT"
+		(exclude_from_sim no)
+		(at 147.32 38.1 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "6c71e435-7372-451e-85a5-91fb5cbe542a")
 	)
 	(text "R"
 		(exclude_from_sim no)
@@ -4538,7 +4558,7 @@
 		(uuid "7bdfe106-4075-4822-b554-91ec77071425")
 	)
 	(label "SCL"
-		(at 82.55 60.325 0)
+		(at 93.345 60.325 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -4571,7 +4591,7 @@
 		(uuid "ed1bb41f-9ee6-4802-b369-2870f44d1fb9")
 	)
 	(label "SDA"
-		(at 82.55 57.785 0)
+		(at 93.345 57.785 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -4594,6 +4614,28 @@
 		(uuid "32e27999-2d5e-439f-99b9-5c067fd95c89")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 151.4845 49.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "PWR_EN"
+		(shape input)
+		(at 81.915 55.245 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "3a53777d-75a2-4c3d-9a91-ea80f860bca0")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 92.3387 55.245 0)
 			(effects
 				(font
 					(size 1.27 1.27)
