@@ -133,7 +133,7 @@
 				)
 			)
 		)
-		(symbol "-VDAC:-VDAC"
+		(symbol "+5V_1"
 			(power)
 			(pin_numbers hide)
 			(pin_names
@@ -150,7 +150,7 @@
 					(hide yes)
 				)
 			)
-			(property "Value" "-VDAC"
+			(property "Value" "+5V"
 				(at 0 3.556 0)
 				(effects
 					(font
@@ -176,7 +176,7 @@
 					(hide yes)
 				)
 			)
-			(property "Description" "Power symbol creates a global label with name \"-VDAC\""
+			(property "Description" "Power symbol creates a global label with name \"+5V\""
 				(at 0 0 0)
 				(effects
 					(font
@@ -194,7 +194,45 @@
 					(hide yes)
 				)
 			)
-			(symbol "-VDAC_0_0"
+			(symbol "+5V_1_0_1"
+				(polyline
+					(pts
+						(xy -0.762 1.27) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 2.54) (xy 0.762 1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "+5V_1_1_1"
 				(pin power_in line
 					(at 0 0 90)
 					(length 0)
@@ -211,20 +249,6 @@
 								(size 1.27 1.27)
 							)
 						)
-					)
-				)
-			)
-			(symbol "-VDAC_0_1"
-				(polyline
-					(pts
-						(xy 0 0) (xy 0 1.27) (xy 0.762 1.27) (xy 0 2.54) (xy -0.762 1.27) (xy 0 1.27)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type outline)
 					)
 				)
 			)
@@ -4697,126 +4721,6 @@
 				)
 			)
 		)
-		(symbol "power:VCC"
-			(power)
-			(pin_numbers hide)
-			(pin_names
-				(offset 0) hide)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "#PWR"
-				(at 0 -3.81 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Value" "VCC"
-				(at 0 3.556 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "Power symbol creates a global label with name \"VCC\""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "global power"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "VCC_0_1"
-				(polyline
-					(pts
-						(xy -0.762 1.27) (xy 0 2.54)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 0) (xy 0 2.54)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 2.54) (xy 0.762 1.27)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "VCC_1_1"
-				(pin power_in line
-					(at 0 0 90)
-					(length 0)
-					(name "~"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-		)
 	)
 	(junction
 		(at 76.835 36.83)
@@ -8944,7 +8848,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "01b0af57-fc44-417c-ba4e-512e4b04f34f")
-		(property "Reference" "#PWR064"
+		(property "Reference" "#PWR067"
 			(at 208.915 88.265 0)
 			(effects
 				(font
@@ -8994,7 +8898,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "#PWR064")
+					(reference "#PWR067")
 					(unit 1)
 				)
 			)
@@ -9009,7 +8913,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "02216bd9-160a-4d37-8472-1a4dd23f6d44")
-		(property "Reference" "#PWR052"
+		(property "Reference" "#PWR062"
 			(at 191.135 116.84 0)
 			(effects
 				(font
@@ -9059,7 +8963,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "#PWR052")
+					(reference "#PWR062")
 					(unit 1)
 				)
 			)
@@ -9161,7 +9065,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "05e68dd7-297c-4d9b-a445-e74fbe1dccf0")
-		(property "Reference" "#PWR0137"
+		(property "Reference" "#PWR071"
 			(at 236.855 113.665 0)
 			(effects
 				(font
@@ -9211,7 +9115,7 @@
 		(instances
 			(project "hackdac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "#PWR0137")
+					(reference "#PWR071")
 					(unit 1)
 				)
 			)
@@ -9226,7 +9130,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "0b009afd-1f57-461b-a2b4-3f4da41e881b")
-		(property "Reference" "R38"
+		(property "Reference" "R39"
 			(at 229.87 64.77 0)
 			(effects
 				(font
@@ -9280,7 +9184,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "R38")
+					(reference "R39")
 					(unit 1)
 				)
 			)
@@ -9297,7 +9201,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "0bfcf270-8f6a-45d5-9330-98c358a8abe4")
-		(property "Reference" "#PWR0135"
+		(property "Reference" "#PWR058"
 			(at 161.29 89.535 0)
 			(effects
 				(font
@@ -9347,7 +9251,7 @@
 		(instances
 			(project ""
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "#PWR0135")
+					(reference "#PWR058")
 					(unit 1)
 				)
 			)
@@ -9363,7 +9267,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "0fcd8444-3a87-4cb9-98ef-0e6b7df49c1f")
-		(property "Reference" "Q3"
+		(property "Reference" "Q4"
 			(at 240.665 58.42 0)
 			(effects
 				(font
@@ -9423,7 +9327,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "Q3")
+					(reference "Q4")
 					(unit 1)
 				)
 			)
@@ -9438,7 +9342,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "110bc073-165c-4a2b-ac05-03f856a24bfb")
-		(property "Reference" "#PWR046"
+		(property "Reference" "#PWR050"
 			(at 75.565 149.225 0)
 			(effects
 				(font
@@ -9488,7 +9392,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "#PWR046")
+					(reference "#PWR050")
 					(unit 1)
 				)
 			)
@@ -9521,7 +9425,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 172.212 57.15 90)
 			(effects
 				(font
@@ -9659,7 +9563,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "16b016d8-76cd-4910-bd3e-9dcc1b258c0a")
-		(property "Reference" "#PWR063"
+		(property "Reference" "#PWR066"
 			(at 208.915 55.245 0)
 			(effects
 				(font
@@ -9709,7 +9613,7 @@
 		(instances
 			(project ""
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "#PWR063")
+					(reference "#PWR066")
 					(unit 1)
 				)
 			)
@@ -9724,7 +9628,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "17840397-6115-434e-9504-1f5edd0806ff")
-		(property "Reference" "#PWR0138"
+		(property "Reference" "#PWR060"
 			(at 173.99 82.55 0)
 			(effects
 				(font
@@ -9774,7 +9678,7 @@
 		(instances
 			(project "hackdac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "#PWR0138")
+					(reference "#PWR060")
 					(unit 1)
 				)
 			)
@@ -9944,7 +9848,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "26901427-c1ee-4890-8c50-5bdb96601176")
-		(property "Reference" "C46"
+		(property "Reference" "C45"
 			(at 130.175 36.195 0)
 			(effects
 				(font
@@ -9998,7 +9902,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "C46")
+					(reference "C45")
 					(unit 1)
 				)
 			)
@@ -10013,7 +9917,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "26c64797-b8cf-4f9e-9825-0161a0208169")
-		(property "Reference" "#PWR049"
+		(property "Reference" "#PWR053"
 			(at 96.52 162.56 0)
 			(effects
 				(font
@@ -10063,7 +9967,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "#PWR049")
+					(reference "#PWR053")
 					(unit 1)
 				)
 			)
@@ -10079,7 +9983,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "2e56f912-0067-493c-ad87-7c3964426700")
-		(property "Reference" "J13"
+		(property "Reference" "J2"
 			(at 163.83 74.295 0)
 			(effects
 				(font
@@ -10133,7 +10037,7 @@
 		(instances
 			(project ""
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "J13")
+					(reference "J2")
 					(unit 1)
 				)
 			)
@@ -10149,7 +10053,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "364e70ef-7cd1-48dd-ab24-0b648f7267da")
-		(property "Reference" "#PWR0139"
+		(property "Reference" "#PWR059"
 			(at 173.99 57.15 0)
 			(effects
 				(font
@@ -10199,7 +10103,7 @@
 		(instances
 			(project "hackdac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "#PWR0139")
+					(reference "#PWR059")
 					(unit 1)
 				)
 			)
@@ -10283,7 +10187,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "417072d8-c9e7-4708-a574-9fdf26201b6c")
-		(property "Reference" "R31"
+		(property "Reference" "R34"
 			(at 175.26 125.73 90)
 			(effects
 				(font
@@ -10337,7 +10241,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "R31")
+					(reference "R34")
 					(unit 1)
 				)
 			)
@@ -10352,7 +10256,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "45eafb5c-2eb5-4e83-b3a8-4445c5c5504d")
-		(property "Reference" "#PWR072"
+		(property "Reference" "#PWR077"
 			(at 259.715 95.885 0)
 			(effects
 				(font
@@ -10402,7 +10306,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "#PWR072")
+					(reference "#PWR077")
 					(unit 1)
 				)
 			)
@@ -10417,7 +10321,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "4a28729b-0552-4df7-aaea-2df3b617d2f4")
-		(property "Reference" "R39"
+		(property "Reference" "R32"
 			(at 135.89 52.07 90)
 			(effects
 				(font
@@ -10469,7 +10373,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "R39")
+					(reference "R32")
 					(unit 1)
 				)
 			)
@@ -10485,7 +10389,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "4d6795e9-587c-4bc7-b17d-e237d7911d89")
-		(property "Reference" "#PWR044"
+		(property "Reference" "#PWR046"
 			(at 41.91 50.165 0)
 			(effects
 				(font
@@ -10535,7 +10439,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "#PWR044")
+					(reference "#PWR046")
 					(unit 1)
 				)
 			)
@@ -10551,7 +10455,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "524f2ba1-bd93-4aee-940f-e91acc98b620")
-		(property "Reference" "C47"
+		(property "Reference" "C46"
 			(at 141.605 36.195 0)
 			(effects
 				(font
@@ -10605,7 +10509,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "C47")
+					(reference "C46")
 					(unit 1)
 				)
 			)
@@ -10827,7 +10731,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "5cd790af-5005-4274-af2f-c08668bfa510")
-		(property "Reference" "#PWR071"
+		(property "Reference" "#PWR076"
 			(at 250.825 78.105 0)
 			(effects
 				(font
@@ -10877,7 +10781,7 @@
 		(instances
 			(project ""
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "#PWR071")
+					(reference "#PWR076")
 					(unit 1)
 				)
 			)
@@ -10893,7 +10797,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "5e734511-f788-42e4-a2cb-9bb1044983d2")
-		(property "Reference" "#PWR056"
+		(property "Reference" "#PWR055"
 			(at 126.365 118.745 0)
 			(effects
 				(font
@@ -10943,7 +10847,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "#PWR056")
+					(reference "#PWR055")
 					(unit 1)
 				)
 			)
@@ -10958,7 +10862,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "5eb5fc30-0088-47dd-aeb3-d531b45a0bfb")
-		(property "Reference" "Q1"
+		(property "Reference" "Q2"
 			(at 186.69 59.69 0)
 			(effects
 				(font
@@ -11018,7 +10922,7 @@
 		(instances
 			(project ""
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "Q1")
+					(reference "Q2")
 					(unit 1)
 				)
 			)
@@ -11374,7 +11278,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "6d5ad4ec-7414-416c-8310-4a32dc1d1571")
-		(property "Reference" "Q2"
+		(property "Reference" "Q3"
 			(at 195.58 59.69 0)
 			(effects
 				(font
@@ -11434,7 +11338,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "Q2")
+					(reference "Q3")
 					(unit 1)
 				)
 			)
@@ -11449,7 +11353,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "6f64589d-b037-4447-aeac-95be6ccb0428")
-		(property "Reference" "#PWR062"
+		(property "Reference" "#PWR065"
 			(at 198.755 88.265 0)
 			(effects
 				(font
@@ -11499,7 +11403,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "#PWR062")
+					(reference "#PWR065")
 					(unit 1)
 				)
 			)
@@ -11514,7 +11418,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "6fb01e04-7011-4f30-ae89-8820381e91c2")
-		(property "Reference" "#PWR070"
+		(property "Reference" "#PWR075"
 			(at 238.125 88.265 0)
 			(effects
 				(font
@@ -11564,7 +11468,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "#PWR070")
+					(reference "#PWR075")
 					(unit 1)
 				)
 			)
@@ -11736,7 +11640,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "7b49dcd4-e5f0-4954-82ab-2a807bb33872")
-		(property "Reference" "R37"
+		(property "Reference" "R38"
 			(at 210.185 75.565 0)
 			(effects
 				(font
@@ -11790,7 +11694,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "R37")
+					(reference "R38")
 					(unit 1)
 				)
 			)
@@ -11805,7 +11709,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "7b992c57-6372-4b56-8ff8-baf50c4ac882")
-		(property "Reference" "R35"
+		(property "Reference" "R31"
 			(at 67.31 52.07 90)
 			(effects
 				(font
@@ -11857,7 +11761,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "R35")
+					(reference "R31")
 					(unit 1)
 				)
 			)
@@ -11986,71 +11890,6 @@
 		)
 	)
 	(symbol
-		(lib_id "power:VCC")
-		(at 138.43 26.67 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "84964c49-baf8-424e-864b-f053c974cc54")
-		(property "Reference" "#PWR054"
-			(at 138.43 30.48 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "VCC"
-			(at 138.43 22.225 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 138.43 26.67 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 138.43 26.67 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"VCC\""
-			(at 138.43 26.67 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "bbba7526-a19f-4b6c-9bd3-081609c730b3")
-		)
-		(instances
-			(project ""
-				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "#PWR054")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_name "GND_3")
 		(lib_id "power:GND")
 		(at 221.615 123.19 0)
@@ -12060,7 +11899,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "869955c3-1c7a-450e-896b-31a6be091970")
-		(property "Reference" "#PWR0140"
+		(property "Reference" "#PWR068"
 			(at 221.615 129.54 0)
 			(effects
 				(font
@@ -12110,7 +11949,7 @@
 		(instances
 			(project ""
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "#PWR0140")
+					(reference "#PWR068")
 					(unit 1)
 				)
 			)
@@ -12125,7 +11964,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "8b23e363-57f3-4ea7-a17b-66b316d3f370")
-		(property "Reference" "#PWR055"
+		(property "Reference" "#PWR054"
 			(at 126.365 49.53 0)
 			(effects
 				(font
@@ -12175,7 +12014,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "#PWR055")
+					(reference "#PWR054")
 					(unit 1)
 				)
 			)
@@ -12190,7 +12029,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "8b30fbd7-89e2-4b91-ac91-afc37a48af9d")
-		(property "Reference" "#PWR050"
+		(property "Reference" "#PWR049"
 			(at 69.85 48.895 0)
 			(effects
 				(font
@@ -12240,7 +12079,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "#PWR050")
+					(reference "#PWR049")
 					(unit 1)
 				)
 			)
@@ -12255,7 +12094,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "8c58dfc2-0043-45b6-a86a-cd558cd387a6")
-		(property "Reference" "#PWR051"
+		(property "Reference" "#PWR052"
 			(at 76.835 118.745 0)
 			(effects
 				(font
@@ -12305,7 +12144,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "#PWR051")
+					(reference "#PWR052")
 					(unit 1)
 				)
 			)
@@ -12320,7 +12159,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "8e5301ce-a035-4fe2-bfce-32191f02332c")
-		(property "Reference" "Q7"
+		(property "Reference" "Q1"
 			(at 168.91 66.04 0)
 			(effects
 				(font
@@ -12380,7 +12219,7 @@
 		(instances
 			(project "hackdac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "Q7")
+					(reference "Q1")
 					(unit 1)
 				)
 			)
@@ -12483,7 +12322,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "8f6c5511-9b82-4833-bbd1-f9158e4963f1")
-		(property "Reference" "C88"
+		(property "Reference" "C48"
 			(at 225.425 117.475 0)
 			(effects
 				(font
@@ -12537,7 +12376,7 @@
 		(instances
 			(project "hackdac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "C88")
+					(reference "C48")
 					(unit 1)
 				)
 			)
@@ -12553,7 +12392,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "92633e53-24e0-439f-96c3-9aea2195dd2d")
-		(property "Reference" "#PWR0136"
+		(property "Reference" "#PWR072"
 			(at 233.045 148.59 0)
 			(effects
 				(font
@@ -12603,7 +12442,7 @@
 		(instances
 			(project ""
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "#PWR0136")
+					(reference "#PWR072")
 					(unit 1)
 				)
 			)
@@ -12619,7 +12458,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "926356e6-c566-4bbc-a4af-77bfe504f95f")
-		(property "Reference" "#PWR043"
+		(property "Reference" "#PWR045"
 			(at 45.72 28.575 0)
 			(effects
 				(font
@@ -12669,7 +12508,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "#PWR043")
+					(reference "#PWR045")
 					(unit 1)
 				)
 			)
@@ -12685,7 +12524,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "9550e7fa-6e71-4626-9e47-3589e26f5de1")
-		(property "Reference" "#PWR053"
+		(property "Reference" "#PWR063"
 			(at 187.325 148.59 0)
 			(effects
 				(font
@@ -12735,7 +12574,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "#PWR053")
+					(reference "#PWR063")
 					(unit 1)
 				)
 			)
@@ -12751,7 +12590,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "99fc6ec8-2d6c-4360-b50e-81a1b40f41d4")
-		(property "Reference" "C45"
+		(property "Reference" "C47"
 			(at 172.085 129.54 0)
 			(effects
 				(font
@@ -12805,7 +12644,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "C45")
+					(reference "C47")
 					(unit 1)
 				)
 			)
@@ -12891,7 +12730,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "9c707763-c5e3-4356-b981-660a26a36b6b")
-		(property "Reference" "#PWR045"
+		(property "Reference" "#PWR047"
 			(at 48.895 99.695 0)
 			(effects
 				(font
@@ -12941,7 +12780,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "#PWR045")
+					(reference "#PWR047")
 					(unit 1)
 				)
 			)
@@ -12957,7 +12796,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "a126ab30-8b8c-4bc3-8ef5-d488d46ca563")
-		(property "Reference" "#PWR061"
+		(property "Reference" "#PWR064"
 			(at 192.405 50.8 0)
 			(effects
 				(font
@@ -13007,7 +12846,7 @@
 		(instances
 			(project ""
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "#PWR061")
+					(reference "#PWR064")
 					(unit 1)
 				)
 			)
@@ -13022,7 +12861,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "a6b33166-0064-4023-baa0-846d8eecd654")
-		(property "Reference" "#PWR075"
+		(property "Reference" "#PWR078"
 			(at 271.145 67.31 0)
 			(effects
 				(font
@@ -13072,7 +12911,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "#PWR075")
+					(reference "#PWR078")
 					(unit 1)
 				)
 			)
@@ -13087,7 +12926,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "bc3b7534-c192-42ad-8c62-df679dfe5ab1")
-		(property "Reference" "R32"
+		(property "Reference" "R36"
 			(at 201.295 128.905 90)
 			(effects
 				(font
@@ -13139,7 +12978,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "R32")
+					(reference "R36")
 					(unit 1)
 				)
 			)
@@ -13155,7 +12994,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "bccf24d7-4f3e-4829-a9a2-afdc6405184d")
-		(property "Reference" "#PWR068"
+		(property "Reference" "#PWR073"
 			(at 238.125 43.18 0)
 			(effects
 				(font
@@ -13205,7 +13044,7 @@
 		(instances
 			(project ""
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "#PWR068")
+					(reference "#PWR073")
 					(unit 1)
 				)
 			)
@@ -13426,7 +13265,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "caee38ba-06b3-4e18-b2aa-a425a078679b")
-		(property "Reference" "#PWR066"
+		(property "Reference" "#PWR070"
 			(at 227.965 88.265 0)
 			(effects
 				(font
@@ -13476,7 +13315,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "#PWR066")
+					(reference "#PWR070")
 					(unit 1)
 				)
 			)
@@ -13491,7 +13330,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "ccdb708e-3d1f-4d7c-a840-284886a0e9ac")
-		(property "Reference" "R36"
+		(property "Reference" "R37"
 			(at 206.375 59.055 90)
 			(effects
 				(font
@@ -13545,7 +13384,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "R36")
+					(reference "R37")
 					(unit 1)
 				)
 			)
@@ -13700,7 +13539,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "d1659987-7e2f-418d-b9b2-1b62683adf9d")
-		(property "Reference" "#PWR060"
+		(property "Reference" "#PWR061"
 			(at 185.42 82.55 0)
 			(effects
 				(font
@@ -13750,7 +13589,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "#PWR060")
+					(reference "#PWR061")
 					(unit 1)
 				)
 			)
@@ -13765,7 +13604,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "d28cc17a-e063-426b-a174-47800a20a9e5")
-		(property "Reference" "J2"
+		(property "Reference" "J3"
 			(at 269.875 44.45 0)
 			(effects
 				(font
@@ -13819,7 +13658,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "J2")
+					(reference "J3")
 					(unit 1)
 				)
 			)
@@ -13834,7 +13673,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "d3f4d110-f08a-40cd-9d61-3bd1feaebd2b")
-		(property "Reference" "#PWR065"
+		(property "Reference" "#PWR069"
 			(at 227.965 56.515 0)
 			(effects
 				(font
@@ -13884,7 +13723,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "#PWR065")
+					(reference "#PWR069")
 					(unit 1)
 				)
 			)
@@ -13969,7 +13808,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "eb7a5d73-1179-4bac-8cf8-aa43c178ce24")
-		(property "Reference" "#PWR047"
+		(property "Reference" "#PWR051"
 			(at 75.565 183.515 0)
 			(effects
 				(font
@@ -14019,7 +13858,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "#PWR047")
+					(reference "#PWR051")
 					(unit 1)
 				)
 			)
@@ -14034,7 +13873,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "ec34c6fe-0e6f-4738-a2d6-02b17a32fbb5")
-		(property "Reference" "U16"
+		(property "Reference" "U7"
 			(at 245.11 123.19 0)
 			(effects
 				(font
@@ -14095,7 +13934,7 @@
 		(instances
 			(project ""
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "U16")
+					(reference "U7")
 					(unit 1)
 				)
 			)
@@ -14172,6 +14011,71 @@
 		)
 	)
 	(symbol
+		(lib_id "power:-5VA")
+		(at 238.125 63.5 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "ef003c07-9860-486c-8a04-96d050bfbef9")
+		(property "Reference" "#PWR074"
+			(at 238.125 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "-5VA"
+			(at 238.125 67.945 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 238.125 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 238.125 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"-5VA\""
+			(at 238.125 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "f9c4092a-1b77-40e6-9e14-519abdd188ec")
+		)
+		(instances
+			(project "hackdac-alpha"
+				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
+					(reference "#PWR074")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "+3.3v_hackrf:+3.3V_HACKRF")
 		(at 26.67 66.04 0)
 		(unit 1)
@@ -14181,7 +14085,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "efc76af5-298f-46da-8006-ad59523c5aea")
-		(property "Reference" "#PWR0107"
+		(property "Reference" "#PWR044"
 			(at 30.48 67.31 0)
 			(effects
 				(font
@@ -14231,7 +14135,7 @@
 		(instances
 			(project "hackdac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "#PWR0107")
+					(reference "#PWR044")
 					(unit 1)
 				)
 			)
@@ -14307,6 +14211,73 @@
 		)
 	)
 	(symbol
+		(lib_name "+5V_1")
+		(lib_id "power:+5V")
+		(at 138.43 26.67 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "f75e49ca-b499-47b4-94c0-7dc7c9402078")
+		(property "Reference" "#PWR056"
+			(at 138.43 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+5V"
+			(at 138.43 21.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 138.43 26.67 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 138.43 26.67 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+5V\""
+			(at 138.43 26.67 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "92530076-1b8e-4ce4-a911-2b1356306af8")
+		)
+		(instances
+			(project ""
+				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
+					(reference "#PWR056")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:GND")
 		(at 138.43 43.18 0)
 		(unit 1)
@@ -14372,71 +14343,6 @@
 		)
 	)
 	(symbol
-		(lib_id "-VDAC:-VDAC")
-		(at 238.125 63.5 180)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "fd70bcd9-bfca-49b8-9eec-d8300f4c5c34")
-		(property "Reference" "#PWR069"
-			(at 238.125 59.69 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "-VDAC"
-			(at 238.125 67.945 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 238.125 63.5 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 238.125 63.5 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"-VDAC\""
-			(at 238.125 63.5 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "3e366b70-a8da-46ea-aa4d-7176a6712a4f")
-		)
-		(instances
-			(project "dacattac-alpha"
-				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "#PWR069")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:R")
 		(at 192.405 52.07 0)
 		(unit 1)
@@ -14445,7 +14351,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "ff968137-3312-4f50-a4ef-e56c561c6ef3")
-		(property "Reference" "R34"
+		(property "Reference" "R35"
 			(at 194.31 50.8 0)
 			(effects
 				(font
@@ -14499,7 +14405,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/e1e307fe-d49b-45b6-b177-774a7a482979"
-					(reference "R34")
+					(reference "R35")
 					(unit 1)
 				)
 			)

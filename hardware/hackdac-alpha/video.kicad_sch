@@ -7806,7 +7806,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "0672eff3-2e07-4e6a-a1e5-d6f0e664a1d0")
-		(property "Reference" "#PWR012"
+		(property "Reference" "#PWR013"
 			(at 112.395 90.17 0)
 			(effects
 				(font
@@ -7856,7 +7856,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "#PWR012")
+					(reference "#PWR013")
 					(unit 1)
 				)
 			)
@@ -7871,7 +7871,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "0acdcef0-0499-4fea-a279-7abd1b04e664")
-		(property "Reference" "#PWR040"
+		(property "Reference" "#PWR041"
 			(at 259.715 100.965 0)
 			(effects
 				(font
@@ -7921,7 +7921,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "#PWR040")
+					(reference "#PWR041")
 					(unit 1)
 				)
 			)
@@ -8006,7 +8006,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "0b76f580-a636-4504-a6bd-33eb843c62ec")
-		(property "Reference" "#PWR038"
+		(property "Reference" "#PWR039"
 			(at 249.555 97.155 0)
 			(effects
 				(font
@@ -8056,7 +8056,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "#PWR038")
+					(reference "#PWR039")
 					(unit 1)
 				)
 			)
@@ -8071,7 +8071,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "0d621523-4476-4c53-9e53-c412e07232c9")
-		(property "Reference" "R22"
+		(property "Reference" "R23"
 			(at 251.46 115.57 90)
 			(effects
 				(font
@@ -8125,7 +8125,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "R22")
+					(reference "R23")
 					(unit 1)
 				)
 			)
@@ -8140,7 +8140,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "0ea508c1-6375-4606-8938-62dc0c6314a5")
-		(property "Reference" "C41"
+		(property "Reference" "C40"
 			(at 271.78 137.16 90)
 			(effects
 				(font
@@ -8194,7 +8194,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "C41")
+					(reference "C40")
 					(unit 1)
 				)
 			)
@@ -8209,7 +8209,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "1068abc2-08d5-4545-8eed-17aaf1e74ef0")
-		(property "Reference" "#PWR011"
+		(property "Reference" "#PWR012"
 			(at 104.14 150.495 0)
 			(effects
 				(font
@@ -8259,7 +8259,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "#PWR011")
+					(reference "#PWR012")
 					(unit 1)
 				)
 			)
@@ -8274,7 +8274,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "1254af68-cdd6-45be-bfac-fbef7448fa47")
-		(property "Reference" "#PWR014"
+		(property "Reference" "#PWR015"
 			(at 119.38 73.025 0)
 			(effects
 				(font
@@ -8324,7 +8324,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "#PWR014")
+					(reference "#PWR015")
 					(unit 1)
 				)
 			)
@@ -8415,7 +8415,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "1453c4a9-109f-43b7-863e-43103374eefc")
-		(property "Reference" "#PWR028"
+		(property "Reference" "#PWR029"
 			(at 215.9 57.785 0)
 			(effects
 				(font
@@ -8465,7 +8465,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "#PWR028")
+					(reference "#PWR029")
 					(unit 1)
 				)
 			)
@@ -8769,7 +8769,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "201ab4f3-94c7-4690-8213-c37301a9dd69")
-		(property "Reference" "#PWR01"
+		(property "Reference" "#PWR02"
 			(at 71.12 150.495 0)
 			(effects
 				(font
@@ -8819,7 +8819,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "#PWR01")
+					(reference "#PWR02")
 					(unit 1)
 				)
 			)
@@ -9318,7 +9318,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "2e72642d-34b0-43ac-9f80-370edf497dbf")
-		(property "Reference" "#PWR035"
+		(property "Reference" "#PWR036"
 			(at 238.125 64.77 0)
 			(effects
 				(font
@@ -9368,7 +9368,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "#PWR035")
+					(reference "#PWR036")
 					(unit 1)
 				)
 			)
@@ -9450,7 +9450,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "2fe2efd8-1927-4afb-b00d-0801e47de9b5")
-		(property "Reference" "#PWR018"
+		(property "Reference" "#PWR019"
 			(at 144.145 100.965 0)
 			(effects
 				(font
@@ -9500,7 +9500,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "#PWR018")
+					(reference "#PWR019")
 					(unit 1)
 				)
 			)
@@ -9588,7 +9588,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "338fe94e-4680-434a-8dd2-6d0417fadc3f")
-		(property "Reference" "R23"
+		(property "Reference" "R22"
 			(at 245.745 115.57 90)
 			(effects
 				(font
@@ -9642,7 +9642,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "R23")
+					(reference "R22")
 					(unit 1)
 				)
 			)
@@ -9863,7 +9863,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "39159fc5-2b5b-4bb5-8479-74ada6feb4d8")
-		(property "Reference" "#PWR04"
+		(property "Reference" "#PWR05"
 			(at 78.74 89.535 0)
 			(effects
 				(font
@@ -9913,7 +9913,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "#PWR04")
+					(reference "#PWR05")
 					(unit 1)
 				)
 			)
@@ -10005,7 +10005,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "3d6e4983-e972-4394-98b7-5a4cc8b368ac")
-		(property "Reference" "#PWR025"
+		(property "Reference" "#PWR026"
 			(at 189.865 74.295 0)
 			(effects
 				(font
@@ -10055,7 +10055,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "#PWR025")
+					(reference "#PWR026")
 					(unit 1)
 				)
 			)
@@ -10070,7 +10070,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "3d8102ab-77ea-4b53-9d75-f2b56f26dba1")
-		(property "Reference" "#PWR026"
+		(property "Reference" "#PWR027"
 			(at 200.66 120.015 0)
 			(effects
 				(font
@@ -10120,7 +10120,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "#PWR026")
+					(reference "#PWR027")
 					(unit 1)
 				)
 			)
@@ -10343,7 +10343,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "42082134-bdf7-45e0-88e3-0f1da85ebf1a")
-		(property "Reference" "#PWR05"
+		(property "Reference" "#PWR06"
 			(at 81.915 150.495 0)
 			(effects
 				(font
@@ -10393,7 +10393,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "#PWR05")
+					(reference "#PWR06")
 					(unit 1)
 				)
 			)
@@ -10550,7 +10550,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "4bd03a2d-65f3-4185-a41e-79a0d019d4a3")
-		(property "Reference" "#PWR031"
+		(property "Reference" "#PWR032"
 			(at 222.25 57.785 0)
 			(effects
 				(font
@@ -10600,7 +10600,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "#PWR031")
+					(reference "#PWR032")
 					(unit 1)
 				)
 			)
@@ -10615,7 +10615,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "55ba7089-50b9-4f28-98d7-39b8c393f233")
-		(property "Reference" "#PWR06"
+		(property "Reference" "#PWR07"
 			(at 88.265 146.685 0)
 			(effects
 				(font
@@ -10665,7 +10665,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "#PWR06")
+					(reference "#PWR07")
 					(unit 1)
 				)
 			)
@@ -10680,7 +10680,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "56440043-afbd-4545-a842-85b3ec99491d")
-		(property "Reference" "#PWR023"
+		(property "Reference" "#PWR024"
 			(at 176.53 136.525 0)
 			(effects
 				(font
@@ -10730,7 +10730,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "#PWR023")
+					(reference "#PWR024")
 					(unit 1)
 				)
 			)
@@ -10954,7 +10954,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "5b11e6d8-a113-4543-a0b4-b3b12ce35e5d")
-		(property "Reference" "#PWR024"
+		(property "Reference" "#PWR025"
 			(at 185.42 120.015 0)
 			(effects
 				(font
@@ -11004,7 +11004,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "#PWR024")
+					(reference "#PWR025")
 					(unit 1)
 				)
 			)
@@ -11638,7 +11638,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "78efd303-6400-47b3-989e-dd29ebbcf798")
-		(property "Reference" "#PWR016"
+		(property "Reference" "#PWR017"
 			(at 129.54 78.105 0)
 			(effects
 				(font
@@ -11688,7 +11688,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "#PWR016")
+					(reference "#PWR017")
 					(unit 1)
 				)
 			)
@@ -11703,7 +11703,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "79e98cd8-366f-45bb-a020-3cf0a4ac5cae")
-		(property "Reference" "C40"
+		(property "Reference" "C41"
 			(at 278.13 137.795 90)
 			(effects
 				(font
@@ -11757,7 +11757,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "C40")
+					(reference "C41")
 					(unit 1)
 				)
 			)
@@ -11911,7 +11911,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "823c3909-08de-469e-b97c-0794f0c4447e")
-		(property "Reference" "#PWR022"
+		(property "Reference" "#PWR023"
 			(at 174.625 74.295 0)
 			(effects
 				(font
@@ -11961,7 +11961,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "#PWR022")
+					(reference "#PWR023")
 					(unit 1)
 				)
 			)
@@ -12179,7 +12179,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "86e1866a-0bd6-4871-8a15-adb6f8659482")
-		(property "Reference" "#PWR030"
+		(property "Reference" "#PWR031"
 			(at 220.345 74.295 0)
 			(effects
 				(font
@@ -12229,7 +12229,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "#PWR030")
+					(reference "#PWR031")
 					(unit 1)
 				)
 			)
@@ -12244,7 +12244,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "87bfd7df-a12f-44bc-93fa-a641467cf010")
-		(property "Reference" "#PWR041"
+		(property "Reference" "#PWR042"
 			(at 263.525 156.21 0)
 			(effects
 				(font
@@ -12294,7 +12294,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "#PWR041")
+					(reference "#PWR042")
 					(unit 1)
 				)
 			)
@@ -12309,7 +12309,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "88eba8a9-5c78-4de1-adc8-7e90044839d9")
-		(property "Reference" "C24"
+		(property "Reference" "C25"
 			(at 202.565 100.965 90)
 			(effects
 				(font
@@ -12363,7 +12363,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "C24")
+					(reference "C25")
 					(unit 1)
 				)
 			)
@@ -12378,7 +12378,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "8e68d176-3bf7-4718-bdfe-dbd16b990ab8")
-		(property "Reference" "#PWR042"
+		(property "Reference" "#PWR043"
 			(at 278.765 97.155 0)
 			(effects
 				(font
@@ -12428,7 +12428,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "#PWR042")
+					(reference "#PWR043")
 					(unit 1)
 				)
 			)
@@ -12581,7 +12581,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "9458a432-63d4-4675-ac97-21ccdb6f6a47")
-		(property "Reference" "#PWR037"
+		(property "Reference" "#PWR038"
 			(at 249.555 78.105 0)
 			(effects
 				(font
@@ -12631,7 +12631,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "#PWR037")
+					(reference "#PWR038")
 					(unit 1)
 				)
 			)
@@ -12646,7 +12646,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "96e9b873-359d-4741-844c-031e24cea044")
-		(property "Reference" "C21"
+		(property "Reference" "C22"
 			(at 187.325 100.965 90)
 			(effects
 				(font
@@ -12700,7 +12700,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "C21")
+					(reference "C22")
 					(unit 1)
 				)
 			)
@@ -12782,7 +12782,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "98dedb05-4a1a-424f-8cf5-761747a8b572")
-		(property "Reference" "#PWR020"
+		(property "Reference" "#PWR021"
 			(at 159.385 74.295 0)
 			(effects
 				(font
@@ -12832,7 +12832,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "#PWR020")
+					(reference "#PWR021")
 					(unit 1)
 				)
 			)
@@ -12848,7 +12848,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "9e79eee5-6b52-41cd-a533-11292b0a577d")
-		(property "Reference" "#PWR032"
+		(property "Reference" "#PWR033"
 			(at 231.14 120.015 0)
 			(effects
 				(font
@@ -12898,7 +12898,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "#PWR032")
+					(reference "#PWR033")
 					(unit 1)
 				)
 			)
@@ -13196,7 +13196,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "a300516a-78f0-45f0-87bd-97c766539921")
-		(property "Reference" "#PWR07"
+		(property "Reference" "#PWR08"
 			(at 92.71 82.55 0)
 			(effects
 				(font
@@ -13246,7 +13246,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "#PWR07")
+					(reference "#PWR08")
 					(unit 1)
 				)
 			)
@@ -13466,7 +13466,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "a49e6db5-2a61-4319-96a7-696db9e80dd8")
-		(property "Reference" "C22"
+		(property "Reference" "C21"
 			(at 181.61 100.965 90)
 			(effects
 				(font
@@ -13520,7 +13520,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "C22")
+					(reference "C21")
 					(unit 1)
 				)
 			)
@@ -13602,7 +13602,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "a75584d1-2951-4f71-b431-f4496768db5d")
-		(property "Reference" "#PWR03"
+		(property "Reference" "#PWR04"
 			(at 78.74 61.595 0)
 			(effects
 				(font
@@ -13652,7 +13652,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "#PWR03")
+					(reference "#PWR04")
 					(unit 1)
 				)
 			)
@@ -13667,7 +13667,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "ab411a89-0976-4f47-af92-217b281bb383")
-		(property "Reference" "C27"
+		(property "Reference" "C26"
 			(at 198.12 64.135 90)
 			(effects
 				(font
@@ -13719,7 +13719,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "C27")
+					(reference "C26")
 					(unit 1)
 				)
 			)
@@ -13948,7 +13948,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "b6f75fa9-29db-42f7-ab7d-374fdf3fa658")
-		(property "Reference" "#PWR029"
+		(property "Reference" "#PWR030"
 			(at 215.9 120.015 0)
 			(effects
 				(font
@@ -13998,7 +13998,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "#PWR029")
+					(reference "#PWR030")
 					(unit 1)
 				)
 			)
@@ -14080,7 +14080,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "bf59d0e8-3493-4422-beab-af81bb12dc00")
-		(property "Reference" "C26"
+		(property "Reference" "C27"
 			(at 198.12 70.485 90)
 			(effects
 				(font
@@ -14132,7 +14132,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "C26")
+					(reference "C27")
 					(unit 1)
 				)
 			)
@@ -14293,7 +14293,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "c412c82d-d2a8-442a-b7cf-7f15840eb24e")
-		(property "Reference" "#PWR033"
+		(property "Reference" "#PWR034"
 			(at 236.22 110.49 0)
 			(effects
 				(font
@@ -14343,7 +14343,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "#PWR033")
+					(reference "#PWR034")
 					(unit 1)
 				)
 			)
@@ -14427,7 +14427,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "c6879cbd-25aa-4539-97c8-a42aaa432d4e")
-		(property "Reference" "#PWR036"
+		(property "Reference" "#PWR037"
 			(at 248.92 157.48 0)
 			(effects
 				(font
@@ -14477,7 +14477,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "#PWR036")
+					(reference "#PWR037")
 					(unit 1)
 				)
 			)
@@ -14850,7 +14850,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "cee0d93d-431e-4386-a5de-635db00ffcf5")
-		(property "Reference" "#PWR010"
+		(property "Reference" "#PWR011"
 			(at 102.235 93.345 0)
 			(effects
 				(font
@@ -14900,7 +14900,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "#PWR010")
+					(reference "#PWR011")
 					(unit 1)
 				)
 			)
@@ -14994,7 +14994,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "d1333d45-c932-4610-a78b-d2804a53295c")
-		(property "Reference" "C25"
+		(property "Reference" "C24"
 			(at 196.85 100.965 90)
 			(effects
 				(font
@@ -15048,7 +15048,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "C25")
+					(reference "C24")
 					(unit 1)
 				)
 			)
@@ -15063,7 +15063,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "d7b9a788-b462-48ef-be95-c47b6f9a8582")
-		(property "Reference" "#PWR08"
+		(property "Reference" "#PWR09"
 			(at 93.345 114.935 0)
 			(effects
 				(font
@@ -15113,7 +15113,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "#PWR08")
+					(reference "#PWR09")
 					(unit 1)
 				)
 			)
@@ -15197,7 +15197,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "d95691a0-2417-4e22-9dd9-426fe21fab7e")
-		(property "Reference" "#PWR013"
+		(property "Reference" "#PWR014"
 			(at 118.11 153.67 0)
 			(effects
 				(font
@@ -15247,7 +15247,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "#PWR013")
+					(reference "#PWR014")
 					(unit 1)
 				)
 			)
@@ -15330,7 +15330,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "dbc7e8dd-cd47-4247-927f-d267f3e02e60")
-		(property "Reference" "#PWR019"
+		(property "Reference" "#PWR020"
 			(at 150.495 114.3 0)
 			(effects
 				(font
@@ -15380,7 +15380,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "#PWR019")
+					(reference "#PWR020")
 					(unit 1)
 				)
 			)
@@ -15532,7 +15532,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "e1514782-9c34-4045-9674-974127eac1a1")
-		(property "Reference" "#PWR058"
+		(property "Reference" "#PWR01"
 			(at 23.495 86.36 0)
 			(effects
 				(font
@@ -15582,7 +15582,7 @@
 		(instances
 			(project ""
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "#PWR058")
+					(reference "#PWR01")
 					(unit 1)
 				)
 			)
@@ -15666,7 +15666,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "e62259a7-bae0-4875-860a-03887b65363f")
-		(property "Reference" "#PWR027"
+		(property "Reference" "#PWR028"
 			(at 205.105 74.295 0)
 			(effects
 				(font
@@ -15716,7 +15716,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "#PWR027")
+					(reference "#PWR028")
 					(unit 1)
 				)
 			)
@@ -15731,7 +15731,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "e7554492-efb1-4e52-a606-a49227fa937a")
-		(property "Reference" "#PWR034"
+		(property "Reference" "#PWR035"
 			(at 237.49 139.065 0)
 			(effects
 				(font
@@ -15781,7 +15781,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "#PWR034")
+					(reference "#PWR035")
 					(unit 1)
 				)
 			)
@@ -15863,7 +15863,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "ec9a697c-ff70-49b2-b07a-769bdcc3f225")
-		(property "Reference" "#PWR015"
+		(property "Reference" "#PWR016"
 			(at 119.38 92.075 0)
 			(effects
 				(font
@@ -15913,7 +15913,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "#PWR015")
+					(reference "#PWR016")
 					(unit 1)
 				)
 			)
@@ -15928,7 +15928,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "ed0a9b6a-57e8-4a98-b231-372c4ecb47bf")
-		(property "Reference" "#PWR02"
+		(property "Reference" "#PWR03"
 			(at 76.2 150.495 0)
 			(effects
 				(font
@@ -15978,7 +15978,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "#PWR02")
+					(reference "#PWR03")
 					(unit 1)
 				)
 			)
@@ -15993,7 +15993,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "ed8f0922-21b8-49b3-9c44-953607dd8468")
-		(property "Reference" "#PWR09"
+		(property "Reference" "#PWR010"
 			(at 93.98 150.495 0)
 			(effects
 				(font
@@ -16043,7 +16043,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "#PWR09")
+					(reference "#PWR010")
 					(unit 1)
 				)
 			)
@@ -16260,7 +16260,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "fbb361d6-a6a6-4fc7-ad79-8af4da49d44b")
-		(property "Reference" "#PWR021"
+		(property "Reference" "#PWR022"
 			(at 165.735 114.3 0)
 			(effects
 				(font
@@ -16310,7 +16310,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "#PWR021")
+					(reference "#PWR022")
 					(unit 1)
 				)
 			)
@@ -16325,7 +16325,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "fc238a2d-aa93-4347-93ac-01139e1d5f4a")
-		(property "Reference" "#PWR017"
+		(property "Reference" "#PWR018"
 			(at 131.445 95.885 0)
 			(effects
 				(font
@@ -16375,7 +16375,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "#PWR017")
+					(reference "#PWR018")
 					(unit 1)
 				)
 			)
@@ -16390,7 +16390,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "ff27abae-1306-4af5-a1be-abfe69614b76")
-		(property "Reference" "#PWR039"
+		(property "Reference" "#PWR040"
 			(at 259.715 83.185 0)
 			(effects
 				(font
@@ -16440,7 +16440,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/b4bbface-dd1a-4873-ab51-f35caad404be"
-					(reference "#PWR039")
+					(reference "#PWR040")
 					(unit 1)
 				)
 			)
