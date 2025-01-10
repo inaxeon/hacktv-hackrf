@@ -31,6 +31,7 @@ Note that the HackDAC firmware increases the USB data buffer from 32KiB to the m
 # Hardware details
 
 <details>
+
 ## Design
 
 The most prominent feature of the present design is the filter after the DAC. It is a full analogue reconstruction filter which corrects its own errors and allows the DAC to run at 1x sample rate. Such a filter is required when attaching to the HackRF as the maximum sample rate is about 20 MHz, not enough even for 2x oversampling.
