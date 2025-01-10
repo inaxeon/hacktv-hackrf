@@ -60,6 +60,7 @@ When a HackDAC is attached to the HackRF it should remain powered down, and not 
 
 ## Variable inductor construction
 
+<details>
 HackDAC uses proprietary Philips inductors in its output filter. Original parts are not purchasable from any source today however they can be recreated using inductor kits. To achieve correct characteristics the following instructions must be exactly followed.
 
 All inductors are made from the WELCO SBK-71S kit *with* the optional SBK-CF1 ferrite cup. Bobbins must be wound with 0.1mm copper wire *using only the bottom half of the bobbon* It is important the top half is left free of windings. Once the bobbins are wound the windings must be varnished to ensure they do not move.
@@ -76,10 +77,12 @@ Double winding types:
 * 4008 100 09770: 1pcs per board. 16.5 turns. Target inductance: 1.3-3.0uH
 
 Two separate wires are wound counter-clockwise (both in the same direction) One starting at pin 1 ending at 4, and another starting at pin 2 ending at 5. Both must be of an identical number of turns. Verification of target inductance must be performed with both windings in parallel.
+</details>
 
 ## Calibration
 
-There are many steps to successfully calibrate a HackDAC:
+<details>
+A number of steps are required to calibrate a HackDAC. Below is the method I personally use. I warn that it takes some time to master in practise.
 
 ### DC Offset / gain calibration:
 
@@ -96,7 +99,7 @@ Once the procedure is completed the calibrations can be saved into nonvolatile m
 Test setup:
 ![VNA Test setup](https://raw.github.com/inaxeon/hacktv-hackrf/master/hardware/hackdac-alpha/images/vna_cal.png)
 
-For this procedure the HackDAC must be connected to a baseband VNA using the A/R MAG input configuration. The procedure is possible with an RF VNA with a built-in S-Parameter test set however the test cable setup will differ and you most likely not be able to accurately measure frequency response or group delay accurately below 1 MHz.
+For this procedure the HackDAC must be connected to a baseband VNA using the A/R MAG input configuration. The procedure is possible with an RF VNA with a built-in S-Parameter test set however the test cable setup will differ and you most likely won't be able to accurately measure frequency response or group delay accurately below 1 MHz.
 
 Firstly the low pass filter must be adjusted:
 
@@ -135,6 +138,7 @@ Lastly if you have an accurate/calibrated vectorscope to hand it is useful for v
 ![Vectorscope view](https://raw.github.com/inaxeon/hacktv-hackrf/master/hardware/hackdac-alpha/images/cal_vector.png)
 
 Colours should fall exactly in the 75% boxes in the graticule, traces between vectors should be perfectly straight. Examples of problems likely to be seen are differential phase errors and incorrect colour subcarrier amplitude. Fine tune the group delay equaliser and SIN X/X correction as necessary to resolve.
+</details>
 
 # Schematic
 
