@@ -23,9 +23,11 @@ Unfortunately it's quite difficult to build, and calibrating it takes some pract
 # Firmware details
 
 <details>
+
 Contained within this repository is a modified version of the HackRF One's firmware which is required to support the HackDAC. It is the explicit intention that this firmware must retain all functionality of the HackRF One and full compatibility with libhackrf. As such any defects should be regarded as bugs and reported here.
 
 Note that the HackDAC firmware increases the USB data buffer from 32KiB to the maximum 64KiB. This may effect latency when using the HackRF for low-bandwidth non-HackTV applications.
+
 </details>
 
 # Hardware details
@@ -64,11 +66,13 @@ Double winding types:
 * 4008 100 09770: 1pcs per board. 16.5 turns. Target inductance: 1.3-3.0uH
 
 Two separate wires are wound counter-clockwise (both in the same direction) One starting at pin 1 ending at 4, and another starting at pin 2 ending at 5. Both must be of an identical number of turns. Verification of target inductance must be performed with both windings in parallel.
+
 </details>
 
 # Calibration
 
 <details>
+
 A number of steps are required to calibrate a HackDAC. Below is the method I personally use. I warn that it takes some time to master in practise.
 
 ### DC Offset / gain calibration:
