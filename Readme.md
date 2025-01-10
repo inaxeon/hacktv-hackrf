@@ -96,7 +96,7 @@ Once the procedure is completed the calibrations can be saved into nonvolatile m
 Test setup:
 ![VNA Test setup](https://raw.github.com/inaxeon/hacktv-hackrf/master/hardware/hackdac-alpha/images/vna_cal.png)
 
-For this procedure the HackDAC must be connected to a baseband VNA using the A/R MAG input configuration. The procedure is possible with an RF VNA with a built-in S-Parameter test set VNA however the test cable setup will differ and you most likely not be able to accurately measure frequency response or group delay accurately below 1 MHz.
+For this procedure the HackDAC must be connected to a baseband VNA using the A/R MAG input configuration. The procedure is possible with an RF VNA with a built-in S-Parameter test set however the test cable setup will differ and you most likely not be able to accurately measure frequency response or group delay accurately below 1 MHz.
 
 Firstly the low pass filter must be adjusted:
 
@@ -130,11 +130,11 @@ Now start HackTV with the "Pulse & Bar" test signal. Check the 2T pulse is symme
 
 ### Final check with vectorscope
 
-Lastly it is recommended to start HackTV with the 75% EBU colour bars test signal and verify the output on a vectorscope matches the below:
+Lastly if you have an accurate/calibrated vectorscope to hand it is useful for validating the previous adjustments. Start HackTV with the 75% EBU colour bars test signal and verify the output on a vectorscope matches the below:
 
 ![Vectorscope view](https://raw.github.com/inaxeon/hacktv-hackrf/master/hardware/hackdac-alpha/images/cal_vector.png)
 
-Colours should fall exactly in the 75% boxes in the graticule, traces between vectors should be perfectly straight. Examples of problems likely to be seen are differential phase errors and incorrect colour subcarrier amplitude. Adjust the group delay equaliser and SIN X/X correction as necessary to resolve.
+Colours should fall exactly in the 75% boxes in the graticule, traces between vectors should be perfectly straight. Examples of problems likely to be seen are differential phase errors and incorrect colour subcarrier amplitude. Fine tune the group delay equaliser and SIN X/X correction as necessary to resolve.
 
 # Schematic
 
