@@ -10,6 +10,7 @@ HackDAC is an add-on board for the HackRF One intended to provide a broadcast qu
 
 # Why is it bristling with trimmable inductors? That looks rather dated!
 
+<details>
 Well yes, it is. For anybody wanting to design a device which has an analogue video output there are certainly more than a few types of chip for the job, however these (to the best of our current knowledge) are all "consumer video encoder" chips. While these devices are plentiful, inexpensive and produce good quality signals using just a single chip with a few passives at the output, unfortunately they do all of the sync generation and chrominance encoding internally, limiting the output typically to just PAL and NTSC (and SECAM in some rare cases).
 
 HackTV on the other hand is a fully software defined TV transmitter which does not want the output hardware doing anything clever for it – this is why it is able to generate a massive range of TV signals, some quite obscure.
@@ -19,15 +20,19 @@ Ultimately HackTV wants a high-quality arbitrary video signal generator as its o
 In 2022 Danish Entrepreneur Karsten Hansen dumped 4 gigabytes of engineering materials from Philips TV & Test Equipment into a github repository (intellectual property he personally came to own). Contained within the repository was detailed information about how to build and calibrate a very high-quality arbitrary video signal generator circuit first used in the Philips PM5655. This circuit became the basis of "HackDAC Alpha" – the current design.
 
 Unfortunately it's quite difficult to build, and calibrating it takes some practice, not to mention some specialised test equipment. Longer term the project will have to wave goodbye to this circuit and move to a digital oversampling solution however it is important for the time being, firstly because it works and proves the concept, secondly because its performance is exceptional and provides a benchmark for any future designs.
+</details>
 
 # Firmware details
 
+<details>
 Contained within this repository is a modified version of the HackRF One's firmware which is required to support the HackDAC. It is the explicit intention that this firmware must retain all functionality of the HackRF One and full compatibility with libhackrf. As such any defects should be regarded as bugs and reported here.
 
 Note that the HackDAC firmware increases the USB data buffer from 32KiB to the maximum 64KiB. This may effect latency when using the HackRF for low-bandwidth non-HackTV applications.
+</details>
 
 # Hardware details
 
+<details>
 During operation the HackRF's CPLD is re-programmed to emit data from the normally unused BANK2_AUX header, instead of the on-board analogue frontend. Realisation of video signals is performed by the 16-bit AD768 from Analogue Devices, the very same DAC originally used by Philips. It's an old chip with quite a price tag but remains in production and still has respectable performance even by todays' standards. Replacement of it with a newer, low-cost device was considered however it was found this would impose a number of compromises and require significant alterations to the design, none of which the project is particularly willing to accept at this time. Nonetheless in future it will have to be abandoned due to its high cost.
 
 Video resolution is limited to 15-bit, as the 16th bit from the CPU is used for the Sync output.
@@ -37,26 +42,7 @@ Jitter was a particular difficulty during the development of HackDAC. The root c
 Audio is handled by a PCM5102 DAC run at a sample rate of 210.9 KHz, the 13.5 MHz video sample rate divided by 64. This ratio arises from interleaved transfers of 16KiB video data, followed by 512B of audio data to the HackRF, a scheme which was found to be efficient and reliable.
 
 When a HackDAC is attached to the HackRF it should remain powered down, and not in any way impair non-HackTV related usage of it (even with standard firmware). Any issues in this scenario should be reported as bugs.
-
-# Specifications
-
-## Video output
-* Bandwidth: DC-6 MHz
-* Voltage range: 2V pk-pk (+/- 1V)
-* Output impedence: 75Ω
-* Sample rate: 13.5 MHz (fixed, per CCIR 601)
-* Word size: 15-bit
-
-## Sync output
-* Output voltage: -1.8V (0v at rest)
-* Rise time: 230ns
-* Output impedence: 75Ω
-
-## Audio output
-* Output voltage: 2.1 V(RMS)
-* Sample rate (with video): 210.9 KHz
-* Sample rate (standalone): 48 KHz
-* Word size: 16-bit
+</details>
 
 ## Variable inductor construction
 
@@ -139,6 +125,26 @@ Lastly if you have an accurate/calibrated vectorscope to hand it is useful for v
 
 Colours should fall exactly in the 75% boxes in the graticule, traces between vectors should be perfectly straight. Examples of problems likely to be seen are differential phase errors and incorrect colour subcarrier amplitude. Fine tune the group delay equaliser and SIN X/X correction as necessary to resolve.
 </details>
+
+# Specifications
+
+## Video output
+* Bandwidth: DC-6 MHz
+* Voltage range: 2V pk-pk (+/- 1V)
+* Output impedence: 75Ω
+* Sample rate: 13.5 MHz (fixed, per CCIR 601)
+* Word size: 15-bit
+
+## Sync output
+* Output voltage: -1.8V (0v at rest)
+* Rise time: 230ns
+* Output impedence: 75Ω
+
+## Audio output
+* Output voltage: 2.1 V(RMS)
+* Sample rate (with video): 210.9 KHz
+* Sample rate (standalone): 48 KHz
+* Word size: 16-bit
 
 # Schematic
 
