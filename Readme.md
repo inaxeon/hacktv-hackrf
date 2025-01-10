@@ -77,6 +77,57 @@ Double winding types:
 
 Two separate wires are wound counter-clockwise (both in the same direction) One starting at pin 1 ending at 4, and another starting at pin 2 ending at 5. Both must be of an identical number of turns. Verification of target inductance must be performed with both windings in parallel.
 
+## Calibration
+
+There are many steps to successfully calibrate a HackDAC:
+
+### DC Offset / gain calibration:
+
+![DC Test setup](https://raw.github.com/inaxeon/hacktv-hackrf/master/hardware/hackdac-alpha/images/dc_cal.png)
+
+Each board has individually calibration DC gain and offset. It is performed using the "hackdac_cal" tool in this repository. Upon running it with an assembled HackRF/HackDAC the user is given the option to set the output voltage to either -1V, 0V or +1V. Additional keystrokes allow the gain and offset to be adjusted in realtime so to achieve correct voltage as measured on a DMM attached to the HackDAC's video output terminated at 75Ω. Once the procedure is completed the calibrations can be saved into nonvolatile memory contained within the calibration DAC on the HackDAC board.
+
+### Low pass filter calibration
+
+Test setup:
+![VNA Test setup](https://raw.github.com/inaxeon/hacktv-hackrf/master/hardware/hackdac-alpha/images/vna_cal.png)
+
+For this procedure the HackDAC must be connected to a baseband VNA using the A/R MAG input configuration. The procedure is possible with an RF VNA with a built-in S-Parameter test set VNA however the test cable setup will differ and you most likely not be able to accurately measure frequency response or group delay accurately below 1 MHz.
+
+Firstly the low pass filter must be adjusted:
+
+* L9: 16.8 MHz
+* L8: 8.05 MHz
+* L7: 10.0 MHz
+
+Resonant frequencies can be observed in the stopband as per this plot:
+
+![LP Filter plot](https://raw.github.com/inaxeon/hacktv-hackrf/master/hardware/hackdac-alpha/images/cal_lp_filter.png)
+
+### Group delay equaliser calibration
+
+In this procedure the VNA will need to be set the A/R DELAY measurement. L3, L4, L5 and L6 are adjusted to keep Tg deviation within 5ns as per this diagram:
+
+![TG plot](https://raw.github.com/inaxeon/hacktv-hackrf/master/hardware/hackdac-alpha/images/cal_tg.png)
+
+In practise this is rather difficult to do and somewhat overkill for any realistic application today. You may find you can get it within 20ns which is still more than good enough.
+
+### SIN X/X correction calibration
+
+![SIN XX Test setup](https://raw.github.com/inaxeon/hacktv-hackrf/master/hardware/hackdac-alpha/images/sinxx_cal.png)
+
+To calibrate the SIN X/X corrector HackTV must be set to generate the SIN X/X test signal. L10 and C39 must be adjusted to achieve symmetry of the SIN X/X test signal as below:
+
+![SIN XX plot](https://raw.github.com/inaxeon/hacktv-hackrf/master/hardware/hackdac-alpha/images/cal_sinxx.png)
+
+### Final check with vectorscope
+
+Lastly it is recommended to start HackTV with the 75% EBU colour bars test signal and verify the output on a vectorscope matches the below:
+
+![Vectorscope view](https://raw.github.com/inaxeon/hacktv-hackrf/master/hardware/hackdac-alpha/images/cal_vector.png)
+
+Colours should fall exactly in the 75% boxes in the graticule, traces between vectors should be perfectly straight. Examples of problems likely to be seen are differential phase errors and incorrect colour subcarrier amplitude. Adjust the group delay equaliser as necessary to resolve.
+
 # Schematic
 
 [Can be viewed here](https://github.com/inaxeon/hacktv-hackrf/blob/master/hardware/hackdac-alpha/hackdac-alpha-rev2.pdf).
