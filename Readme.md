@@ -31,6 +31,10 @@ Note that the HackDAC firmware increases the USB data buffer from 32KiB to the m
 # Hardware details
 
 <details>
+## Design
+
+The most prominent feature of the present design is the filter after the DAC. It is a full analogue reconstruction filter which corrects its own errors and allows the DAC to run at 1x sample rate. Such a filter is required when attaching to the HackRF as the maximum sample rate is about 20 MHz, not enough even for 2x oversampling.
+
 During operation the HackRF's CPLD is re-programmed to emit data from the normally unused BANK2_AUX header, instead of the on-board analogue frontend. Realisation of video signals is performed by the 16-bit AD768 from Analogue Devices, the very same DAC originally used by Philips. It's an old chip with quite a price tag but remains in production and still has respectable performance even by todays' standards. Replacement of it with a newer, low-cost device was considered however it was found this would impose a number of compromises and require significant alterations to the design, none of which the project is particularly willing to accept at this time. Nonetheless in future it will have to be abandoned due to its high cost.
 
 Video resolution is limited to 15-bit, as the 16th bit from the CPU is used for the Sync output.
