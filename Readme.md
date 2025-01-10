@@ -85,7 +85,11 @@ There are many steps to successfully calibrate a HackDAC:
 
 ![DC Test setup](https://raw.github.com/inaxeon/hacktv-hackrf/master/hardware/hackdac-alpha/images/dc_cal.png)
 
-Each board has individually calibration DC gain and offset. It is performed using the "hackdac_cal" tool in this repository. Upon running it with an assembled HackRF/HackDAC the user is given the option to set the output voltage to either -1V, 0V or +1V. Additional keystrokes allow the gain and offset to be adjusted in realtime so to achieve correct voltage as measured on a DMM attached to the HackDAC's video output terminated at 75Ω. Once the procedure is completed the calibrations can be saved into nonvolatile memory contained within the calibration DAC on the HackDAC board.
+Each board has individually calibration DC gain and offset. It is performed using the "hackdac_cal" tool in this repository.
+
+Upon running it with an assembled HackRF/HackDAC the user is given the option to set the output voltage to either -1V, 0V or +1V. Additional keystrokes allow the gain and offset to be adjusted in realtime so to achieve correct voltage as measured on a DMM attached to the HackDAC's video output terminated at 75Ω.
+
+Once the procedure is completed the calibrations can be saved into nonvolatile memory contained within the calibration DAC on the HackDAC board.
 
 ### Low pass filter calibration
 
@@ -120,13 +124,17 @@ To calibrate the SIN X/X corrector HackTV must be set to generate the SIN X/X te
 
 ![SIN XX plot](https://raw.github.com/inaxeon/hacktv-hackrf/master/hardware/hackdac-alpha/images/cal_sinxx.png)
 
+Now start HackTV with the "Pulse & Bar" test signal. Check the 2T pulse is symmetrical as below. Ajust group delay & SIN X/X as necessary to resolve any issues.
+
+![SIN XX plot](https://raw.github.com/inaxeon/hacktv-hackrf/master/hardware/hackdac-alpha/images/cal_2t.png)
+
 ### Final check with vectorscope
 
 Lastly it is recommended to start HackTV with the 75% EBU colour bars test signal and verify the output on a vectorscope matches the below:
 
 ![Vectorscope view](https://raw.github.com/inaxeon/hacktv-hackrf/master/hardware/hackdac-alpha/images/cal_vector.png)
 
-Colours should fall exactly in the 75% boxes in the graticule, traces between vectors should be perfectly straight. Examples of problems likely to be seen are differential phase errors and incorrect colour subcarrier amplitude. Adjust the group delay equaliser as necessary to resolve.
+Colours should fall exactly in the 75% boxes in the graticule, traces between vectors should be perfectly straight. Examples of problems likely to be seen are differential phase errors and incorrect colour subcarrier amplitude. Adjust the group delay equaliser and SIN X/X correction as necessary to resolve.
 
 # Schematic
 
