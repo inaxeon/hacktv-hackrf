@@ -10,7 +10,6 @@ HackDAC is an add-on board for the HackRF One intended to provide a broadcast qu
 
 # Why is it bristling with trimmable inductors? That looks rather dated!
 
-<details>
 Well yes, it is. For anybody wanting to design a device which has an analogue video output there are certainly more than a few types of chip for the job, however these (to the best of our current knowledge) are all "consumer video encoder" chips. While these devices are plentiful, inexpensive and produce good quality signals using just a single chip with a few passives at the output, unfortunately they do all of the sync generation and chrominance encoding internally, limiting the output typically to just PAL and NTSC (and SECAM in some rare cases).
 
 HackTV on the other hand is a fully software defined TV transmitter which does not want the output hardware doing anything clever for it – this is why it is able to generate a massive range of TV signals, some quite obscure.
@@ -20,7 +19,6 @@ Ultimately HackTV wants a high-quality arbitrary video signal generator as its o
 In 2022 Danish Entrepreneur Karsten Hansen dumped 4 gigabytes of engineering materials from Philips TV & Test Equipment into a github repository (intellectual property he personally came to own). Contained within the repository was detailed information about how to build and calibrate a very high-quality arbitrary video signal generator circuit first used in the Philips PM5655. This circuit became the basis of "HackDAC Alpha" – the current design.
 
 Unfortunately it's quite difficult to build, and calibrating it takes some practice, not to mention some specialised test equipment. Longer term the project will have to wave goodbye to this circuit and move to a digital oversampling solution however it is important for the time being, firstly because it works and proves the concept, secondly because its performance is exceptional and provides a benchmark for any future designs.
-</details>
 
 # Firmware details
 
@@ -42,11 +40,9 @@ Jitter was a particular difficulty during the development of HackDAC. The root c
 Audio is handled by a PCM5102 DAC run at a sample rate of 210.9 KHz, the 13.5 MHz video sample rate divided by 64. This ratio arises from interleaved transfers of 16KiB video data, followed by 512B of audio data to the HackRF, a scheme which was found to be efficient and reliable.
 
 When a HackDAC is attached to the HackRF it should remain powered down, and not in any way impair non-HackTV related usage of it (even with standard firmware). Any issues in this scenario should be reported as bugs.
-</details>
 
 ## Variable inductor construction
 
-<details>
 HackDAC uses proprietary Philips inductors in its output filter. Original parts are not purchasable from any source today however they can be recreated using inductor kits. To achieve correct characteristics the following instructions must be exactly followed.
 
 All inductors are made from the WELCO SBK-71S kit *with* the optional SBK-CF1 ferrite cup. Bobbins must be wound with 0.1mm copper wire *using only the bottom half of the bobbon* It is important the top half is left free of windings. Once the bobbins are wound the windings must be varnished to ensure they do not move.
@@ -65,7 +61,7 @@ Double winding types:
 Two separate wires are wound counter-clockwise (both in the same direction) One starting at pin 1 ending at 4, and another starting at pin 2 ending at 5. Both must be of an identical number of turns. Verification of target inductance must be performed with both windings in parallel.
 </details>
 
-## Calibration
+# Calibration
 
 <details>
 A number of steps are required to calibrate a HackDAC. Below is the method I personally use. I warn that it takes some time to master in practise.
