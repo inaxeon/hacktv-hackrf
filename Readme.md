@@ -58,6 +58,25 @@ When a HackDAC is attached to the HackRF it should remain powered down, and not 
 * Sample rate (standalone): 48 KHz
 * Word size: 16-bit
 
+## Variable inductor construction
+
+HackDAC uses proprietary Philips inductors in its output filter. Original parts are not purchasable from any source today however they can be recreated using inductor kits. To achieve correct characteristics the following instructions must be exactly followed.
+
+All inductors are made from the WELCO SBK-71S kit *with* the optional SBK-CF1 ferrite cup. Bobbins must be wound with 0.1mm copper wire *using only the bottom half of the bobbon* It is important the top half is left free of windings. Once the bobbins are wound the windings must be varnished to ensure they do not move.
+
+Single winding types:
+* 4008 100 09500: 1pcs per board. 42.5 turns. Target inductance: 8.0-15.0uH
+* 4008 100 09760: 2pcs per board. 9.5 turns. Target inductance: 0.5-1.0uH
+* 4008 100 09750: 3pcs per board. 11.5 turns. Target inductance: 0.8-1.8uH
+
+A single wire is wound counter-clockwise between pins 1 and 4. All turn counts are given including the extra half turn to reach the opposing pin. i.e. 9.5T = 9 full turns from pin 1, plus the extra half turn to reach pin 4.
+
+Double winding types:
+* 4008 100 09510: 1pcs per board. 10.5 turns. Target inductance: 0.7-1.2uH
+* 4008 100 09770: 1pcs per board. 16.5 turns. Target inductance: 1.3-3.0uH
+
+Two separate wires are wound counter-clockwise (both in the same direction) One starting at pin 1 ending at 4, and another starting at pin 2 ending at 5. Both must be of an identical number of turns. Verification of target inductance must be performed with both windings in parallel.
+
 # Schematic
 
 [Can be viewed here](https://github.com/inaxeon/hacktv-hackrf/blob/master/hardware/hackdac-alpha/hackdac-alpha-rev2.pdf).
