@@ -18,7 +18,25 @@ Ultimately HackTV wants a high-quality arbitrary video signal generator as its o
 
 In 2022 Danish Entrepreneur Karsten Hansen dumped 4 gigabytes of engineering materials from Philips TV & Test Equipment into a github repository (intellectual property he personally came to own). Contained within the repository was detailed information about how to build and calibrate a very high-quality arbitrary video signal generator circuit first used in the Philips PM5655. This circuit became the basis of "HackDAC Alpha" – the current design.
 
-Unfortunately it's quite difficult to build, and calibrating it takes some practice, not to mention some rather specialised test equipment. Longer term the project will have to wave goodbye to this circuit however it is important for the time being, firstly because it works and proves the concept, secondly because its performance is exceptional.
+Unfortunately it's quite difficult to build, and calibrating it takes some practice, not to mention some specialised test equipment. Longer term the project will have to wave goodbye to this circuit and move to a digital oversampling solution however it is important for the time being, firstly because it works and proves the concept, secondly because its performance is exceptional and provides a benchmark for any future designs.
+
+# Firmware details
+
+Contained within this repository is a modified version of the HackRF One's firmware which is required to support the HackDAC. It is the explicit intention that this firmware must retain all functionality of the HackRF One and full compatibility with libhackrf. As such any defects should be regarded as bugs and reported here.
+
+Note that the HackDAC firmware increases the USB data buffer from 32KiB to the maximum 64KiB. This may effect latency when using the HackRF for low-bandwidth non-HackTV applications.
+
+# Hardware details
+
+During operation the HackRF's CPLD is re-programmed to emit data from the normally unused BANK2_AUX header, instead of the on-board analogue frontend. Realisation of video signals is performed by the 16-bit AD768 from Analogue Devices, the very same DAC originally used by Philips. It's an old chip with quite a price tag but remains in production and still has respectable performance even by todays' standards. Replacement of it with a newer, low-cost device was considered however it was found this would impose a number of compromises and require significant alterations to the design, none of which the project is particularly willing to accept at this time. Nonetheless in future it will have to be abandoned due to its high cost.
+
+Video resolution is limited to 15-bit, as the 16th bit from the CPU is used for the Sync output.
+
+Jitter was a particular difficulty during the development of HackDAC. The root cause of the problem is the HackRF's Si5351c/a PLL; a low-quality consumer chip with poor jitter characteristics, even when using the most optimum divisor ratios. To work around the problem, when running in baseband video mode the HackDAC firmware re-programs the Si5351 to act as a clock buffer, disabling its PLL entirely. HackDAC then clocks the Si5351 from its on-board 27 MHz TCXO, providing a stable, extremely low jitter to clock to the HackRF's CPLD and MCU. 
+
+Audio is handled by a PCM5102 DAC run at a sample rate of 210.9 KHz, the 13.5 MHz video sample rate divided by 64. This ratio arises from interleaved transfers of 16KiB video data, followed by 512B of audio data to the HackRF, a scheme which was found to be efficient and reliable.
+
+When a HackDAC is attached to the HackRF it should remain powered down, and not in any way impair non-HackTV related usage of it (even with standard firmware). Any issues in this scenario should be reported as bugs.
 
 # Specifications
 
