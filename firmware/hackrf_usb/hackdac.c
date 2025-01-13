@@ -27,7 +27,10 @@
 #define MCP47FEBXX_NONVOLATILE_DAC0         0x10
 #define MCP47FEBXX_NONVOLATILE_DAC1         0x11
 
+
+static struct gpio_t hackdac_pwr_en = GPIO(1, 13);
 static struct gpio_t video_out_led = GPIO(1, 9);
+static struct gpio_t rf_out_led = GPIO(1, 2);
 static struct gpio_t vdac_sw_clock = GPIO(5, 13);
 static struct gpio_t tcxo_clock_enable = GPIO(1, 6);
 
@@ -75,11 +78,17 @@ void hackdac_init()
 	_audio_mode = HACKDAC_NO_AUDIO;
 	_rffc5071_hijacked = false;
 
+	gpio_output(&hackdac_pwr_en);
+	gpio_set(&hackdac_pwr_en);
+
 	gpio_output(&tcxo_clock_enable);
 	gpio_set(&tcxo_clock_enable);
 
 	gpio_output(&video_out_led);
 	gpio_set(&video_out_led);
+
+	gpio_output(&rf_out_led);
+	gpio_set(&rf_out_led);
 
 	gpio_output(&vdac_sw_clock);
 	delay(100);
@@ -130,6 +139,7 @@ bool hackdac_set_mode(uint8_t mode)
 		if (!cpld_jtag_sram_load_hackdac(&jtag_cpld)) {
 			halt_and_flash(6000000);
 		}
+		gpio_clear(&hackdac_pwr_en); // Power up HackDAC
 		gpio_clear(&tcxo_clock_enable); // Activate 27 MHz clock
 		si5351c_mcu_clk_enable(&clock_gen, true);
 	}
@@ -139,6 +149,7 @@ bool hackdac_set_mode(uint8_t mode)
 			halt_and_flash(6000000);
 		}
 		si5351c_mcu_clk_enable(&clock_gen, false);
+		gpio_set(&hackdac_pwr_en); // Power down HackDAC
 		gpio_set(&tcxo_clock_enable); // Shut off 27 MHz clock
 		hackdac_zero_video_output();
 	}
@@ -190,4 +201,14 @@ void video_led_on()
 void video_led_off()
 {
 	gpio_set(&video_out_led);
+}
+
+void rf_led_on()
+{
+	gpio_clear(&rf_out_led);
+}
+
+void rf_led_off()
+{
+	gpio_set(&rf_out_led);
 }

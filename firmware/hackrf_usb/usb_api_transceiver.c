@@ -564,6 +564,8 @@ void tx_mode(uint32_t seq)
 			baseband_streaming_enable(&sgpio_config);
 			if (hackdac_baseband_enabled()) {
 				video_led_on();
+			} else {
+				rf_led_on();
 			}
 			started = true;
 		}
@@ -610,6 +612,7 @@ void tx_mode(uint32_t seq)
 	}
 
 	video_led_off();
+	rf_led_off();
 	transceiver_shutdown();
 }
 
