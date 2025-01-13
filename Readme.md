@@ -18,7 +18,118 @@ Ultimately HackTV wants a high-quality arbitrary video signal generator as its o
 
 In 2022 Danish Entrepreneur Karsten Hansen dumped 4 gigabytes of engineering materials from Philips TV & Test Equipment into a github repository (intellectual property he personally came to own). Contained within the repository was detailed information about how to build and calibrate a very high-quality arbitrary video signal generator circuit first used in the Philips PM5655. This circuit became the basis of "HackDAC Alpha" – the current design.
 
-Unfortunately it's quite difficult to build, and calibrating it takes some practice, not to mention some rather specialised test equipment. Longer term the project will have to wave goodbye to this circuit however it is important for the time being, firstly because it works and proves the concept, secondly because its performance is exceptional.
+Unfortunately it's quite difficult to build, and calibrating it takes some practice, not to mention some specialised test equipment. Longer term the project will have to wave goodbye to this circuit and move to a digital oversampling solution however it is important for the time being, firstly because it works and proves the concept, secondly because its performance is exceptional and provides a benchmark for any future designs.
+
+# Firmware details
+
+<details>
+
+Contained within this repository is a modified version of the HackRF One's firmware which is required to support the HackDAC. It is the explicit intention that this firmware must retain all functionality of the HackRF One and full compatibility with libhackrf. As such any defects should be regarded as bugs and reported here.
+
+Note that the HackDAC firmware increases the USB data buffer from 32KiB to the maximum 64KiB. This may effect latency when using the HackRF for low-bandwidth non-HackTV applications.
+
+</details>
+
+# Hardware details
+
+<details>
+
+## Design
+
+The most prominent feature of the present design is the filter after the DAC. It is a full analogue reconstruction filter which corrects its own errors and allows the DAC to run at 1x sample rate. Such a filter is required when attaching to the HackRF as the maximum sample rate is about 20 MHz, not enough even for 2x oversampling.
+
+During operation the HackRF's CPLD is re-programmed to emit data from the normally unused BANK2_AUX header, instead of the on-board analogue frontend. Realisation of video signals is performed by the 16-bit AD768 from Analogue Devices, the very same DAC originally used by Philips. It's an old chip with quite a price tag but remains in production and still has respectable performance even by todays' standards. Replacement of it with a newer, low-cost device was considered however it was found this would impose a number of compromises and require significant alterations to the design, none of which the project is particularly willing to accept at this time. Nonetheless in future it will have to be abandoned due to its high cost.
+
+Video resolution is limited to 15-bit, as the 16th bit from the CPU is used for the Sync output.
+
+Jitter was a particular difficulty during the development of HackDAC. The root cause of the problem is the HackRF's Si5351c/a PLL; a low-quality consumer chip with poor jitter characteristics, even when using the most optimum divisor ratios. To work around the problem, when running in baseband video mode the HackDAC firmware re-programs the Si5351 to act as a clock buffer, disabling its PLL entirely. HackDAC then clocks the Si5351 from its on-board 27 MHz TCXO, providing a stable, extremely low jitter to clock to the HackRF's CPLD and MCU. 
+
+Audio is handled by a PCM5102 DAC run at a sample rate of 210.9 KHz, the 13.5 MHz video sample rate divided by 64. This ratio arises from interleaved transfers of 16KiB video data, followed by 512B of audio data to the HackRF, a scheme which was found to be efficient and reliable.
+
+When a HackDAC is attached to the HackRF it should remain powered down, and not in any way impair non-HackTV related usage of it (even with standard firmware). Any issues in this scenario should be reported as bugs.
+
+## Variable inductor construction
+
+HackDAC uses proprietary Philips inductors in its output filter. Original parts are not purchasable from any source today however they can be recreated using inductor kits. To achieve correct characteristics the following instructions must be exactly followed.
+
+All inductors are made from the WELCO SBK-71S kit *with* the optional SBK-CF1 ferrite cup. Bobbins must be wound with 0.1mm copper wire *using only the bottom half of the bobbon* It is important the top half is left free of windings. Once the bobbins are wound the windings must be varnished to ensure they do not move.
+
+Single winding types:
+* 4008 100 09500: 1pcs per board. 42.5 turns. Target inductance: 8.0-15.0uH
+* 4008 100 09760: 2pcs per board. 9.5 turns. Target inductance: 0.5-1.0uH
+* 4008 100 09750: 3pcs per board. 11.5 turns. Target inductance: 0.8-1.8uH
+
+A single wire is wound counter-clockwise between pins 1 and 4. All turn counts are given including the extra half turn to reach the opposing pin. i.e. 9.5T = 9 full turns from pin 1, plus the extra half turn to reach pin 4.
+
+Double winding types:
+* 4008 100 09510: 1pcs per board. 10.5 turns. Target inductance: 0.7-1.2uH
+* 4008 100 09770: 1pcs per board. 16.5 turns. Target inductance: 1.3-3.0uH
+
+Two separate wires are wound counter-clockwise (both in the same direction) One starting at pin 1 ending at 4, and another starting at pin 2 ending at 5. Both must be of an identical number of turns. Verification of target inductance must be performed with both windings in parallel.
+
+</details>
+
+# Calibration
+
+<details>
+
+A number of steps are required to calibrate a HackDAC. Below is the method I personally use. I warn that it takes some time to master in practise.
+
+### DC Offset / gain calibration:
+
+![DC Test setup](https://raw.github.com/inaxeon/hacktv-hackrf/master/hardware/hackdac-alpha/images/dc_cal.png)
+
+Each board has individually calibration DC gain and offset. It is performed using the "hackdac_cal" tool in this repository.
+
+Upon running it with an assembled HackRF/HackDAC the user is given the option to set the output voltage to either -1V, 0V or +1V. Additional keystrokes allow the gain and offset to be adjusted in realtime so to achieve correct voltage as measured on a DMM attached to the HackDAC's video output terminated at 75Ω.
+
+Once the procedure is completed the calibrations can be saved into nonvolatile memory contained within the calibration DAC on the HackDAC board.
+
+### Low pass filter calibration
+
+Test setup:
+![VNA Test setup](https://raw.github.com/inaxeon/hacktv-hackrf/master/hardware/hackdac-alpha/images/vna_cal.png)
+
+For this procedure the HackDAC must be connected to a baseband VNA using the A/R MAG input configuration. The procedure is possible with an RF VNA with a built-in S-Parameter test set however the test cable setup will differ and you most likely won't be able to accurately measure frequency response or group delay accurately below 1 MHz.
+
+Firstly the low pass filter must be adjusted:
+
+* L9: 16.8 MHz
+* L8: 8.05 MHz
+* L7: 10.0 MHz
+
+Resonant frequencies can be observed in the stopband as per this plot:
+
+![LP Filter plot](https://raw.github.com/inaxeon/hacktv-hackrf/master/hardware/hackdac-alpha/images/cal_lp_filter.png)
+
+### Group delay equaliser calibration
+
+In this procedure the VNA will need to be set the A/R DELAY measurement. L3, L4, L5 and L6 are adjusted to keep Tg deviation within 5ns as per this diagram:
+
+![TG plot](https://raw.github.com/inaxeon/hacktv-hackrf/master/hardware/hackdac-alpha/images/cal_tg.png)
+
+In practise this is rather difficult to do and somewhat overkill for any realistic application today. You may find you can get it within 20ns which is still more than good enough.
+
+### SIN X/X correction calibration
+
+![SIN XX Test setup](https://raw.github.com/inaxeon/hacktv-hackrf/master/hardware/hackdac-alpha/images/sinxx_cal.png)
+
+To calibrate the SIN X/X corrector HackTV must be set to generate the SIN X/X test signal. L10 and C39 must be adjusted to achieve symmetry of the SIN X/X test signal as below:
+
+![SIN XX plot](https://raw.github.com/inaxeon/hacktv-hackrf/master/hardware/hackdac-alpha/images/cal_sinxx.png)
+
+Now start HackTV with the "Pulse & Bar" test signal. Check the 2T pulse is symmetrical as below. Ajust group delay & SIN X/X as necessary to resolve any issues.
+
+![SIN XX plot](https://raw.github.com/inaxeon/hacktv-hackrf/master/hardware/hackdac-alpha/images/cal_2t.png)
+
+### Final check with vectorscope
+
+Lastly if you have an accurate/calibrated vectorscope to hand it is useful for validating the previous adjustments. Start HackTV with the 75% EBU colour bars test signal and verify the output on a vectorscope matches the below:
+
+![Vectorscope view](https://raw.github.com/inaxeon/hacktv-hackrf/master/hardware/hackdac-alpha/images/cal_vector.png)
+
+Colours should fall exactly in the 75% boxes in the graticule, traces between vectors should be perfectly straight. Examples of problems likely to be seen are differential phase errors and incorrect colour subcarrier amplitude. Fine tune the group delay equaliser and SIN X/X correction as necessary to resolve.
+</details>
 
 # Specifications
 

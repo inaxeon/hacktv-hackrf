@@ -148,8 +148,8 @@
 	)
 	(pad "" np_thru_hole oval
 		(at 0 0)
-		(size 2 3.6)
-		(drill oval 2 3.6)
+		(size 1.7 3.5)
+		(drill oval 1.7 3.5)
 		(layers "*.Mask")
 		(uuid "792d931c-8327-4278-8344-9665b968c9ee")
 	)
