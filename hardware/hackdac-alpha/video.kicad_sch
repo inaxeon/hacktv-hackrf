@@ -7986,7 +7986,6 @@
 		)
 	)
 	(symbol
-		(lib_name "KJL_ADJ:KJL_ADJ_SGL")
 		(lib_id "KJL_ADJ:KJL_ADJ_SGL")
 		(at 248.92 140.97 0)
 		(unit 1)
@@ -8596,7 +8595,6 @@
 		)
 	)
 	(symbol
-		(lib_name "KJL_ADJ:KJL_ADJ_SGL")
 		(lib_id "KJL_ADJ:KJL_ADJ_SGL")
 		(at 170.815 102.87 0)
 		(mirror y)
@@ -9773,7 +9771,6 @@
 		)
 	)
 	(symbol
-		(lib_name "KJL_ADJ:KJL_ADJ_SGL")
 		(lib_id "KJL_ADJ:KJL_ADJ_SGL")
 		(at 187.325 86.995 90)
 		(unit 1)
@@ -11004,7 +11001,6 @@
 		)
 	)
 	(symbol
-		(lib_name "KJL_ADJ:KJL_ADJ_SGL")
 		(lib_id "KJL_ADJ:KJL_ADJ_SGL")
 		(at 202.565 86.995 90)
 		(unit 1)
@@ -11413,7 +11409,6 @@
 		)
 	)
 	(symbol
-		(lib_name "KJL_ADJ:KJL_ADJ_SGL")
 		(lib_id "KJL_ADJ:KJL_ADJ_SGL")
 		(at 217.805 86.995 90)
 		(unit 1)
@@ -14134,7 +14129,6 @@
 		)
 	)
 	(symbol
-		(lib_name "KJL_ADJ:KJL_ADJ_SGL")
 		(lib_id "KJL_ADJ:KJL_ADJ_SGL")
 		(at 155.575 102.87 0)
 		(mirror y)
@@ -14546,7 +14540,6 @@
 		)
 	)
 	(symbol
-		(lib_name "KJL_ADJ:KJL_ADJ_DUAL")
 		(lib_id "KJL_ADJ:KJL_ADJ_DUAL")
 		(at 156.845 86.995 90)
 		(unit 1)
@@ -15248,7 +15241,6 @@
 		)
 	)
 	(symbol
-		(lib_name "KJL_ADJ:KJL_ADJ_DUAL")
 		(lib_id "KJL_ADJ:KJL_ADJ_DUAL")
 		(at 172.085 86.995 90)
 		(unit 1)
