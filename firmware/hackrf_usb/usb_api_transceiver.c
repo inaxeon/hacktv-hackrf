@@ -432,11 +432,11 @@ void transceiver_bulk_transfer_complete(void* user_data, unsigned int bytes_tran
 void transceiver_audio_transfer_complete(void* user_data, unsigned int bytes_transferred)
 {
 	(void) user_data;
-	i2s_usb_audio_bytes_transferred += bytes_transferred;
+	i2s_state.usb_count += bytes_transferred;
 
 	if (i2s_is_paused()) {
 		// Wait for buffer to re-fill
-		if ((i2s_usb_audio_bytes_transferred - i2s_bus_bytes_transferred()) == i2s_buffer_size) {
+		if ((i2s_state.usb_count - i2s_state.i2s_count) == i2s_state.buffer_size) {
 			i2s_resume();
 		}
 	}
@@ -552,10 +552,10 @@ void tx_mode(uint32_t seq)
 		usb_transfer_schedule_block(
 			&usb_endpoint_audio_out,
 			&i2s_audio_buffer[0x0000],
-			i2s_usb_transfer_size,
+			i2s_state.usb_transfer_size,
 			transceiver_audio_transfer_complete,
 			NULL);
-		usb_audio_count += i2s_usb_transfer_size;
+		usb_audio_count += i2s_state.usb_transfer_size;
 	}
 
 	while (transceiver_request.seq == seq) {
@@ -571,7 +571,7 @@ void tx_mode(uint32_t seq)
 		}
 
 		if ((audio_mode != HACKDAC_NO_AUDIO) && !audio_started &&
-			(i2s_usb_audio_bytes_transferred == (i2s_buffer_size - i2s_usb_transfer_size))) {
+			(i2s_state.usb_count == (i2s_state.buffer_size - i2s_state.usb_transfer_size))) {
 			i2s_streaming_enable(); // Start audio
 			audio_started = true;
 		}
@@ -587,23 +587,23 @@ void tx_mode(uint32_t seq)
 			if (audio_mode == HACKDAC_SYNC_AUDIO) {
 				usb_transfer_schedule_block(
 					&usb_endpoint_bulk_out,
-					&i2s_audio_buffer[usb_audio_count & i2s_buffer_mask],
-					i2s_usb_transfer_size,
+					&i2s_audio_buffer[usb_audio_count & i2s_state.buffer_mask],
+					i2s_state.usb_transfer_size,
 					transceiver_audio_transfer_complete,
 					NULL);
-				usb_audio_count += i2s_usb_transfer_size;
+				usb_audio_count += i2s_state.usb_transfer_size;
 			}
 		}
 
 		if ((audio_mode == HACKDAC_ASYNC_AUDIO) &&
-			((usb_audio_count - i2s_bus_bytes_transferred()) <= (i2s_buffer_size - i2s_usb_transfer_size))) {
+			((usb_audio_count - i2s_state.i2s_count) <= (i2s_state.buffer_size - i2s_state.usb_transfer_size))) {
 			usb_transfer_schedule_block(
 				&usb_endpoint_audio_out,
-				&i2s_audio_buffer[usb_audio_count & i2s_buffer_mask],
-				i2s_usb_transfer_size,
+				&i2s_audio_buffer[usb_audio_count & i2s_state.buffer_mask],
+				i2s_state.usb_transfer_size,
 				transceiver_audio_transfer_complete,
 				NULL);
-			usb_audio_count += i2s_usb_transfer_size;
+			usb_audio_count += i2s_state.usb_transfer_size;
 		}
 	}
 

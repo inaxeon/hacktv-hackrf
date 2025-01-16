@@ -45,6 +45,17 @@
 
 #define I2S_BUFFER_DEPTH_ASYNC		512 // 32-bit words (each one 16-bit L+R sample)
 
+struct i2s_state
+{
+	uint32_t usb_count;
+	uint32_t i2s_count;
+	uint32_t num_shortfalls;
+	uint32_t usb_transfer_size;
+	uint32_t buffer_depth;
+	uint32_t buffer_size;
+	uint32_t buffer_mask;
+};
+
 void i2s_init();
 void i2s_startup(bool ext_clock);
 void i2s_shutdown();
@@ -54,12 +65,8 @@ void i2s_gpdma_isr();
 void i2s_generate_test_tone();
 void i2s_resume();
 bool i2s_is_paused();
-uint32_t i2s_bus_bytes_transferred();
 
 extern uint8_t i2s_audio_buffer[];
-extern volatile uint32_t i2s_usb_audio_bytes_transferred;
-extern uint32_t i2s_usb_transfer_size;
-extern uint32_t i2s_buffer_mask;
-extern uint32_t i2s_buffer_size;
+extern volatile struct i2s_state i2s_state;
 
 #endif /*__I2S_H__*/

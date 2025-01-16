@@ -34,12 +34,7 @@
 
 dma_lli i2s_dma_lli[I2S_NUM_BUFFERS];
 uint8_t i2s_audio_buffer[I2S_BUFFER_DEPTH_ASYNC * sizeof(uint32_t) * I2S_NUM_BUFFERS];
-volatile uint32_t i2s_usb_audio_bytes_transferred;
-uint32_t i2s_usb_transfer_size;
-uint32_t i2s_buffer_size;
-uint32_t i2s_buffer_mask;
-static uint32_t _i2s_usb_buffer_depth;
-static uint32_t _i2s_bus_bytes_transferred;
+volatile struct i2s_state i2s_state;
 
 static void i2s_init_dma()
 {
@@ -54,7 +49,7 @@ static void i2s_init_dma()
 
 static void i2s_init_dma_lli()
 {
-	uint32_t cw = GPDMA_CCONTROL_TRANSFERSIZE(_i2s_usb_buffer_depth) |
+	uint32_t cw = GPDMA_CCONTROL_TRANSFERSIZE(i2s_state.buffer_depth) |
 		GPDMA_CCONTROL_SBSIZE(0) // 1
 		| GPDMA_CCONTROL_DBSIZE(0) // 1
 		| GPDMA_CCONTROL_SWIDTH(2) // 32-bit word
@@ -70,7 +65,7 @@ static void i2s_init_dma_lli()
 
 	for (int i = 0; i < I2S_NUM_BUFFERS; i++)
 	{
-		i2s_dma_lli[i].src = (uint32_t)&(i2s_audio_buffer[i2s_usb_transfer_size * i]);
+		i2s_dma_lli[i].src = (uint32_t)&(i2s_audio_buffer[i2s_state.usb_transfer_size * i]);
 		i2s_dma_lli[i].dest = (uint32_t)&(I2S0_TXFIFO);
 		i2s_dma_lli[i].next_lli = (uint32_t)&(i2s_dma_lli[(i == (I2S_NUM_BUFFERS - 1)) ? 0 : i + 1]);
 		i2s_dma_lli[i].control = cw;
@@ -165,8 +160,8 @@ static bool i2s_get_clock_divider(int sample_rate, int word_width, uint16_t *px_
 static int i2s_get_next_lli_index()
 {
 	// Determine index of buffer last filled
-	int last_transferred_buffer = ((i2s_usb_audio_bytes_transferred - i2s_usb_transfer_size /* incremented before this was called */)
-		& i2s_buffer_mask) / i2s_usb_transfer_size;
+	int last_transferred_buffer = ((i2s_state.usb_count - i2s_state.usb_transfer_size /* incremented before this was called */)
+		& i2s_state.buffer_mask) / i2s_state.usb_transfer_size;
 	// Calculate index of buffer to resume playback on
 	return (last_transferred_buffer - (I2S_NUM_BUFFERS - 1)) & (I2S_NUM_BUFFERS - 1);
 }
@@ -192,14 +187,15 @@ void i2s_init()
 
 void i2s_startup(bool sync_mode)
 {
-	i2s_usb_audio_bytes_transferred = 0;
-	_i2s_bus_bytes_transferred = 0;
+	i2s_state.usb_count = 0;
+	i2s_state.i2s_count = 0;
+	i2s_state.num_shortfalls = 0;
 
 	if (sync_mode) {
 		I2S0_TXMODE = I2S0_TXMODE_TXCLKSEL(1); // BASE_AUDIO_CLK (Datasheet lists this as "Reserved" ?)
 		I2S0_TXBITRATE = (I2S_SYNC_CLOCK_DIVIDER - 1);
 		// I2S0_TXRATE does nothing in this mode
-		_i2s_usb_buffer_depth = I2S_BUFFER_DEPTH_SYNC;
+		i2s_state.buffer_depth = I2S_BUFFER_DEPTH_SYNC;
 	} else {
 		uint16_t x_div = 0, y_div = 0;
 		uint32_t clk_n = 0;
@@ -207,12 +203,12 @@ void i2s_startup(bool sync_mode)
 		I2S0_TXMODE = I2S0_TXMODE_TXCLKSEL(0); // BASE_APB1_CLK
 		I2S0_TXBITRATE = (clk_n - 1);
 		I2S0_TXRATE = y_div | (x_div << 8);
-		_i2s_usb_buffer_depth = I2S_BUFFER_DEPTH_ASYNC;
+		i2s_state.buffer_depth = I2S_BUFFER_DEPTH_ASYNC;
 	}
 
-	i2s_usb_transfer_size = (_i2s_usb_buffer_depth * sizeof(uint32_t));
-	i2s_buffer_size = (i2s_usb_transfer_size * I2S_NUM_BUFFERS);
-	i2s_buffer_mask = ((i2s_usb_transfer_size * I2S_NUM_BUFFERS) - 1);
+	i2s_state.usb_transfer_size = (i2s_state.buffer_depth * sizeof(uint32_t));
+	i2s_state.buffer_size = (i2s_state.usb_transfer_size * I2S_NUM_BUFFERS);
+	i2s_state.buffer_mask = ((i2s_state.usb_transfer_size * I2S_NUM_BUFFERS) - 1);
 
 	i2s_init_dma_lli();
 	i2s_setup_dma_channel(0);
@@ -241,11 +237,6 @@ void i2s_mute(bool mute)
 	}
 }
 
-uint32_t i2s_bus_bytes_transferred()
-{
-	return _i2s_bus_bytes_transferred;
-}
-
 void i2s_resume()
 {
 	i2s_init_dma_lli();
@@ -264,11 +255,12 @@ void i2s_gpdma_isr()
 	{
 		GPDMA_INTTCCLEAR = (1 << I2S_DMA_CHANNEL);
 
-		if ((i2s_usb_audio_bytes_transferred - _i2s_bus_bytes_transferred) <= i2s_usb_transfer_size) {
+		if ((i2s_state.usb_count - i2s_state.i2s_count) <= i2s_state.usb_transfer_size) {
 			// Buffer underrun
 			GPDMA_CCONFIG(I2S_DMA_CHANNEL) |= GPDMA_CCONFIG_H(1); // Halt playback
+			i2s_state.num_shortfalls++;
 		} else {
-			_i2s_bus_bytes_transferred += i2s_usb_transfer_size;
+			i2s_state.usb_count += i2s_state.usb_transfer_size;
 		}
 	}
 
