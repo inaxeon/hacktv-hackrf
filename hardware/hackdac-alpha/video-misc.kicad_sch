@@ -8025,9 +8025,9 @@
 		)
 		(uuid "612cf422-d6b8-4940-bf6f-c3edaaabe065")
 	)
-	(text "NON TCXO OPTION:\nECS-2333-270-BN-TR"
+	(text "TCXO OPTION:\nECS-TXO-3225-270-TR\nNOTE: PIN 1 NC"
 		(exclude_from_sim no)
-		(at 193.675 139.7 0)
+		(at 193.675 140.335 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -10196,8 +10196,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "10k"
-			(at 177.8 125.73 90)
+		(property "Value" "NF"
+			(at 177.8 125.095 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13474,15 +13474,15 @@
 				)
 			)
 		)
-		(property "Value" "ECS-TXO-3225-270-TR"
-			(at 205.74 135.89 0)
+		(property "Value" "ECS-5032MV-270-CN-TR"
+			(at 206.375 135.255 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Footprint" "Oscillator:Oscillator_SMD_EuroQuartz_XO32-4Pin_3.2x2.5mm"
+		(property "Footprint" "Oscillator:Oscillator_SMD_EuroQuartz_XO53-4Pin_5.0x3.2mm"
 			(at 205.105 140.335 0)
 			(effects
 				(font
