@@ -5385,7 +5385,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "056220a8-4797-4810-a074-613a417ed01c")
-		(property "Reference" "R48"
+		(property "Reference" "R47"
 			(at 213.36 116.205 90)
 			(effects
 				(font
@@ -5437,7 +5437,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/80e17ed4-cb43-4c12-a09c-75e0f0ffaba0"
-					(reference "R48")
+					(reference "R47")
 					(unit 1)
 				)
 			)
@@ -6660,7 +6660,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "6caeeb20-2804-401f-bb9a-0210ec5b3b56")
-		(property "Reference" "JP2"
+		(property "Reference" "JP3"
 			(at 80.645 113.03 90)
 			(effects
 				(font
@@ -6717,7 +6717,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/80e17ed4-cb43-4c12-a09c-75e0f0ffaba0"
-					(reference "JP2")
+					(reference "JP3")
 					(unit 1)
 				)
 			)
@@ -6732,7 +6732,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "711b52dc-ba59-446b-802c-b1dcc9429c60")
-		(property "Reference" "R47"
+		(property "Reference" "R46"
 			(at 213.36 113.665 90)
 			(effects
 				(font
@@ -6784,7 +6784,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/80e17ed4-cb43-4c12-a09c-75e0f0ffaba0"
-					(reference "R47")
+					(reference "R46")
 					(unit 1)
 				)
 			)
@@ -6799,7 +6799,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "7927595c-ab92-464e-a9c9-10f9daccd115")
-		(property "Reference" "R45"
+		(property "Reference" "R44"
 			(at 131.445 136.525 90)
 			(effects
 				(font
@@ -6851,7 +6851,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/80e17ed4-cb43-4c12-a09c-75e0f0ffaba0"
-					(reference "R45")
+					(reference "R44")
 					(unit 1)
 				)
 			)
@@ -7000,7 +7000,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "80ab9f4c-73d3-4a4d-aafe-3c902c7f32b8")
-		(property "Reference" "R44"
+		(property "Reference" "R43"
 			(at 117.475 68.58 90)
 			(effects
 				(font
@@ -7052,7 +7052,7 @@
 		(instances
 			(project "hackdac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/80e17ed4-cb43-4c12-a09c-75e0f0ffaba0"
-					(reference "R44")
+					(reference "R43")
 					(unit 1)
 				)
 			)
@@ -7331,7 +7331,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "8d84ff88-de71-4a6b-99ab-9cf437a0eef8")
-		(property "Reference" "JP3"
+		(property "Reference" "JP4"
 			(at 107.315 113.03 90)
 			(effects
 				(font
@@ -7388,7 +7388,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/80e17ed4-cb43-4c12-a09c-75e0f0ffaba0"
-					(reference "JP3")
+					(reference "JP4")
 					(unit 1)
 				)
 			)
@@ -8268,7 +8268,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "c6411677-b4db-4918-b3aa-80a67da65f1f")
-		(property "Reference" "R46"
+		(property "Reference" "R45"
 			(at 149.86 149.225 0)
 			(effects
 				(font
@@ -8322,7 +8322,7 @@
 		(instances
 			(project "dacattac-alpha"
 				(path "/487245ca-0c1f-4f9d-bc99-20c8f558090f/80e17ed4-cb43-4c12-a09c-75e0f0ffaba0"
-					(reference "R46")
+					(reference "R45")
 					(unit 1)
 				)
 			)
