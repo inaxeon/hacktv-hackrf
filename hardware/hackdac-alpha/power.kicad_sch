@@ -6087,7 +6087,7 @@
 	)
 	(wire
 		(pts
-			(xy 88.9 99.06) (xy 92.71 99.06)
+			(xy 89.535 99.06) (xy 92.71 99.06)
 		)
 		(stroke
 			(width 0)
@@ -6701,7 +6701,7 @@
 	)
 	(global_label "TCXO_ENABLE"
 		(shape input)
-		(at 88.9 99.06 180)
+		(at 89.535 99.06 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -6711,7 +6711,7 @@
 		)
 		(uuid "a8eb7cd9-b427-4283-88e7-4156882f8133")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 73.1544 99.06 0)
+			(at 73.7894 99.06 0)
 			(effects
 				(font
 					(size 1.27 1.27)
