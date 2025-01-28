@@ -13725,7 +13725,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "SYNC/VIDEO OUT"
+		(property "Value" "VIDEO/SYNC OUT"
 			(at 266.065 57.785 0)
 			(effects
 				(font
@@ -13860,7 +13860,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "SYNC/VIDEO"
+		(property "Value" "VIDEO/SYNC"
 			(at 269.24 67.945 90)
 			(effects
 				(font
