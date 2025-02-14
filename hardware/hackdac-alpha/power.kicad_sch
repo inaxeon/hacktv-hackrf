@@ -11345,7 +11345,7 @@
 		(fields_autoplaced yes)
 		(uuid "b57e954b-0f9b-470a-a66d-cb9263e788e0")
 		(property "Reference" "L14"
-			(at 218.44 110.49 0)
+			(at 218.44 110.4899 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11353,8 +11353,8 @@
 				(justify right)
 			)
 		)
-		(property "Value" "4u7"
-			(at 218.44 113.03 0)
+		(property "Value" "5u6"
+			(at 218.44 113.0299 0)
 			(effects
 				(font
 					(size 1.27 1.27)

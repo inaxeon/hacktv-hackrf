@@ -5453,7 +5453,7 @@
 		(fields_autoplaced yes)
 		(uuid "1c06b245-8997-48ff-8794-8f69078cafd3")
 		(property "Reference" "C62"
-			(at 179.705 92.075 0)
+			(at 180.34 92.0749 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5461,8 +5461,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "10uF"
-			(at 179.705 94.615 0)
+		(property "Value" "10u"
+			(at 180.34 94.6149 0)
 			(effects
 				(font
 					(size 1.27 1.27)
