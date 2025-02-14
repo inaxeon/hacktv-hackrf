@@ -13994,7 +13994,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 202.565 72.39 90)
+		(at 202.565 66.04 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -14002,15 +14002,15 @@
 		(dnp no)
 		(uuid "ab411a89-0976-4f47-af92-217b281bb383")
 		(property "Reference" "C28"
-			(at 198.12 70.485 90)
+			(at 198.12 64.135 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Value" "270p"
-			(at 207.01 71.12 90)
+		(property "Value" "NF"
+			(at 207.01 64.77 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14018,7 +14018,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
-			(at 206.375 71.4248 0)
+			(at 206.375 65.0748 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14027,7 +14027,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 202.565 72.39 0)
+			(at 202.565 66.04 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14036,7 +14036,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 202.565 72.39 0)
+			(at 202.565 66.04 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14407,7 +14407,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 202.565 66.04 90)
+		(at 202.565 72.39 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -14415,15 +14415,15 @@
 		(dnp no)
 		(uuid "bf59d0e8-3493-4422-beab-af81bb12dc00")
 		(property "Reference" "C29"
-			(at 198.12 64.135 90)
+			(at 198.12 70.485 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Value" "NF"
-			(at 207.01 64.77 90)
+		(property "Value" "270p"
+			(at 207.01 71.12 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14431,7 +14431,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
-			(at 206.375 65.0748 0)
+			(at 206.375 71.4248 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14440,7 +14440,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 202.565 66.04 0)
+			(at 202.565 72.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14449,7 +14449,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 202.565 66.04 0)
+			(at 202.565 72.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
