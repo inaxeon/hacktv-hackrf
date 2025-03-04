@@ -94,9 +94,9 @@ For this procedure the HackDAC must be connected to a baseband VNA using the A/R
 
 Firstly the low pass filter must be adjusted:
 
-* L9: 16.8 MHz
+* L9: 10 MHz
 * L8: 8.05 MHz
-* L7: 10.0 MHz
+* L7: 16.8 MHz
 
 Resonant frequencies can be observed in the stopband as per this plot:
 
