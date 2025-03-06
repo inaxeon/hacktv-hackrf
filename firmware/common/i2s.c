@@ -157,13 +157,14 @@ static bool i2s_get_clock_divider(int sample_rate, int word_width, uint16_t *px_
 	return true;
 }
 
-static int i2s_get_next_lli_index()
+static int i2s_get_current_lli()
 {
-	// Determine index of buffer last filled
-	int last_transferred_buffer = ((i2s_state.usb_count - i2s_state.usb_transfer_size /* incremented before this was called */)
-		& i2s_state.buffer_mask) / i2s_state.usb_transfer_size;
-	// Calculate index of buffer to resume playback on
-	return (last_transferred_buffer - (I2S_NUM_BUFFERS - 1)) & (I2S_NUM_BUFFERS - 1);
+	uint32_t lli_index = (GPDMA_CLLI(I2S_DMA_CHANNEL) - (uint32_t)&i2s_dma_lli) / sizeof(dma_lli);
+	
+	lli_index += (I2S_NUM_BUFFERS - 1);
+	lli_index &= (I2S_NUM_BUFFERS - 1);
+
+	return (int) lli_index;
 }
 
 void i2s_init()
@@ -190,6 +191,7 @@ void i2s_startup(bool sync_mode)
 	i2s_state.usb_count = 0;
 	i2s_state.i2s_count = 0;
 	i2s_state.num_shortfalls = 0;
+	i2s_state.buffer_currently_filling = 0;
 
 	if (sync_mode) {
 		I2S0_TXMODE = I2S0_TXMODE_TXCLKSEL(1); // BASE_AUDIO_CLK (Datasheet lists this as "Reserved" ?)
@@ -222,10 +224,17 @@ void i2s_shutdown()
 	gpdma_channel_disable(I2S_DMA_CHANNEL);
 }
 
-void i2s_streaming_enable()
+void i2s_start_playback()
 {
+	i2s_init_dma_lli();
+	i2s_setup_dma_channel(0);
 	gpdma_channel_enable(I2S_DMA_CHANNEL);
 	I2S0_DAO &= ~(I2S0_DAO_RESET_MASK | I2S0_DAO_STOP_MASK | I2S0_DAO_MUTE_MASK);
+}
+
+void i2s_resume_playback()
+{
+	I2S0_DAO &= ~I2S0_DAO_STOP_MASK;
 }
 
 void i2s_mute(bool mute)
@@ -237,16 +246,9 @@ void i2s_mute(bool mute)
 	}
 }
 
-void i2s_resume()
-{
-	i2s_init_dma_lli();
-	i2s_setup_dma_channel(i2s_get_next_lli_index()); // Resume playback on the buffer after the one we stopped at.
-	i2s_streaming_enable();
-}
-
 bool i2s_is_paused()
 {
-	return (GPDMA_CCONFIG(I2S_DMA_CHANNEL) & GPDMA_CCONFIG_H_MASK) == GPDMA_CCONFIG_H(1) && (I2S0_DAO & I2S0_DAO_RESET_MASK) == 0;
+	return !(I2S0_DAO & I2S0_DAO_RESET_MASK) && (I2S0_DAO & I2S0_DAO_STOP_MASK);
 }
 
 void i2s_gpdma_isr()
@@ -255,12 +257,19 @@ void i2s_gpdma_isr()
 	{
 		GPDMA_INTTCCLEAR = (1 << I2S_DMA_CHANNEL);
 
-		if ((i2s_state.usb_count - i2s_state.i2s_count) <= i2s_state.usb_transfer_size) {
-			// Buffer underrun
-			GPDMA_CCONFIG(I2S_DMA_CHANNEL) |= GPDMA_CCONFIG_H(1); // Halt playback
+		i2s_state.i2s_count += i2s_state.usb_transfer_size;
+
+		if ((i2s_state.usb_count - i2s_state.i2s_count) == 0) {
+			// Out of data. Trigger underrun condition.
+			I2S0_DAO |= I2S0_DAO_STOP_MASK;
 			i2s_state.num_shortfalls++;
-		} else {
-			i2s_state.usb_count += i2s_state.usb_transfer_size;
+		}
+
+		int current_lli = i2s_get_current_lli();
+		if (current_lli == i2s_state.buffer_currently_filling) {
+			current_lli += (I2S_NUM_BUFFERS - 1);
+			current_lli &= (I2S_NUM_BUFFERS - 1);
+			GPDMA_CLLI(I2S_DMA_CHANNEL) = (uint32_t)&i2s_dma_lli[current_lli];
 		}
 	}
 

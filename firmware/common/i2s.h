@@ -54,16 +54,17 @@ struct i2s_state
 	uint32_t buffer_depth;
 	uint32_t buffer_size;
 	uint32_t buffer_mask;
+	uint32_t buffer_currently_filling;
 };
 
 void i2s_init();
 void i2s_startup(bool ext_clock);
 void i2s_shutdown();
-void i2s_streaming_enable();
+void i2s_start_playback();
+void i2s_resume_playback();
 void i2s_mute(bool mute);
 void i2s_gpdma_isr();
 void i2s_generate_test_tone();
-void i2s_resume();
 bool i2s_is_paused();
 
 extern uint8_t i2s_audio_buffer[];

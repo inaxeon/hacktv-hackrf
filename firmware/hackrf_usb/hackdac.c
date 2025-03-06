@@ -139,7 +139,17 @@ bool hackdac_set_mode(uint8_t mode)
 		if (!cpld_jtag_sram_load_hackdac(&jtag_cpld)) {
 			halt_and_flash(6000000);
 		}
-		gpio_clear(&hackdac_pwr_en); // Power up HackDAC
+
+		// Soft-start HackDAC
+		for (int i = 0; i <= 5000; i++)
+		{
+			gpio_clear(&hackdac_pwr_en); // Power up
+			gpio_set(&hackdac_pwr_en); // Power down
+			delay_us_at_mhz(10 - (i / 500), 96);
+		}
+		
+		gpio_clear(&hackdac_pwr_en); // Power up and stay on
+		
 		gpio_clear(&tcxo_clock_enable); // Activate 27 MHz clock
 		si5351c_mcu_clk_enable(&clock_gen, true);
 	}
