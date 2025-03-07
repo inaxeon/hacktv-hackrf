@@ -47,8 +47,8 @@
 
 struct i2s_state
 {
-	uint32_t usb_count;
-	uint32_t i2s_count;
+	uint32_t buffers_received;
+	uint32_t buffers_played;
 	uint32_t num_shortfalls;
 	uint32_t usb_transfer_size;
 	uint32_t buffer_depth;
@@ -62,7 +62,6 @@ void i2s_startup(bool ext_clock);
 void i2s_shutdown();
 void i2s_start_playback();
 void i2s_resume_playback();
-void i2s_mute(bool mute);
 void i2s_gpdma_isr();
 void i2s_generate_test_tone();
 bool i2s_is_paused();

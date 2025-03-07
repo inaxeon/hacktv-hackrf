@@ -188,8 +188,8 @@ void i2s_init()
 
 void i2s_startup(bool sync_mode)
 {
-	i2s_state.usb_count = 0;
-	i2s_state.i2s_count = 0;
+	i2s_state.buffers_received = 0;
+	i2s_state.buffers_played = 0;
 	i2s_state.num_shortfalls = 0;
 	i2s_state.buffer_currently_filling = 0;
 
@@ -237,15 +237,6 @@ void i2s_resume_playback()
 	I2S0_DAO &= ~I2S0_DAO_STOP_MASK;
 }
 
-void i2s_mute(bool mute)
-{
-	if (mute) {
-		I2S0_DAO |= I2S0_DAO_MUTE_MASK;
-	} else {
-		I2S0_DAO &= ~I2S0_DAO_MUTE_MASK;
-	}
-}
-
 bool i2s_is_paused()
 {
 	return !(I2S0_DAO & I2S0_DAO_RESET_MASK) && (I2S0_DAO & I2S0_DAO_STOP_MASK);
@@ -257,19 +248,21 @@ void i2s_gpdma_isr()
 	{
 		GPDMA_INTTCCLEAR = (1 << I2S_DMA_CHANNEL);
 
-		i2s_state.i2s_count += i2s_state.usb_transfer_size;
+		i2s_state.buffers_played++;
 
-		if ((i2s_state.usb_count - i2s_state.i2s_count) == 0) {
+		if ((i2s_state.buffers_received - i2s_state.buffers_played) == 0) {
 			// Out of data. Trigger underrun condition.
 			I2S0_DAO |= I2S0_DAO_STOP_MASK;
 			i2s_state.num_shortfalls++;
 		}
 
+		// Occasionally after an underrun the I2S playback process "slips" and ends up
+		// playing the buffer CPU is presently filling resulting in a nasty noise from the output.
 		int current_lli = i2s_get_current_lli();
-		if (current_lli == i2s_state.buffer_currently_filling) {
-			current_lli += (I2S_NUM_BUFFERS - 1);
+		if (current_lli == (int)i2s_state.buffer_currently_filling) {
+			current_lli++; // Wind I2S DMA process back to beginning of buffer ring.
 			current_lli &= (I2S_NUM_BUFFERS - 1);
-			GPDMA_CLLI(I2S_DMA_CHANNEL) = (uint32_t)&i2s_dma_lli[current_lli];
+			GPDMA_CLLI(I2S_DMA_CHANNEL) = i2s_dma_lli[current_lli].next_lli;
 		}
 	}
 

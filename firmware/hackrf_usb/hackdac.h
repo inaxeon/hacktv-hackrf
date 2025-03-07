@@ -47,5 +47,6 @@ bool hackdac_baseband_enabled();
 bool hackdac_i2c_reg_read(uint8_t idx, uint16_t *value);
 bool hackdac_i2c_reg_write(uint8_t idx, uint16_t value);
 bool hackdac_rffc5071_api_is_hijacked();
+void hackdac_get_version(char *buffer, int len);
 
 #endif /*__HACKDAC_H__*/

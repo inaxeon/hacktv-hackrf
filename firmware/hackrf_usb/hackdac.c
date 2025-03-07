@@ -21,6 +21,7 @@
 #include "cpld_jtag.h"
 #include "cpld_xc2c.h"
 #include "i2s.h"
+#include "firmware_info.h"
 
 #define MCP47FEBXX_A1_SLAVE_ADDR            0x61
 #define MCP47FEBXX_CMD_READ                 0x06
@@ -33,8 +34,13 @@ static struct gpio_t video_out_led = GPIO(1, 9);
 static struct gpio_t rf_out_led = GPIO(1, 2);
 static struct gpio_t vdac_sw_clock = GPIO(5, 13);
 static struct gpio_t tcxo_clock_enable = GPIO(1, 6);
+static struct gpio_t board_id_0 = GPIO(3, 8);
+static struct gpio_t board_id_1 = GPIO(3, 9);
+static struct gpio_t board_id_2 = GPIO(3, 10);
+static struct gpio_t board_id_3 = GPIO(3, 11);
 
 static uint8_t _audio_mode;
+static uint8_t _board_id;
 static bool _baseband_enabled;
 static bool _rffc5071_hijacked;
 
@@ -78,6 +84,23 @@ void hackdac_init()
 	_audio_mode = HACKDAC_NO_AUDIO;
 	_rffc5071_hijacked = false;
 
+	scu_pinmux(SCU_PINMUX_GPIO3_8, SCU_CONF_FUNCTION0 | SCU_GPIO_PUP);
+	scu_pinmux(SCU_PINMUX_GPIO3_9, SCU_CONF_FUNCTION0 | SCU_GPIO_PUP);
+	scu_pinmux(SCU_PINMUX_GPIO3_10, SCU_CONF_FUNCTION0 | SCU_GPIO_PUP);
+	scu_pinmux(SCU_PINMUX_GPIO3_11, SCU_CONF_FUNCTION0 | SCU_GPIO_PUP);
+
+	gpio_input(&board_id_0);
+	gpio_input(&board_id_1);
+	gpio_input(&board_id_2);
+	gpio_input(&board_id_3);
+
+	_board_id = (!gpio_read(&board_id_0) << 0) |
+				(!gpio_read(&board_id_1) << 1) |
+				(!gpio_read(&board_id_2) << 2) |
+				(!gpio_read(&board_id_3) << 3);
+	
+	_board_id &= 0x0F;
+
 	gpio_output(&hackdac_pwr_en);
 	gpio_set(&hackdac_pwr_en);
 
@@ -102,8 +125,10 @@ void hackdac_error()
 	// System error: Blink the video out LED.
 	while (1) {
 		video_led_on();
+		rf_led_on();
 		delay(6000000);
 		video_led_off();
+		rf_led_off();
 		delay(6000000);
 	}
 }
@@ -221,4 +246,17 @@ void rf_led_on()
 void rf_led_off()
 {
 	gpio_set(&rf_out_led);
+}
+
+void hackdac_get_version(char *buffer, int len)
+{
+	const char *hackdac_token;
+	strncpy(buffer, firmware_info.version_string, len - 1);
+
+	hackdac_token = strstr(buffer, "hackdac");
+
+	if (!hackdac_token)
+		hackdac_error();
+
+	*((char *)(hackdac_token + 8)) = 'a' + _board_id;
 }
