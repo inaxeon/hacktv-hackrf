@@ -153,7 +153,7 @@ Colours should fall exactly in the 75% boxes in the graticule, traces between ve
 
 # Schematic
 
-[Can be viewed here](https://github.com/inaxeon/hacktv-hackrf/blob/master/hardware/hackdac-alpha/hackdac-alpha-rev2.pdf).
+[Can be viewed here](https://github.com/inaxeon/hacktv-hackrf/blob/master/hardware/hackdac-alpha/hackdac-alpha-rev3.pdf).
 
 # How do I obtain one?
 
