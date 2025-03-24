@@ -157,4 +157,4 @@ Colours should fall exactly in the 75% boxes in the graticule, traces between ve
 
 # How do I obtain one?
 
-The project is presently in the prototype stage.
+While fully open-source HackDACs are produced in small quantities and available to purchase pre-made. Contact me at inaxeon@hotmail.com for more information.
